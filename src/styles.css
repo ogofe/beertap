@@ -1,0 +1,199 @@
+/* Set the background image for the body element */
+body {
+    /*background-image: url('./images/61769.jpg');  Replace with the actual path to your image file */
+    background-size: cover; /* Cover the entire viewport with the background image */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-attachment: fixed; /* Keep the background fixed while scrolling */
+    /* You can also set background color as a fallback */
+    background-color: #4c4a4a; /* Replace with your desired background color */
+}
+
+/*** Reduce the opacity of the body background image 
+body::after {
+    content: ''; /* Create a pseudo-element 
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0); /* Adjust the alpha value (0.5) to control the image opacity 
+    z-index: -1; /* Place it below the content 
+  }
+*/
+.App{
+    padding: 20px 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.beers{
+    display: flex;
+}
+
+.beer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+img{
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    background: tomato;
+}
+
+.update{
+    border: 1px solid tomato;
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: tomato;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.delete{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+input{
+    width: 200px;
+    padding: 10px;
+    border: 1px solid grey;
+    border-radius: 10px;
+}
+
+.formButton{
+    border: none;
+    padding: 10px;
+    background: tomato;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tbl-button{
+    background: none;
+    color: black;
+}
+
+.tbl-left{
+    text-align: left;
+}
+
+.brewery-table {
+    width: 100%;
+    border-collapse: collapse; /* Collapse the table borders */
+    height: auto;
+    
+  }
+  
+
+  .brewery-table td {
+    /*border: 1px solid #ccc; /* Add a 1px solid gray border to table headers and cells 
+    padding: 8px; /* Add padding for cell content 
+    text-align: center; /* Center-align cell content */
+    border: none;
+    padding: 10px 20px;
+  }
+  
+  .brewery-table th {
+    background-color: #f2f2f2;
+    border: none;
+    padding: 10px 20px; /* Gray background color for header cells */
+  }
+  .update-link {
+    color: white; /* Text color of the link */
+    text-decoration: none; /* Remove underlining of the link */
+  }  
+
+  .navbar .navbar-collapse .nav .nav-link.login-link {
+    color: white; /* Set the desired text color */
+  }
+
+  .btn-div{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+  }
+
+  .btn-extra{
+    width: 150px;
+  }
+
+  .tap{
+    margin: 5px;
+  }
+
+  .contMargin{
+    margin-top: 40px;
+  }
+
+  .status-ontap{
+    font-weight: bolder;
+    font-size: 20px;
+    color: green;
+  }
+
+  .status-upcoming{
+    font-weight: bolder;
+    font-size: 20px;
+    color: grey;
+  }
+
+  .status-empty{
+    color: red;
+    font-weight: bolder;
+    font-size: 20px;
+    
+  }
+
+  .orderNew{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .orderTitle{
+    float: left;
+    margin: 0;
+  }
+
+  .noBeers{
+    font-weight: bold;
+    color: red;
+  }
+
+  .listTapTitle{
+    font-weight: bold;
+    color: green;
+  }
+
+  .listUntapTitle{
+    font-weight: bold;
+    color: grey;
+  }
+
+  .bg-logo{
+    background: none;
+    padding-bottom: 0;
+    width: 20;
+    height: 20;
+  }
+
+  
