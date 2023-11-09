@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { RouterProvider, createBrowserRouter, Outlet, Routes, Navigate, useNavigate } from 'react-router-dom';
 import Navigation from './components/Navbar';
 import { UserProvider, useUser } from './contexts/userContext';
@@ -29,6 +29,8 @@ import Deliveries from './pages/taplist/Deliveries';
 import Login from './pages/users/Login';
 
 //import Router from './components/Routers'
+
+export const GlobalStore = createContext({})
 
 const Layout = () => {
   return(
@@ -307,6 +309,10 @@ const router = createBrowserRouter([
 
 
 function App() {
+  const generalContext = {
+    'apiUrl': 'https://beer.binsoft.online/api'
+  }
+
   // Define your router and routes...
 
   // const navigate = useNavigate();
@@ -337,12 +343,14 @@ function App() {
 
   // Wrap the component using useNavigate inside the RouterProvider
   return (
+    <GlobalStore.Provider value={generalContext}>
     <UserProvider>
       <div className='App'>
       <RouterProvider router={router}>
-    </RouterProvider>
+      </RouterProvider>
       </div>
-      </UserProvider>
+    </UserProvider>
+    </GlobalStore.Provider>
   );
 }
 

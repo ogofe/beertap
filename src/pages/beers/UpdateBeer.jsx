@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, InputGroup, Form } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import {GlobalStore} from '../../App';
+
 
 function UpdateBeer() {
   const [beer, setBeer] = useState({
@@ -27,6 +29,7 @@ function UpdateBeer() {
   const location = useLocation();
   const [isDisabled, setIsDisabled] = useState(true);
   const beerId = location.pathname.split('/')[3];
+  const {apiUrl} = useContext(GlobalStore);
   //const { beerId } = useParams();
 
   useEffect(() => {
@@ -48,7 +51,7 @@ function UpdateBeer() {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const beerUrl = `http://localhost:5001/api/beers/${beerId}`;
+    const beerUrl = `${apiUrl}/beers/${beerId}`;
     try {
       await axios.put(beerUrl, beer);
       setUpdateConfirmation('Record updated successfully.');

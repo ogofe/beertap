@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button, InputGroup, Form, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {GlobalStore} from '../../App';
 // import PDFDocument from '../../contexts/PDFDocument';
 
 // import jsPDF from 'jspdf';
@@ -38,6 +39,8 @@ function AddBeer() {
   // const [isDisabled, setIsDisabled] = useState(true); // Set it to true to initially disable the input
   const navigate = useNavigate();
   
+  // get api Url from GlobalStore
+  const {apiUrl} = useContext(GlobalStore)
 
   const orderedItemsTableRef = useRef(null);
 
@@ -89,7 +92,7 @@ function AddBeer() {
   useEffect(() => {
     // Fetch breweries and suppliers to populate dropdowns
     axios
-      .get('http://localhost:5001/api/breweries')
+      .get(`${apiUrl}/breweries`)
       .then((response) => {
         setBreweries(response.data);
                         // Create a map of supplier IDs to names

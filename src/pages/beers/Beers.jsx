@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 //import { useNavigate } from 'react-router-dom';
 import { Button, Container, InputGroup, FormControl } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {GlobalStore} from '../../App'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Beers() {
@@ -14,7 +15,8 @@ function Beers() {
   const [searchQuery, setSearchQuery] = useState(''); // Manage search functionality
   const maxRecords = 10; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
-  const beerUrl = "http://localhost:5001/api/beers/";
+  const {apiUrl} = useContext(GlobalStore)
+  const beerUrl = `${apiUrl}/beers/`
 
   const [breweryNames, setBreweryNames] = useState({});
   const [supplierNames, setSupplierNames] = useState({});
@@ -71,7 +73,7 @@ function Beers() {
   // Define an async function to fetch the brewery name based on brewery_id
   const fetchBreweryName = async (breweryId) => {
     try {
-      const response = await axios.get(`http://localhost:5001/api/breweries/${breweryId}`);
+      const response = await axios.get(`${apiUrl}/breweries/${breweryId}`);
       return response.data.name; // Assuming the brewery name is available in the response
     } catch (err) {
       console.log(err);
@@ -82,7 +84,7 @@ function Beers() {
   // Define an async function to fetch the supplier name based on supplier_id
   const fetchSupplierName = async (supplierId) => {
     try {
-      const response = await axios.get(`http://localhost:5001/api/suppliers/${supplierId}`);
+      const response = await axios.get(`${apiUrl}/suppliers/${supplierId}`);
       return response.data.name; // Assuming the supplier name is available in the response
     } catch (err) {
       console.log(err);
