@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, InputGroup, Form, Dropdown } from 'react-bootstrap';
+import {GlobalStore} from '../../App'
 
 function UpdateUser() {
   const [user, setUser] = useState({
@@ -17,6 +18,7 @@ function UpdateUser() {
   const location = useLocation();
   const userId = location.pathname.split('/')[3];
  //console.log(user.username)
+  const {apiUrl} = useContext(GlobalStore)
 
   useEffect(() => {
     // Fetch existing data from the API
