@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import {GlobalStore} from '../../App';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
@@ -17,8 +18,8 @@ function Categories() {
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
-
-  const categoryUrl = 'http://localhost:5001/api/categories/';
+  const {apiUrl} = useContext(GlobalStore)
+  const categoryUrl = `${apiUrl}/categories/`;
 
   // Fetch all breweries using the useEffect
   useEffect(() => {

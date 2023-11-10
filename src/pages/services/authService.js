@@ -1,8 +1,8 @@
 // authService.js
-
+import { API_URL as apiUrl } from '../../App';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5001/api/users';
+const API_URL = `${apiUrl}/users`;
 
 export const login = async (username, password) => {
   try {

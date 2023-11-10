@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, InputGroup, Form } from 'react-bootstrap';
+import {GlobalStore} from '../../App';
+
 
 function UpdateBrewery() {
   const [brewery, setBrewery] = useState({
@@ -13,12 +15,13 @@ function UpdateBrewery() {
   const navigate = useNavigate();
   const location = useLocation();
   const breweryId = location.pathname.split('/')[3];
+  const {apiUrl} = useContext(GlobalStore)
 
   useEffect(() => {
     // Fetch existing data from the API
     const fetchBrewery = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/api/breweries/${breweryId}`);
+        const response = await axios.get(`${apiUrl}/breweries/${breweryId}`);
         // Set the existing data as the initial state for the input field
         setBrewery(response.data);
       } catch (err) {
@@ -35,7 +38,7 @@ function UpdateBrewery() {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const breweryUrl = `http://localhost:5001/api/breweries/${breweryId}`;
+    const breweryUrl = `${apiUrl}/breweries/${breweryId}`;
     try {
       await axios.put(breweryUrl, brewery);
       setUpdateConfirmation('Record updated successfully.'); // Set the update confirmation message

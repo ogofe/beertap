@@ -1,4 +1,5 @@
-import React, { useState} from 'react'
+import {GlobalStore} from '../../App';
+import React, { useContext, useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 //import { Link } from 'react-router-dom';
@@ -13,6 +14,7 @@ function AddUsers() {
         role: ""
     })
 
+  const {apiUrl} = useContext(GlobalStore)
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -22,7 +24,7 @@ function AddUsers() {
 
     const handleClick = async e => {
         e.preventDefault()
-        const userUrl = "http://localhost:5001/api/users/register"
+        const userUrl = `${apiUrl}/users/register`
         try {
             await axios.post(userUrl, user)
             navigate("/users")

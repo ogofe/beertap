@@ -107,7 +107,7 @@ function AddBeer() {
       });
 
     axios
-      .get('http://localhost:5001/api/suppliers')
+      .get('${apiUrl}/suppliers')
       .then((response) => {
         setSuppliers(response.data);
                 // Create a map of supplier IDs to names
@@ -123,7 +123,7 @@ function AddBeer() {
 
     // Fetch keg sizes from the kegsizes table
     axios
-      .get('http://localhost:5001/api/kegsizes')
+      .get('${apiUrl}/kegsizes')
       .then((response) => {
         setKegSizes(response.data);
                                 // Create a map of supplier IDs to names
@@ -202,7 +202,7 @@ function AddBeer() {
   // function to get all beers from local storage and push to database to handle order
   const handleClick = async (e) => {
   e.preventDefault();
-  const beerUrl = 'http://localhost:5001/api/beers/';
+  const beerUrl = '${apiUrl}/beers/';
 
   try {
     // Get all orders from local storage
@@ -244,7 +244,7 @@ function AddBeer() {
   // // Function to handle the Order button click
   // const handleClick = async (e) => {
   //   e.preventDefault();
-  //   const beerUrl = 'http://localhost:5001/api/beers/';
+  //   const beerUrl = '${apiUrl}/beers/';
 
   //   try {
   //     // Order the beer (update its status to "Ordered")

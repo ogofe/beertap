@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
@@ -6,6 +6,7 @@ import { Button, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {GlobalStore} from '../../App';
 
 
 function KegSizes() {
@@ -17,8 +18,8 @@ function KegSizes() {
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
-
-  const sizeUrl = 'http://localhost:5001/api/kegsizes/';
+  const {apiUrl} = useContext(GlobalStore)
+  const sizeUrl = `${apiUrl}/kegsizes/`;
 
   // Fetch all Suppliers using the useEffect
   useEffect(() => {

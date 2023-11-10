@@ -22,7 +22,7 @@ function UpdateUser() {
     // Fetch existing data from the API
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/api/users/${userId}`);
+        const response = await axios.get(`${apiUrl}/users/${userId}`);
         // Set the existing data as the initial state for the input field
         setUser(response.data);
       } catch (err) {
@@ -45,7 +45,7 @@ function UpdateUser() {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const userUrl = `http://localhost:5001/api/users/${userId}`;
+    const userUrl = `${apiUrl}/users/${userId}`;
     try {
       await axios.put(userUrl, user);
       setUpdateConfirmation('Record updated successfully.'); // Set the update confirmation message

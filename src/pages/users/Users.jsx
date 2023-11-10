@@ -18,7 +18,7 @@ function Users() {
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
 
-  const userUrl = 'http://localhost:5001/api/users/';
+  const userUrl = '${apiUrl}/users/';
 
   // Fetch all breweries using the useEffect
   useEffect(() => {

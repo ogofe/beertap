@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import {GlobalStore} from '../../App';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
@@ -17,8 +18,8 @@ function Suppliers() {
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
-
-  const supplierUrl = 'http://localhost:5001/api/suppliers/';
+  const {apiUrl} = useContext(GlobalStore)
+  const supplierUrl = `${apiUrl}/suppliers/`;
 
   // Fetch all Suppliers using the useEffect
   useEffect(() => {

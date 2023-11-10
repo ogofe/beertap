@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Button, Container, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {GlobalStore} from '../../App';
 
 function Deliveries() {
   const [beerList, setBeerList] = useState([]); // Original list of beers
   const [filteredBeerList, setFilteredBeerList] = useState([]); // Filtered list based on status
-  const updateUrl = 'http://localhost:5001/api/tap/updateStatus';
+  const {apiUrl} = useContext(GlobalStore)
+  const updateUrl = `${apiUrl}/tap/updateStatus`;
 
   useEffect(() => {
     // Fetch data from the API to populate the list of beers
-    axios.get('http://localhost:5001/api/beers').then((response) => {
+    axios.get(`${apiUrl}/beers`).then((response) => {
       if (response.data) {
         setBeerList(response.data);
         // Initialize filtered list with beers with 'ordered' status

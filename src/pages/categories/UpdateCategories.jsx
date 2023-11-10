@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import {GlobalStore} from '../../App';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, InputGroup, Form } from 'react-bootstrap';
@@ -9,6 +10,7 @@ function UpdateCategory() {
     type:'',
   });
 
+  const {apiUrl} = useContext(GlobalStore)
   const [updateConfirmation, setUpdateConfirmation] = useState(null); // Added state for update confirmation
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,7 +20,7 @@ function UpdateCategory() {
     // Fetch existing data from the API
     const fetchCategory = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/api/categories/${categoryId}`);
+        const response = await axios.get(`${apiUrl}/categories/${categoryId}`);
         // Set the existing data as the initial state for the input field
         setCategory(response.data);
       } catch (err) {
@@ -35,7 +37,7 @@ function UpdateCategory() {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const categoryUrl = `http://localhost:5001/api/categories/${categoryId}`;
+    const categoryUrl = `${apiUrl}/categories/${categoryId}`;
     try {
       await axios.put(categoryUrl, category);
       setUpdateConfirmation('Record updated successfully.'); // Set the update confirmation message

@@ -1,15 +1,17 @@
-import React, { useState} from 'react'
+import React, { useContext, useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 //import { Link } from 'react-router-dom';
 import {Button, InputGroup, Form} from 'react-bootstrap'
+import {GlobalStore} from '../../App';
+
 
 function AddBreweries() {
     const [brewery, setBrewery] = useState({
         name: "",
         location:""
     })
-
+    const {apiUrl} = useContext(GlobalStore)
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -19,7 +21,7 @@ function AddBreweries() {
 
     const handleClick = async e => {
         e.preventDefault()
-        const breweryUrl = "http://localhost:5001/api/breweries/"
+        const breweryUrl = "${apiUrl}/breweries/"
         try {
             await axios.post(breweryUrl, brewery)
             navigate("/breweries")

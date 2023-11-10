@@ -1,8 +1,10 @@
-import React, { useState} from 'react'
+import React, { useContext, useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 //import { Link } from 'react-router-dom';
 import {Button, InputGroup, Form} from 'react-bootstrap'
+import {GlobalStore} from '../../App';
+
 
 function AddCategories() {
     const [category, setCategory] = useState({
@@ -11,7 +13,7 @@ function AddCategories() {
     })
 
     const navigate = useNavigate()
-
+    const {apiUrl} = useContext(GlobalStore)
     const handleChange = (e) => {
         setCategory((prev) => ({...prev, [e.target.name]: e.target.value}))
     }
@@ -19,7 +21,7 @@ function AddCategories() {
 
     const handleClick = async e => {
         e.preventDefault()
-        const categoryUrl = "http://localhost:5001/api/categories/"
+        const categoryUrl = `${apiUrl}/categories/`
         try {
             await axios.post(categoryUrl, category)
             navigate("/categories")

@@ -29,6 +29,7 @@ import Deliveries from './pages/taplist/Deliveries';
 import Login from './pages/users/Login';
 
 //import Router from './components/Routers'
+export const API_URL = 'https://beer.binsoft.online/api'
 
 export const GlobalStore = createContext({})
 
@@ -310,7 +311,7 @@ const router = createBrowserRouter([
 
 function App() {
   const generalContext = {
-    'apiUrl': 'https://beer.binsoft.online/api'
+    'apiUrl': API_URL,
   }
 
   // Define your router and routes...

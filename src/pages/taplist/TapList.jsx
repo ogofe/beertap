@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import {GlobalStore} from '../../App';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Button, Container, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,9 +7,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function TapList() {
   const [tapList, setTapList] = useState([]);
   const [untappedList, setUntappedList] = useState([]);
-  const tapListUrl = 'http://localhost:5001/api/tap/';
-  const untappedListUrl = 'http://localhost:5001/api/tap/untappedList';
-  const updateUrl = 'http://localhost:5001/api/tap/updateStatus';
+  const {apiUrl} = useContext(GlobalStore)
+  const tapListUrl = `${apiUrl}/tap/`;
+  const untappedListUrl = `${apiUrl}/tap/untappedList`;
+  const updateUrl = `${apiUrl}/tap/updateStatus`;
 
   useEffect(() => {
     // Fetch data from the tapList URL

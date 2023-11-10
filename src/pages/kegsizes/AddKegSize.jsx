@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 //import { Link } from 'react-router-dom';
 import {Button, InputGroup, Form} from 'react-bootstrap'
+import {GlobalStore} from '../../App';
+
+
 
 function AddKegSize() {
     const [kegsize, setKegsize] = useState({
@@ -10,7 +13,7 @@ function AddKegSize() {
     })
 
     const navigate = useNavigate()
-
+    const {apiUrl} = useContext(GlobalStore)
     const handleChange = (e) => {
         setKegsize((prev) => ({...prev, [e.target.name]: e.target.value}))
     }
@@ -18,7 +21,7 @@ function AddKegSize() {
 
     const handleClick = async e => {
         e.preventDefault()
-        const kegsizeUrl = "http://localhost:5001/api/kegsizes/"
+        const kegsizeUrl = `${apiUrl}/kegsizes/`
         console.log(kegsizeUrl)
         try {
             await axios.post(kegsizeUrl, kegsize)

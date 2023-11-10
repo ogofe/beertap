@@ -1,4 +1,5 @@
-import React, { useState} from 'react'
+import {GlobalStore} from '../../App';
+import React, { useContext, useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 //import { Link } from 'react-router-dom';
@@ -9,7 +10,7 @@ function AddSuppliers() {
     const [supplier, setSupplier] = useState({
         name: ""
     })
-
+    const {apiUrl} = useContext(GlobalStore);
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -19,7 +20,7 @@ function AddSuppliers() {
 
     const handleClick = async e => {
         e.preventDefault()
-        const supplierUrl = "http://localhost:5001/api/suppliers/"
+        const supplierUrl = `${apiUrl}/suppliers/`
         console.log(supplierUrl)
         try {
             await axios.post(supplierUrl, supplier)

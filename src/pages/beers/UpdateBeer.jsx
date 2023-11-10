@@ -35,7 +35,7 @@ function UpdateBeer() {
   useEffect(() => {
     const fetchBeer = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/api/beers/${beerId}`);
+        const response = await axios.get(`${apiUrl}/beers/${beerId}`);
         setBeer(response.data);
       } catch (err) {
         console.log(err);
