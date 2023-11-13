@@ -28,10 +28,10 @@ import Login from '../pages/users/Login';
 // Define the Routers component
 function Routers() {
   return (
-        <>
-                <Navigation />
-                <Outlet />
-        </>
+    <>
+      <Navigation />
+      <Outlet />
+    </>
   );
 }
 
@@ -41,6 +41,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Login />,
   },
+  
   {
     path: "/beers",
     element: <Beers />,
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
     path: "/breweries",
     element: <Breweries />,
@@ -69,6 +71,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
     path: "/categories",
     element: <Categories />,
@@ -83,6 +86,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
     path: "/kegsizes",
     element: <KegSize />,
@@ -97,6 +101,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
     path: "/suppliers",
     element: <Suppliers />,
@@ -111,6 +116,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  
   {
     path: "/users",
     element: <Users />,
@@ -125,10 +131,12 @@ const router = createBrowserRouter([
       },
     ],
   },
+  
   {
     path: "/taplist",
     element: <TapList />,
   },
+
   {
     path: "/deliveries",
     element: <Deliveries />,

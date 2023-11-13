@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
@@ -6,6 +6,7 @@ import { Button, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {GlobalStore} from '../../App';
 
 
 function Users() {
@@ -16,9 +17,10 @@ function Users() {
   const [users, setUsers] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const maxRecords = 5; // Define the maximum number of records per table
+  const {apiUrl} = useContext(GlobalStore)
   const [activePage, setActivePage] = useState(0);
 
-  const userUrl = '${apiUrl}/users/';
+  const userUrl = `${apiUrl}/users/`;
 
   // Fetch all breweries using the useEffect
   useEffect(() => {

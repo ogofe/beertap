@@ -247,7 +247,7 @@ const router = createBrowserRouter([
   },
 
    // For Taplist display
-   {
+  {
     path: "/taplist",
     element: (
       <>
@@ -265,25 +265,25 @@ const router = createBrowserRouter([
   },
 
      // For Untaplist display
-     {
-      path: "/untaplist",
-      element: (
-        <>
-        {/* <ProtectedRoute /> */}
-          <Layout />
-          {/* <Outlet /> */}
-        </>
-      ),
-      children: [
-        {
-          index: true,
-          element: <UntappedList />,
-        },
-      ],
-    },
+  {
+    path: "/untaplist",
+    element: (
+      <>
+      {/* <ProtectedRoute /> */}
+      <Layout />
+      {/* <Outlet /> */}
+      </>
+    ),
+    children: [
+      {
+        index: true,
+        element: <UntappedList />,
+      },
+    ],
+  },
 
    // For Deliverias display
-   {
+  {
     path: "/deliveries",
     element: (
       <>

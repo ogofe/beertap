@@ -1,12 +1,12 @@
 // authService.js
-import { API_URL as apiUrl } from '../../App';
+// import { API_URL } from '../../App';
 import axios from 'axios';
 
-const API_URL = `${apiUrl}/users`;
+const apiUrl = `https://beer.binsoft.online/api/users`;
 
 export const login = async (username, password) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, { username, password });
+    const response = await axios.post(`${apiUrl}/login`, { username, password });
     return response; // Return the full response object
   } catch (error) {
     console.error('Login failed:', error);
@@ -22,11 +22,11 @@ export const isAuthenticated = () => {
 export const loginWithToken = async (token) => {
   try {
     // Simulate a token validation request
-    const response = await axios.post(`${API_URL}/validate-token`, { token });
+    const response = await axios.post(`${apiUrl}/validate-token`, { token });
 
     if (response.status === 200 && response.data.valid) {
       // Token is valid, retrieve user data if needed
-      const userResponse = await axios.get(`${API_URL}/user-profile`, {
+      const userResponse = await axios.get(`${apiUrl}/user-profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
