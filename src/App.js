@@ -1,3 +1,5 @@
+// import { ChakraProvider } from '@chakra-ui/react';
+
 import React, { useState, useEffect, createContext } from 'react';
 import { RouterProvider, createBrowserRouter, Outlet, Routes, Navigate, useNavigate } from 'react-router-dom';
 import Navigation from './components/Navbar';
@@ -35,10 +37,10 @@ export const GlobalStore = createContext({})
 
 const Layout = () => {
   return(
-    <>
+    <div className="w-100">
     <Navigation />
     <Outlet />
-    </>
+    </div>
   )
 }
 
@@ -352,6 +354,7 @@ function App() {
       </div>
     </UserProvider>
     </GlobalStore.Provider>
+    
   );
 }
 

@@ -1,12 +1,29 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, Fragment } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-//import { useNavigate } from 'react-router-dom';
-import { Button, Container, InputGroup, FormControl } from 'react-bootstrap';
+// import { ResponsiveTable } from '../../components';
+import { Button, Container, InputGroup, FormControl, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faChevronRight, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
 import {GlobalStore} from '../../App'
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+
+const Headers = [
+  { id: 0, Header: 'Tap Number', accessor: 'tap_number'},
+  { id: 1, Header: 'Beer Name', accessor: 'name'},
+  { id: 2, Header: 'Beer Type', accessor: 'type'},
+  { id: 3, Header: 'Brewery Name', accessor: 'name'},
+  { id: 4, Header: 'Supplier Name', accessor: 'name'},
+  { id: 5, Header: 'Description', accessor: 'description'},
+  { id: 6, Header: 'Flavor', accessor: 'flavor_details'},
+  { id: 7, Header: 'Price per Keg ($)', accessor: 'price_per_keg'},
+  { id: 8, Header: 'Serving Sizes', accessor: 'serving_sizes'},
+  { id: 9, Header: 'Price per Service Size ($)', accessor: 'price_per_serving_size'},
+  { id: 10, Header: 'Arrival Date', accessor: 'arrival_date'},
+  { id: 11, Header: 'Status', accessor: 'status'},
+]
 
 function Beers() {
   const [isDeleted, setIsDeleted] = useState(false);
@@ -174,72 +191,79 @@ function Beers() {
   };
 
   return (
-    <div>
+    <div className="page">
       <Container className='contMargin'>
-        <br />
-        <div className='orderNew'>
-        <h1 className='orderTitle listUntapTitle'>Beer Stock</h1>
-            <Button variant='primary' size='lg'>
+        <h1 className='listUntapTitle text-left mb-3 pt-5'>Beer Stock</h1>
+        
+        <div className='d-flex justify-content-between mb-3'>
+          <InputGroup className='w-50'>
+            <FontAwesomeIcon style={{
+             padding: '11px', backgroundColor: 'grey', color: '#fff',
+             borderRadius: '4px 0px 0px 4px'
+            }} icon={faSearch} />
+            <FormControl
+              placeholder='Search Beer Inventory by name...'
+              aria-label='Search Beer'
+              aria-describedby='basic-addon2'
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <Button
+              variant='outline-primary'
+              id='button-addon2'
+              onClick={handleSearch}
+            >
+              Search
+            </Button>
+            <Button
+              variant='outline-secondary'
+              id='button-addon2'
+              onClick={resetSearch}
+            >
+              Clear
+            </Button>
+          </InputGroup>
+
+          <div className="mx-2">
+            <Button variant='primary' size='md' className="w-fit mr-3">
               <Link to="/beers/add" className="update-link">
                 Order Beer
               </Link>
             </Button>
-        </div><br />
+          </div>
+        </div>
         
         {deleteConfirmation && (
           <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>
         )}
 
         {/* Add the search input field */}
-        <InputGroup className='mb-3'>
-          <FormControl
-            placeholder='Search Beer Inventory by name...'
-            aria-label='Search Beer'
-            aria-describedby='basic-addon2'
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <Button
-            variant='outline-primary'
-            id='button-addon2'
-            onClick={handleSearch}
-          >
-            Search
-          </Button>
-          <Button
-            variant='outline-secondary'
-            id='button-addon2'
-            onClick={resetSearch}
-          >
-            Clear
-          </Button>
-        </InputGroup>
+        
+        <Fragment>
 
-        {beers.length === 0 ? (
-          <p className='noBeers'>SORRY : No Beers Found</p>
-        ) : (
-          <>
-            <table className="brewery-table">
-              <thead>
-                <tr>
-                  <th className='tbl-left'>Tap Number</th>
-                  <th className='tbl-left'>Beer Name</th>
-                  <th className='tbl-left'>Beer Type</th>
-                  <th className='tbl-left'>Brewery Name</th>
-                  <th className='tbl-left'>Supplier Name</th>
-                  <th className='tbl-left'>Description</th>
-                  <th className='tbl-left'>Flavor</th>
-                  <th className='tbl-left'>Price per Keg ($)</th>
-                  <th className='tbl-left'>Serving Sizes</th>
-                  <th className='tbl-left'>Price per Service Size ($)</th>
-                  <th className='tbl-left'>Arrival Date</th>
-                  <th className='tbl-left'>Status</th>
-                  <th>Add To Tap</th>
-                  {/* <th></th> */}
+          {/* table */}
+          <div className="table-wrapper">
+            <Table responsive className="rounded nowrap brewery-table table table-responsive table-striped">
+              <thead className="rounded">
+                <tr className='text-white'>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Tap Number</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Beer Name</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Beer Type</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Brewery Name</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Supplier Name</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Description</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Flavor</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Price per Keg ($)</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Serving Sizes</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Price per Service Size ($)</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Arrival Date</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Status</th>
+                  <th colspan="1" className='bg-dark text-white w-fit tbl-left'>Add To Tap</th>
                 </tr>
               </thead>
+
               <tbody>
-                {beers.slice(start, end).map((beer) => (
+                {beers.length > 1 && beers.slice(start, end).map((beer) => (
                   <tr key={beer.product_id}>
                     <td className='tbl-left'>{beer.tap_number}</td>
                     <td className='tbl-left'>{beer.name}</td>
@@ -271,61 +295,72 @@ function Beers() {
                     >
                       {beer.status}
                     </td>
-                    <td>
-                      <Button>
+                    <td className="d-flex tbl-left">
+                      <Button className="mx-2">
                         <Link to={`/beers/update/${beer.product_id}`} className="update-link">
                           <FontAwesomeIcon icon={faEdit} />
                         </Link>
                       </Button>
-                    </td>
-                    <td>
-                      {/* <Button 
+
+                      <Button 
                       onClick={() => handleDelete(beer.product_id)} 
                       variant="dark"
                       disabled={true}
                       >
                         <FontAwesomeIcon icon={faTrash} />
-                      </Button> */}
+                      </Button>
                     </td>
                   </tr>
                 ))}
+
+                {beers.length < 1 && (
+
+                  <tr>
+                    <td colspan="13" className="text-danger font-weight-bold"> SORRY No beers to show</td>
+                  </tr>
+                )}
               </tbody>
-            </table>
+            </Table>
+          </div>
+          
+          {beers.length > 1 &&
             <div>
-              <Button
-                onClick={handlePrevious}
-                disabled={activePage === 0}
-                style={{
-                  background: 'none',
-                  color: 'black',
-                  border: 'none',
-                }}
-              >
-                Previous
-              </Button>
-              <Button
-                onClick={handleNext}
-                disabled={activePage === Math.ceil(beers.length / maxRecords) - 1}
-                style={{
-                  background: 'none',
-                  color: 'black',
-                  border: 'none',
-                }}
-              >
-                Next
-              </Button>
-            </div>
-            <br />
-            <Button variant='primary' size='lg'>
-              <Link to="/beers/add" className="update-link">
-                Order Beer
-              </Link>
+            <Button
+              onClick={handlePrevious}
+              disabled={activePage === 0}
+              style={{
+                // background: 'none',
+                color: 'black',
+                border: 'none',
+              }}
+              className=""
+            >
+              <FontAwesomeIcon icon={faChevronLeft} /> Previous 
             </Button>
-          </>
-        )}
+
+            <Button
+              onClick={handleNext}
+              className="mx-2"
+              disabled={activePage === Math.ceil(beers.length / maxRecords) - 1}
+              style={{
+                // background: 'none',
+                color: 'black',
+                border: 'none',
+              }}
+            >
+              Next <FontAwesomeIcon icon={faChevronRight} />
+            </Button>
+            </div>
+          }
+        </Fragment>
       </Container>
     </div>
   );
 }
 
 export default Beers;
+
+/*
+
+
+*/
