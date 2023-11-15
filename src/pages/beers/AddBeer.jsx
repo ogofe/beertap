@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button, div, Form, Container } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {Skeleton} from '../../components'
-import {GlobalStore} from '../../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faTrash, faTruck, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faTrash, faTruckFast, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Skeleton, BackButton} from '../../components'
+import {GlobalStore} from '../../App';
 // import PDFDocument from '../../contexts/PDFDocument';
 
 // import jsPDF from 'jspdf';
@@ -34,10 +34,12 @@ function AddBeer() {
   const [breweries, setBreweries] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [kegSizes, setKegSizes] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [orderedItems, setOrderedItems] = useState([])
   const [supplierNames, setSupplierNames] = useState({}); 
   const [breweryNames, setBreweryNames] = useState({});
   const [kegsize, setKegsize] = useState({}); 
+  const [category, setCategory] = useState(""); 
   const [pageLoading, setPageLoading] = useState(true); 
   // const [error, setError] = useState(null);
   // const [isDisabled, setIsDisabled] = useState(true); // Set it to true to initially disable the input
@@ -89,60 +91,82 @@ function AddBeer() {
     link.click();
     document.body.removeChild(link);
   }
-  
-  
-  
 
-  useEffect(() => {
-    // Fetch breweries and suppliers to populate dropdowns
-    axios
-      .get(`${apiUrl}/breweries`)
-      .then((response) => {
-        setBreweries(response.data);
-                        // Create a map of supplier IDs to names
-                        const breweryNamesMap = {};
-                        response.data.forEach((brewery) => {
-                           breweryNamesMap[brewery.brewery_id] = brewery.name;
-                        });
-                        setBreweryNames(breweryNamesMap);
-      })
-      .catch((error) => {
-        console.error('Error fetching breweries:', error);
-      });
+  function getBreweries(){
+   // Fetch breweries and suppliers to populate dropdowns
+    axios.get(`${apiUrl}/breweries`)
+    .then((response) => {
+      setBreweries(response.data);
+        // Create a map of supplier IDs to names
+        const breweryNamesMap = {};
+        response.data.forEach((brewery) => {
+           breweryNamesMap[brewery.brewery_id] = brewery.name;
+        });
+        setBreweryNames(breweryNamesMap);
+    })
+    .catch((error) => {
+      console.error('Error fetching breweries:', error);
+    }); 
+  }
 
-    axios
-      .get('${apiUrl}/suppliers')
-      .then((response) => {
-        setSuppliers(response.data);
-                // Create a map of supplier IDs to names
-                const supplierNamesMap = {};
-                response.data.forEach((supplier) => {
-                  supplierNamesMap[supplier.supplier_id] = supplier.name;
-                });
-                setSupplierNames(supplierNamesMap);
-      })
-      .catch((error) => {
-        console.error('Error fetching suppliers:', error);
-      });
+  function getSuppliers(){
+    axios.get(`${apiUrl}/suppliers`)
+    .then((response) => {
+      setSuppliers(response.data);
+              // Create a map of supplier IDs to names
+              const supplierNamesMap = {};
+              response.data.forEach((supplier) => {
+                supplierNamesMap[supplier.supplier_id] = supplier.name;
+              });
+              setSupplierNames(supplierNamesMap);
+    })
+    .catch((error) => {
+      console.error('Error fetching suppliers:', error);
+    });
+  }
 
+  function getKegSizes(){
     // Fetch keg sizes from the kegsizes table
-    axios
-      .get('${apiUrl}/kegsizes')
-      .then((response) => {
-        setKegSizes(response.data);
-                                // Create a map of supplier IDs to names
-                                const kegsizesMap = {};
-                                response.data.forEach((kegsize) => {
-                                   kegsizesMap[kegsize.keg_size_id] = kegsize.size;
-                                });
-                                setKegsize(kegsizesMap);
-      })
-      .catch((error) => {
-        console.error('Error fetching keg sizes:', error);
-      });
-  }, []);
+    axios.get(`${apiUrl}/kegsizes`)
+    .then((response) => {
+      setKegSizes(response.data);
+        // Create a map of supplier IDs to names
+        const kegsizesMap = {};
+        response.data.forEach((kegsize) => {
+           kegsizesMap[kegsize.keg_size_id] = kegsize.size;
+        });
+        setKegsize(kegsizesMap);
+    })
+    .catch((error) => {
+      console.error('Error fetching keg sizes:', error);
+    });
+  }
+
+  function getCategories(){
+    axios.get(`${apiUrl}/categories`)
+    .then((response) => {
+      setCategories(response.data);
+        // console.log("Categories", response.data)
+        // const categoriesMap = {};
+        // response.data.forEach((cat) => {
+        //    categoriesMap[cat.category_id] = cat.name;
+        // });
+        // setCategory(categoriesMap);
+    })
+    .catch((error) => {
+      console.error('Error fetching categories:', error);
+    });
+  }
 
   useEffect(() => {
+    getBreweries();
+
+    getSuppliers();
+
+    getKegSizes();
+
+    getCategories();
+    
     // Load ordered items from local storage when the component mounts
     const storedItems = JSON.parse(localStorage.getItem('orderedItems')) || [];
     setOrderedItems(storedItems);
@@ -150,21 +174,21 @@ function AddBeer() {
     setTimeout(() => setPageLoading(false), 1000)
   }, []);
 
-    // Function to add the current beer to the list of ordered items
-    const addBeerToOrder = () => {
-      const newOrderedItems = [...orderedItems, beer];
-      setOrderedItems(newOrderedItems);
-  
-      // Save the updated ordered items to local storage
-      localStorage.setItem('orderedItems', JSON.stringify(newOrderedItems));
-      // Reload the page
-      window.location.reload();
-  
-      setBeer({
-        // Reset the beer state after adding to the order
-      });
-      
-    };
+
+  // Function to add the current beer to the list of ordered items
+  const addBeerToOrder = () => {
+    const newOrderedItems = [...orderedItems, beer];
+    setOrderedItems(newOrderedItems);
+
+    // Save the updated ordered items to local storage
+    localStorage.setItem('orderedItems', JSON.stringify(newOrderedItems));
+    // Reload the page
+    window.location.reload();
+
+    setBeer({
+      // Reset the beer state after adding to the order
+    }); 
+  };
 
 
   // Function to remove a beer from the order list
@@ -206,70 +230,70 @@ function AddBeer() {
   };
 
   // function to get all beers from local storage and push to database to handle order
+  const orderBeers = async (e) => {
+    e.preventDefault();
+    const beerUrl =  `${apiUrl}/beers/`;
+
+    try {
+      // Get all orders from local storage
+      const localOrders = JSON.parse(localStorage.getItem('orderedItems')) || [];
+      //console.log(localOrders)
+
+      // Iterate through each order and send it to the database
+      for (const localOrder of localOrders) {
+        const orderedBeer = { ...localOrder, status: 'ordered' };
+        console.log(orderedBeer)
+        const response = await axios.post(beerUrl, orderedBeer);
+
+        if (response.data) {
+          // Send an email to the staff with beer details for each order if needed
+          sendEmailToStaff(orderedBeer);
+        } else {
+          console.error('No data received from the API for order:', orderedBeer);
+        }
+      }
+
+      // Export table as pdf
+      // exportTableAsPDF();
+
+      // Export table as CSV
+      exportTableAsCSV(document.querySelector('.brewery-table'), 'ordered-items.csv');
+
+
+      // Clear the orders from local storage after they are successfully sent to the database
+      localStorage.removeItem('orderedItems');
+
+      // Navigate to the beers page or do other actions as needed
+      navigate('/beers');
+    } catch (err) {
+      console.error('Error adding orders:', err);
+    }
+  }
+
+
+  // Function to handle the Order button click
   const handleClick = async (e) => {
-  e.preventDefault();
-  const beerUrl = '${apiUrl}/beers/';
+    e.preventDefault();
+    const beerUrl = `${apiUrl}/beers/`;
 
-  try {
-    // Get all orders from local storage
-    const localOrders = JSON.parse(localStorage.getItem('orderedItems')) || [];
-    //console.log(localOrders)
-
-    // Iterate through each order and send it to the database
-    for (const localOrder of localOrders) {
-      const orderedBeer = { ...localOrder, status: 'ordered' };
-      console.log(orderedBeer)
+    try {
+      // Order the beer (update its status to "Ordered")
+      const orderedBeer = { ...beer, status: 'ordered' };
       const response = await axios.post(beerUrl, orderedBeer);
 
+      // Check if the response contains the newly created beer data
       if (response.data) {
-        // Send an email to the staff with beer details for each order if needed
-        sendEmailToStaff(orderedBeer);
+        // Send an email to the staff with beer details
+        sendEmailToStaff();
       } else {
-        console.error('No data received from the API for order:', orderedBeer);
+        console.error('No data received from the API');
       }
+
+      navigate('/beers');
+    } catch (err) {
+      console.error('Error adding beer:', err);
     }
-
-    // Export table as pdf
-    // exportTableAsPDF();
-
-    // Export table as CSV
-    exportTableAsCSV(document.querySelector('.brewery-table'), 'ordered-items.csv');
-
-
-    // Clear the orders from local storage after they are successfully sent to the database
-    localStorage.removeItem('orderedItems');
-
-    // Navigate to the beers page or do other actions as needed
-    navigate('/beers');
-  } catch (err) {
-    console.error('Error adding orders:', err);
-  }
-};
-
-
-  // // Function to handle the Order button click
-  // const handleClick = async (e) => {
-  //   e.preventDefault();
-  //   const beerUrl = '${apiUrl}/beers/';
-
-  //   try {
-  //     // Order the beer (update its status to "Ordered")
-  //     const orderedBeer = { ...beer, status: 'ordered' };
-  //     const response = await axios.post(beerUrl, orderedBeer);
-
-  //     // Check if the response contains the newly created beer data
-  //     if (response.data) {
-  //       // Send an email to the staff with beer details
-  //       sendEmailToStaff();
-  //     } else {
-  //       console.error('No data received from the API');
-  //     }
-
-  //     navigate('/beers');
-  //   } catch (err) {
-  //     console.error('Error adding beer:', err);
-  //   }
-  // };
+  };
 
   if (pageLoading){
     return(
@@ -283,15 +307,7 @@ function AddBeer() {
     <div className="page">
       <Container className='contMargin'>
         <div className=''>
-          <Button
-              variant='dark'
-              size='md'
-              href={"/beers"}
-              className="mt-5 mb-2 btn-extra"
-            >
-              <FontAwesomeIcon icon={faChevronLeft} />
-              <b> Back </b>
-          </Button>
+          <BackButton path={"/beers"} />
 
           <h1 className='listUntapTitle '>Order Beer</h1>       
 
@@ -333,14 +349,14 @@ function AddBeer() {
 
               <div className="my-2 col-sm-12 col-md-4">
                 <div>
-                  <label className="form-label"htmlFor="brewery_id">Brewery:</label>
-                  <select
-                    className="form-select"
-                    name="brewery_id"
+                  <label className="form-label"htmlFor="brewery_id">Brewery</label>
+                  <Form.Control
                     onChange={handleChange}
-                    defaultValue={''}
+                    name="brewery_id"
+                    aria-describedby="brewery_id"
+                    as="select"
                   >
-                    <option value="" disabled>
+                    <option selected value="" disabled>
                       Select Brewery
                     </option>
                     {breweries.map((brewery) => (
@@ -348,20 +364,20 @@ function AddBeer() {
                         {brewery.name}
                       </option>
                     ))}
-                  </select>
+                  </Form.Control>
                 </div>
               </div>
 
               <div className="my-2 col-sm-12 col-md-4">
                 <div>
-                  <label className="form-label"htmlFor="supplier_id">Supplier:</label>
-                  <select
-                    className="form-select"
+                  <label className="form-label"htmlFor="supplier_id">Supplier</label>
+                  <Form.Control
+                    as="select"
                     name="supplier_id"
                     onChange={handleChange}
                     defaultValue={''}
                   >
-                    <option value="" disabled>
+                    <option value="" selected disabled>
                       Select Supplier
                     </option>
                     {suppliers.map((supplier) => (
@@ -369,7 +385,7 @@ function AddBeer() {
                         {supplier.name}
                       </option>
                     ))}
-                  </select>
+                  </Form.Control>
                 </div>
               </div>
 
@@ -425,14 +441,14 @@ function AddBeer() {
 
               <div className="my-2 col-sm-12 col-md-4">
                 <div>
-                  <label className="form-label"htmlFor="keg_size">Keg Size:</label>
-                  <select
-                    className="form-select"
+                  <label className="form-label"htmlFor="keg_size">Keg Size</label>
+                  <Form.Control
+                    as="select"
                     name="keg_size_id"
                     onChange={handleChange}
                     defaultValue={''}
                   >
-                    <option value="" disabled>
+                    <option value="" selected disabled>
                       Select Keg Size
                     </option>
                     {kegSizes.map((kegSize) => (
@@ -440,26 +456,26 @@ function AddBeer() {
                         {kegSize.size}
                       </option>
                     ))}
-                  </select>
+                  </Form.Control>
                 </div>
               </div>
 
               <div className="my-2 col-sm-12 col-md-4">
                 <div>
-                  <label className="form-label"htmlFor="serving_sizes">Serving Sizes:</label>
-                  <select
-                    className="form-select"
+                  <label className="form-label"htmlFor="serving_sizes">Serving Size</label>
+                  <Form.Control
+                    as="select"
                     name="serving_sizes"
                     onChange={handleChange}
                     defaultValue={''}
                   >
-                    <option value="" disabled>
-                      Select Serving Sizes
+                    <option value="" selected disabled>
+                      Select Serving Size
                     </option>
                     <option value="16oz">16oz</option>
                     <option value="10oz">10oz</option>
                     <option value="6oz">6oz</option>
-                  </select>
+                  </Form.Control>
                 </div>
               </div>
 
@@ -558,9 +574,9 @@ function AddBeer() {
                 variant="danger"
                 size="md"
                 className="bold w-fit btn-extra"
-                onClick={handleClick}
+                onClick={orderBeers}
               >
-                <FontAwesomeIcon icon={faTruck} /> Place Beer Order
+                <FontAwesomeIcon icon={faTruckFast} /> Place Beer Order
               </Button>
             </div>
           )}

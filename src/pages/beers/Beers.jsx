@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 // import { ResponsiveTable } from '../../components';
 import { Button, Container, InputGroup, FormControl, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faChevronRight, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faBeerMugEmpty, faChevronRight, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
 import {GlobalStore} from '../../App'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -227,7 +227,8 @@ function Beers() {
           <div className="mx-2">
             <Button variant='primary' size='md' className="w-fit mr-3">
               <Link to="/beers/add" className="update-link">
-                Order Beer
+                Order Beer 
+                <FontAwesomeIcon className="mx-2" icon={faBeerMugEmpty} />
               </Link>
             </Button>
           </div>
