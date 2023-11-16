@@ -62,20 +62,21 @@ function TapList() {
   };
 
   return (
-    <>
+    <div className="page">
       <Container className='contMargin'>
         <br />
-        <h2 className='listUntapTitle'>Tapped List</h2>
+        <h2 className='listUntapTitle mb-5'>Tapped List</h2>
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th className="tbl-left">Beer Name</th>
-              <th className="tbl-left">Status</th>
-              <th>Action</th>
+              <th className="rounded tbl-left bg-dark text-white">Beer Name</th>
+              <th className="rounded tbl-left bg-dark text-white">Status</th>
+              <th className="rounded tbl-left bg-dark text-white">Action</th>
             </tr>
           </thead>
+
           <tbody>
-            {tapList.map((beer) => (
+            {tapList?.length > 0 ? tapList.map((beer) => (
               <tr key={beer.product_id}>
                 <td className="tbl-left">{beer.name}</td>
                 <td
@@ -105,7 +106,12 @@ function TapList() {
                   </Button>
                 </td>
               </tr>
-            ))}
+            )) : (
+              <tr>
+                <td colspan='3'> Nothing to show here </td>
+              </tr>
+            )}
+
           </tbody>
         </Table>
         <br />
@@ -152,7 +158,7 @@ function TapList() {
           </tbody>
         </Table> */}
       </Container>
-    </>
+    </div>
   );
 }
 

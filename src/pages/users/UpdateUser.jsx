@@ -58,58 +58,63 @@ function UpdateUser() {
   };
 
   return (
-    <>
- <div className='form contMargin'>
+    <div className="page">
+      <div className='form contMargin'>
         <h1>Update Staff</h1>
+        
         <div>
-        <InputGroup size="lg">
-        <InputGroup.Text id="inputGroup-sizing-lg">Username</InputGroup.Text>
-        <Form.Control
-          onChange={handleChange}
-          name='username'
-          value={user.username} 
-          aria-label="Large"
-          aria-describedby="inputGroup-sizing-sm"
-        />
-        </InputGroup>
+          <InputGroup size="lg">
+          <InputGroup.Text id="inputGroup-sizing-lg">Username</InputGroup.Text>
+          <Form.Control
+            onChange={handleChange}
+            name='username'
+            value={user.username} 
+            aria-label="Large"
+            aria-describedby="inputGroup-sizing-sm"
+          />
+          </InputGroup>
         </div>
+
         <div>
-        <InputGroup size="lg">
-        <InputGroup.Text id="inputGroup-sizing-lg">Password</InputGroup.Text>
-        <Form.Control
-          onChange={handleChange}
-          type='password' 
-          name='password'
-          value={user.password}
-          aria-label="Large"
-          aria-describedby="inputGroup-sizing-sm"
-        />
-        </InputGroup>
+          <InputGroup size="lg">
+          <InputGroup.Text id="inputGroup-sizing-lg">Password</InputGroup.Text>
+          <Form.Control
+            onChange={handleChange}
+            type='password' 
+            name='password'
+            value={user.password}
+            aria-label="Large"
+            aria-describedby="inputGroup-sizing-sm"
+          />
+          </InputGroup>
         </div>
+
         <div>
-        <InputGroup size="lg">
-        <InputGroup.Text id="inputGroup-sizing-lg">Full Name</InputGroup.Text>
-        <Form.Control
-          onChange={handleChange} 
-          name='full_name'
-          value={user.full_name}
-          aria-label="Large"
-          aria-describedby="inputGroup-sizing-sm"
-        />
-        </InputGroup>
+          <InputGroup size="lg">
+          <InputGroup.Text id="inputGroup-sizing-lg">Full Name</InputGroup.Text>
+          <Form.Control
+            onChange={handleChange} 
+            name='full_name'
+            value={user.full_name}
+            aria-label="Large"
+            aria-describedby="inputGroup-sizing-sm"
+          />
+          </InputGroup>
         </div>
+
         <div>
-        <InputGroup size="lg">
-        <InputGroup.Text id="inputGroup-sizing-lg">Email</InputGroup.Text>
-        <Form.Control
-          onChange={handleChange} 
-          name='email'
-          value={user.email}
-          aria-label="Large"
-          aria-describedby="inputGroup-sizing-sm"
-        />
-        </InputGroup>
+          <InputGroup size="lg">
+          <InputGroup.Text id="inputGroup-sizing-lg">Email</InputGroup.Text>
+          <Form.Control
+            onChange={handleChange} 
+            name='email'
+            value={user.email}
+            aria-label="Large"
+            aria-describedby="inputGroup-sizing-sm"
+          />
+          </InputGroup>
         </div>
+
         <div>
           <InputGroup size='lg'>
             <InputGroup.Text id='inputGroup-sizing-lg'>Role</InputGroup.Text>
@@ -125,17 +130,18 @@ function UpdateUser() {
             </Dropdown>
           </InputGroup>
         </div>
+        
         <div className='btn-div'>
-        <Button className='btn-extra' variant='primary' size='lg' onClick={handleClick}>
-            Update
-        </Button>
-        <Button variant='primary' size='lg' href={"/users"} className="update-link btn-extra">
-            Back
-        </Button>
-    </div>
+          <Button className='btn-extra' variant='primary' size='lg' onClick={handleClick}>
+              Update
+          </Button>
+          <Button variant='primary' size='lg' href={"/users"} className="update-link btn-extra">
+              Back
+          </Button>
+        </div>
 
       </div>
-    </>
+    </div>
   );
 }
 

@@ -1,11 +1,13 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { useState, useEffect, useContext } from 'react';
+import { Navbar, Container, Button, Nav, NavDropdown } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom'; // Import NavLink from react-router-dom
+import {GlobalStore} from '../App'
 
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate()
+  const {onLogout} = useContext(GlobalStore)
 
   useEffect(() => {
     // Check if the user is logged in by inspecting local storage
@@ -15,12 +17,7 @@ function Navigation() {
 
   const handleLogout = () => {
     // Clear user data and redirect to the login page
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    // dispatch({ type: 'LOGOUT' });
-    navigate('/')
-// Reload the page
-    // window.location.reload();
+    onLogout()
   };
 
   return (
@@ -66,10 +63,17 @@ function Navigation() {
                 Staff
               </NavDropdown.Item>
             </NavDropdown>
-          </Nav>
-          {/* <Nav.Link as={NavLink} to="/" className="ms-auto" style={{ color: 'white' }} onClick={isLoggedIn ? handleLogout : null}>
-            {isLoggedIn ? 'Logout' : 'Login'}
-          </Nav.Link> */}
+          </Nav>          
+
+          <NavDropdown title="User" className="text-white" id="basic-nav-dropdown">
+            <NavDropdown.Item as={NavLink} to="/breweries">
+              Profile
+            </NavDropdown.Item>
+            
+            <NavDropdown.Item as={Button} onClick={handleLogout}>
+              Log out
+            </NavDropdown.Item>
+          </NavDropdown>
         </Navbar.Collapse>
       </Container>
     </Navbar>

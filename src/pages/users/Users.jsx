@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
 //import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faAdd } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
 
@@ -87,9 +87,19 @@ function Users() {
   const end = start + maxRecords;
 
   return (
-    <div>
+    <div className="page">
       <Container className='contMargin'>
-        <h1>All Staffs</h1>
+
+        <div className="d-flex my-5 pt-3 justify-content-between align-content-center">
+          <h2 className="listUntapTitle"> All Staff Accounts </h2>
+
+          <Button variant='primary' size='md' className='btn-extra'>
+            <Link to="/users/add" className="update-link">
+              <FontAwesomeIcon icon={faAdd} className="mx-2" /> Add Staff
+            </Link>
+          </Button>
+        </div>
+
         {deleteConfirmation && <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>}
         <table className="brewery-table">
           <thead>
@@ -148,12 +158,7 @@ function Users() {
             Next
           </Button>
         </div>
-        <br />
-        <Button variant='primary' size='lg' className='btn-extra'>
-          <Link to="/users/add" className="update-link">
-            Add Staff
-          </Link>
-        </Button>
+        
       </Container>
     </div>
   );

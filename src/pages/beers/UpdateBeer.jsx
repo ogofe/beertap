@@ -250,7 +250,6 @@ function UpdateBeer() {
             </div>
 
             {/* Add more fields similarly */}
-
           </div>
         </div>
 

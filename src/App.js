@@ -6,7 +6,7 @@ import Navigation from './components/Navbar';
 import { UserProvider, useUser } from './contexts/userContext';
 import { loginWithToken } from './pages/services/authService';
 import './styles.css';
-
+import {PageLoader} from './components'
 import Beers from './pages/beers/Beers';
 import AddBeer from './pages/beers/AddBeer';
 import UpdateBeer from './pages/beers/UpdateBeer';
@@ -78,7 +78,7 @@ const Layout = () => {
 // }
 
 
-const router = createBrowserRouter([
+const BaseRouter = createBrowserRouter([
 
   // Public Route for login page
   {
@@ -310,11 +310,85 @@ const router = createBrowserRouter([
 ]);
 
 
+const AuthRouter = createBrowserRouter([
+
+  // Public Route for login page
+  {
+    path: "/",
+    element: <>
+      {/* <ConditionalRoute /> */}
+      <Login />
+    </>,
+  },
+
+  // Public Route for password-reset page
+  {
+    path: "/password-reset",
+    element: <>
+      {/* <ConditionalRoute /> */}
+      <Login /> 
+    </>,
+  },
+
+]);
+
+
 
 function App() {
+  const [isAuthenticated, setAuthState] = useState(false)
+  // always loading before mounting route based on authetication
+  const [isLoading, setLoadingState] = useState(true) 
+  // const navigate = useNavigate()
+
   const generalContext = {
     'apiUrl': API_URL,
+    onLogin: authenticate,
+    onLogout: logout,
+    isAuthenticated,
   }
+
+  function renderApp(){
+    setLoadingState(false)
+  }
+
+  function authenticate(authData){
+    // receive token and confirm from api
+    // then store token to session storage (session restarts when browser is closed)
+    // set the auth state to true
+    localStorage.setItem('isAuthenticated', true)
+    setLoadingState(true)
+    window.location.href = '/'
+    setAuthState(true)
+  }
+
+  function logout(){
+    setLoadingState(true)
+    setAuthState(false)
+    localStorage.setItem('isAuthenticated', false)
+    localStorage.removeItem('token');
+    window.location.href = '/'
+    // setIsLoggedIn(false);
+    // dispatch({ type: 'LOGOUT' });
+    // navigate('/')
+  }
+
+  function init(){
+    // get authentication status from the api  using session storage token
+    // some logic
+    // after auth logic and confirmation
+    // set auth state
+    const loggedIn = JSON.parse(localStorage.getItem('isAuthenticated'))
+    if(loggedIn && loggedIn === true){
+      setAuthState(true)
+    }
+
+    // timer to set loading state false after 1.5 seconds of confirmation
+    setTimeout(() => setLoadingState(false), 2500)
+  }
+
+  useEffect(() => {
+    init()
+  }, [isAuthenticated])
 
   // Define your router and routes...
 
@@ -343,19 +417,37 @@ function App() {
   //   }
   // }, [navigate, dispatch]);
 
+  if (isLoading){
+    return <PageLoader />
+  }
 
-  // Wrap the component using useNavigate inside the RouterProvider
-  return (
-    <GlobalStore.Provider value={generalContext}>
-    <UserProvider>
-      <div className='App'>
-      <RouterProvider router={router}>
-      </RouterProvider>
-      </div>
-    </UserProvider>
-    </GlobalStore.Provider>
-    
-  );
+  if(!isAuthenticated){
+    return(
+      <GlobalStore.Provider value={generalContext}>
+      <UserProvider>
+        <div className='App'>
+          <RouterProvider router={AuthRouter}>
+          </RouterProvider>
+        </div>
+      </UserProvider>
+      </GlobalStore.Provider>
+    )
+  }
+
+  if(isAuthenticated){
+    // Wrap the component using useNavigate inside the RouterProvider
+    return (
+      <GlobalStore.Provider value={generalContext}>
+      <UserProvider>
+        <div className='App'>
+          <RouterProvider router={BaseRouter}>
+          </RouterProvider>
+        </div>
+      </UserProvider>
+      </GlobalStore.Provider>
+    );
+
+  }
 }
 
 
@@ -373,3 +465,4 @@ function App() {
 
 
 export default App;
+

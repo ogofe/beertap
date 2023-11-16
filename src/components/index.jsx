@@ -1,6 +1,8 @@
 
 import { Button, div, Form, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import logo from '../images/uob.png'
+import {Link} from 'react-router-dom'
 import { faSave, faTrash, faTruck, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
 // import React from 'react';
 // import {
@@ -43,15 +45,16 @@ import { faSave, faTrash, faTruck, faChevronLeft, faSearch } from '@fortawesome/
 export const BackButton =({ path }) =>{
 
 	return(
-		<Button
-          variant='dark'
-          size='md'
-          href={path}
-          className="mt-5 mb-2 btn-extra"
-        >
-          <FontAwesomeIcon icon={faChevronLeft} />
-          <b> Back </b>
-      </Button>
+		<Link to={path}>
+			<Button
+	      variant='dark'
+	      size='md'
+	      className="mt-5 mb-2 btn-extra"
+	    >
+	      <FontAwesomeIcon icon={faChevronLeft} />
+	      <b> Back </b>
+	    </Button>
+    </Link>
 	)
 }
 
@@ -70,6 +73,19 @@ export const Skeleton = ({ props }) => {
 		    <div class="row mt-3">
 		      <div class="col-md-4 mx-auto loading-skeleton" style={{height: '10px'}}></div>
 		    </div>
+		</div>
+	)
+}
+
+export const PageLoader = () => {
+	return(
+		<div className="w-100 h-100 d-flex justify-content-center align-content-center">
+			<img src={logo} className="loading-skeleton" 
+				style={{
+					width:"100%",
+					height: "100vh",
+					animation: 'grayOut 1s infinite'
+				}} />
 		</div>
 	)
 }

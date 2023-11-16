@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button, div, Form, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faTrash, faTruckFast, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faTrash, faTruckFast, faChevronLeft, faPenFancy } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Skeleton, BackButton} from '../../components'
 import {GlobalStore} from '../../App';
@@ -41,8 +41,8 @@ function AddBeer() {
   const [kegsize, setKegsize] = useState({}); 
   const [category, setCategory] = useState(""); 
   const [pageLoading, setPageLoading] = useState(true); 
-  // const [error, setError] = useState(null);
-  // const [isDisabled, setIsDisabled] = useState(true); // Set it to true to initially disable the input
+  const [queueItemId, setQueueItemId] = useState(null); // item for editing
+  const [editing, setEditingState] = useState(false); // Set it to true to initially disable editing
   const navigate = useNavigate();
   
   // get api Url from GlobalStore
@@ -75,7 +75,7 @@ function AddBeer() {
       const row = [];
       const cols = rows[i].querySelectorAll('td, th');
   
-      for (let j = 0; j < cols.length; j++) {
+      for (let j = 0; j < cols.length - 1; j++) {
         row.push(cols[j].innerText);
       }
   
@@ -270,6 +270,23 @@ function AddBeer() {
     }
   }
 
+  function showOverlay(){
+    // show editing form
+    // .... code body
+  }
+
+  function editQueueItem(itemId){
+    setEditingState(true)
+    const info = document.querySelector('#title')
+    
+    window.scrollTo({
+      behavior: 'smooth',
+      top: (info.offsetTop - 150)
+    })
+
+    // setQueueItemId(itemId)
+    // showOverlay()
+  }
 
   // Function to handle the Order button click
   const handleClick = async (e) => {
@@ -309,7 +326,14 @@ function AddBeer() {
         <div className=''>
           <BackButton path={"/beers"} />
 
-          <h1 className='listUntapTitle '>Order Beer</h1>       
+          {editing &&
+            <div className="p-3 bg-warning rounded fadeIn">
+              <FontAwesomeIcon size='lg' className="d-block" icon={faPenFancy} />
+              <p className="my-2"> You are now editing an item in the queue, be careful your changes are permanent until altered. </p>
+            </div>
+          }
+
+          <h1 className='listUntapTitle' id="title">Order Beer</h1>       
 
           <div className="form my-3 bg-light p-2 rounded">
             {/* <div size="lg">
@@ -554,13 +578,24 @@ function AddBeer() {
                     <td>{item.price_per_serving_size}</td>
                     <td>{item.status}</td>
                     <td>
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => removeBeerFromOrder(index)}
-                      >
-                        Remove
-                      </Button>
+                      <div className="d-flex">
+                        <Button
+                          variant="warning"
+                          size="sm"
+                          onClick={() => editQueueItem(index)}
+                        >
+                          Edit
+                        </Button>
+
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          className="mx-2"
+                          onClick={() => removeBeerFromOrder(index)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -586,5 +621,224 @@ function AddBeer() {
     </div>
   );
 }
+
+
+
+const EditQueueItem = ({ itemId }) => {
+  const [orderQueue, setQueue] = useState([]);
+  const [beer, setBeer] = useState({
+    tap_number: null,
+    name: '',
+    type: '',
+    brewery_id: '',
+    supplier_id: '',
+    description: '',
+    flavor_details: '',
+    price_per_keg: '',
+    arrival_date: '',
+    keg_size_id: '',
+    serving_sizes: '',
+    price_per_serving_size: '',
+    category_id: null,
+    tap_id: null,
+    status: 'ordered', // Default status is "ordered"
+  });
+
+  const [breweries, setBreweries] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+  const [kegSizes, setKegSizes] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [orderedItems, setOrderedItems] = useState([])
+  const [supplierNames, setSupplierNames] = useState({}); 
+  const [breweryNames, setBreweryNames] = useState({});
+  const [kegsize, setKegsize] = useState({}); 
+  const [category, setCategory] = useState(""); 
+  const [pageLoading, setPageLoading] = useState(true); 
+
+  function getAllQueuedItems(){
+    // get all queued items from local storage
+    const queue = JSON.parse(
+                    localStorage.getItem('orderedItems')
+                  )
+
+    setQueue(queue)
+  }
+
+  function getItemFromQueue(){
+    orderQueue.find(item => item.id === itemId)
+  }
+
+  function handleChange(){
+
+  }
+
+  const isDisabled = true
+
+  useEffect(() => {
+    getAllQueuedItems();
+    getItemFromQueue();
+  }, [])
+
+  return(
+    <div> 
+      <div className="row">
+        {/* Beer Name */}
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Name </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.name}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+              disabled = {isDisabled}
+            />
+          </div>
+        </div>
+
+        {/* Beer Type */}
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Type </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.type}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        {/* Beer Brewery */}
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Brewery Name </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.brewery}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        {/* Beer Supplier */}
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Supplier Name </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.supplier_id}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        <div className="col-sm-12 my-2 col-md-8">
+          <div>
+            <label className="form-label"> Description </label>
+            <Form.Control
+              onChange={handleChange}
+              name='description'
+              as='textarea'
+              value={beer.description}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Flavor Details </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.flavor_details}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Price Per Keg ($) </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.flavor_details}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Arrival Date </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.flavor_details}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Keg Size </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.flavor_details}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Serving Size </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.flavor_details}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        <div className="col-sm-12 my-2 col-md-4">
+          <div>
+            <label className="form-label"> Price Per Serving ($) </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={beer.flavor_details}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+        {/* Add more fields similarly */}
+      </div>
+    </div>
+
+  )
+}
+
+
+
 
 export default AddBeer;

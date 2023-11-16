@@ -95,6 +95,10 @@ body::after {
     display: flex;
 }
 
+.bg-beer{
+    background-color: #d39439 !important;
+}
+
 .beer{
     display: flex;
     flex-direction: column;
@@ -136,6 +140,24 @@ input{
     padding: 10px;
     border: 1px solid grey;
     border-radius: 10px;
+}
+
+@keyframes grayOut{
+    from{
+        filter: grayscale(80%);
+    }
+    25%{
+        filter: grayscale(100%);
+    }
+    50%{
+        filter: grayscale(80%);
+    }
+    70%{
+        filter: grayscale(100%);
+    }
+    to{
+        filter: grayscale(80%);
+    }
 }
 
 .formButton{
