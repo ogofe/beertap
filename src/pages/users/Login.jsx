@@ -78,7 +78,7 @@ function Login() {
                 />
               </div>
               
-              <div size='lg'>
+              <div size='lg' className="mt-4">
                 <label className="form-label"id='inputGroup-sizing-lg'>Password</label>
                 <Form.Control
                   onChange={handleChange}
