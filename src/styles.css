@@ -5,7 +5,7 @@ body {
     background-repeat: no-repeat; /* Prevent the background image from repeating */
     background-attachment: fixed; /* Keep the background fixed while scrolling */
     /* You can also set background color as a fallback */
-    background-color: #4c4a4a; /* Replace with your desired background color */
+    background-color: #fff; /* Replace with your desired background color */
 }
 
 /*** Reduce the opacity of the body background image 
