@@ -63,7 +63,7 @@ function UpdateBrewery() {
         )}
         
         <div>
-          <InputGroup size='lg'>
+          <div size='lg'>
             <label className="form-label" id='inputGroup-sizing-lg'>Brewery Name</label>
             <Form.Control
               onChange={handleChange}
@@ -72,11 +72,11 @@ function UpdateBrewery() {
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
             />
-          </InputGroup>
+          </div>
         </div>
   
         <div>
-          <InputGroup size='lg'>
+          <div size='lg'>
             <label className="form-label" id='inputGroup-sizing-lg'>Location</label>
             <Form.Control
               onChange={handleChange}
@@ -85,7 +85,7 @@ function UpdateBrewery() {
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
             />
-          </InputGroup>
+          </div>
         </div>
 
         <div className="bg-light rounded p-2 my-3">
