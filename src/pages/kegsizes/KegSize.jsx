@@ -89,7 +89,7 @@ function KegSizes() {
     <div className="page">
       <Container className='contMargin'>
         
-        <div className="d-flex justify-content-between align-items-center flex-wrap w-100">
+        <div className="d-flex justify-content-between mb-3 align-items-center flex-wrap w-100">
           <h2 className='listUntapTitle my-4 w-fit'>Keg Sizes</h2>
 
           <Button variant='primary' size='md'>
@@ -101,34 +101,37 @@ function KegSizes() {
 
         {deleteConfirmation && <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>}
         
-        <table className="brewery-table">
-          <thead>
-            <tr>
-              <th className='tbl-left'>Size</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {kegsize.slice(start, end).map((size) => (
-              <tr key={size.keg_size_id}>
-                <td className='tbl-left'>{size.size}</td>
-                <td>
-                  <div className="d-flex">
-                    <Button className="warning mr-1">
-                      <Link to={`/kegsizes/update/${size.keg_size_id}`} className="update-link">
-                      <FontAwesomeIcon icon={faEdit} />
-                      </Link>
-                    </Button>
-
-                    <Button onClick={() => handleDelete(size.keg_size_id)} variant="danger">
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </div>
-                </td>
+        <div className="table-wrapper">
+          <table className="brewery-table">
+            <thead>
+              <tr>
+                <th className='tbl-left'>Size</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {kegsize.slice(start, end).map((size) => (
+                <tr key={size.keg_size_id}>
+                  <td className='tbl-left'>{size.size}</td>
+                  <td>
+                    <div className="d-flex">
+                      <Button className="warning mr-1">
+                        <Link to={`/kegsizes/update/${size.keg_size_id}`} className="update-link">
+                        <FontAwesomeIcon icon={faEdit} />
+                        </Link>
+                      </Button>
+
+                      <Button onClick={() => handleDelete(size.keg_size_id)} variant="danger">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         <div>
           <Button 
           onClick={handlePrevious} 

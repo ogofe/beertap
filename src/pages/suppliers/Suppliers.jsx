@@ -100,34 +100,36 @@ function Suppliers() {
 
         {deleteConfirmation && <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>}
 
-        <table className="brewery-table">
-          <thead>
-            <tr>
-              <th className='tbl-left'>Supplier Name</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {supplier.slice(start, end).map((supply) => (
-              <tr key={supply.supplier_id}>
-                <td className='tbl-left'>{supply.name}</td>
-                <td>
-                  <div className="d-flex">
-                    <Button className=" mr-1">
-                      <Link to={`/suppliers/update/${supply.supplier_id}`} className="update-link">
-                        <FontAwesomeIcon icon={faEdit} />
-                      </Link>
-                    </Button>
-
-                    <Button onClick={() => handleDelete(supply.supplier_id)} variant="dark">
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </div>
-                </td>
+        <div className="table-wrapper">
+          <table className="brewery-table">
+            <thead>
+              <tr>
+                <th className='tbl-left'>Supplier Name</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {supplier.slice(start, end).map((supply) => (
+                <tr key={supply.supplier_id}>
+                  <td className='tbl-left'>{supply.name}</td>
+                  <td>
+                    <div className="d-flex">
+                      <Button className=" mr-1">
+                        <Link to={`/suppliers/update/${supply.supplier_id}`} className="update-link">
+                          <FontAwesomeIcon icon={faEdit} />
+                        </Link>
+                      </Button>
+
+                      <Button onClick={() => handleDelete(supply.supplier_id)} variant="dark">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="my-3 bg-light rounded p-2">
           <Button 

@@ -74,39 +74,41 @@ function UntappedList() {
         
         <h2 className='listUntapTitle my-3'>Untapped List</h2>
 
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th className="bg-dark text-white tbl-left">Beer Name</th>
-              <th className="bg-dark text-white tbl-left">Status</th>
-              <th className="bg-dark text-white ">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {untappedList.map((beer) => (
-              <tr key={beer.product_id}>
-                <td className="tbl-left">{beer.name}</td>
-                <td className="tbl-left">
-                  <Badge 
-                    bg={bgColor[beer.status]}
-                    style={{
-                      fontWeight: 'bolder',
-                      fontSize: '15px',
-                    }}> {beer.status} </Badge>
-                </td>
-                <td>
-                  <Button
-                    variant={beer.status !== 'delivered' ? "secondary" :"primary"}
-                    onClick={() => updateBeerStatus(beer.product_id, 'on-tap')}
-                    disabled={beer.status !== 'delivered'}
-                  >
-                    Put On Tap
-                  </Button>
-                </td>
+        <div className="table-wrapper">
+          <Table responsive striped bordered hover>
+            <thead>
+              <tr>
+                <th className="bg-dark text-white tbl-left">Beer Name</th>
+                <th className="bg-dark text-white tbl-left">Status</th>
+                <th className="bg-dark text-white ">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {untappedList.map((beer) => (
+                <tr key={beer.product_id}>
+                  <td className="tbl-left">{beer.name}</td>
+                  <td className="tbl-left">
+                    <Badge 
+                      bg={bgColor[beer.status]}
+                      style={{
+                        fontWeight: 'bolder',
+                        fontSize: '15px',
+                      }}> {beer.status} </Badge>
+                  </td>
+                  <td>
+                    <Button
+                      variant={beer.status !== 'delivered' ? "secondary" :"primary"}
+                      onClick={() => updateBeerStatus(beer.product_id, 'on-tap')}
+                      disabled={beer.status !== 'delivered'}
+                    >
+                      Put On Tap
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
       </Container>
     </div>
   );

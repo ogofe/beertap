@@ -90,7 +90,7 @@ function Users() {
     <div className="page">
       <Container className='contMargin'>
 
-        <div className="d-flex my-5 pt-3 justify-content-between align-items-center">
+        <div className="d-flex flex-wrap my-5 pt-3 justify-content-between align-items-center">
           <h2 className="listUntapTitle"> Staff Accounts </h2>
 
           <Button variant='primary' size='md' className=''>
@@ -101,41 +101,44 @@ function Users() {
         </div>
 
         {deleteConfirmation && <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>}
-        <table className="brewery-table">
-          <thead>
-            <tr>
-              <th className='tbl-left'>Username</th>
-              <th className='tbl-left'>Full Name</th>
-              <th className='tbl-left'>Email</th>
-              <th className='tbl-left'>Role</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.slice(start, end).map((user) => (
-              <tr key={user.user_id}>
-                <td className='tbl-left'>{user.username}</td>
-                <td className='tbl-left'>{user.full_name}</td>
-                <td className='tbl-left'>{user.email}</td>
-                <td className='tbl-left'>{user.role}</td>
-                <td>
-                  <div className="d-flex">
-                    <Button className="mr-1">
-                      <Link to={`/users/update/${user.user_id}`} className="update-link">
-                        <FontAwesomeIcon icon={faEdit} /> 
-                      </Link>
-                    </Button>
-
-                    <Button onClick={() => handleDelete(user.user_id)} variant="dark">
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </div>
-                </td>
+        
+        <div className="table-wrapper">
+          <table className="table table-responsive brewery-table">
+            <thead>
+              <tr>
+                <th className='tbl-left'>Username</th>
+                <th className='tbl-left'>Full Name</th>
+                <th className='tbl-left'>Email</th>
+                <th className='tbl-left'>Role</th>
+                <th></th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.slice(start, end).map((user) => (
+                <tr key={user.user_id}>
+                  <td className='tbl-left'>{user.username}</td>
+                  <td className='tbl-left'>{user.full_name}</td>
+                  <td className='tbl-left'>{user.email}</td>
+                  <td className='tbl-left'>{user.role}</td>
+                  <td>
+                    <div className="d-flex">
+                      <Button className="mr-1">
+                        <Link to={`/users/update/${user.user_id}`} className="update-link">
+                          <FontAwesomeIcon icon={faEdit} /> 
+                        </Link>
+                      </Button>
+
+                      <Button onClick={() => handleDelete(user.user_id)} variant="dark">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="bg-light rounded p-2 my-3">
           <Button 

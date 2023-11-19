@@ -69,90 +69,51 @@ function TapList() {
   return (
     <div className="page">
       <Container className='contMargin'>
-        <br />
+        
         <h2 className='listUntapTitle my-3'>Tapped List</h2>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th className="tbl-left bg-dark text-white">Beer Name</th>
-              <th className="tbl-left bg-dark text-white">Status</th>
-              <th className="tbl-left bg-dark text-white">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {tapList?.length > 0 ? tapList.map((beer) => (
-              <tr key={beer.product_id}>
-                <td className="tbl-left">{beer.name}</td>
-                <td className="tbl-left">
-                  <Badge 
-                    bg={bgColor[beer.status]}
-                    style={{
-                      fontWeight: 'bolder',
-                      fontSize: '15px',
-                    }}> {beer.status} </Badge>
-                </td>
-                <td>
-                  <Button
-                    variant="danger"
-                    onClick={() => updateBeerStatus(beer.product_id, 'empty')}
-                    className='tap'
-                  >
-                    Mark as Empty
-                  </Button>
-                </td>
-              </tr>
-            )) : (
+        
+        <div className="table-wrapper">
+          <Table responsive striped bordered hover>
+            <thead>
               <tr>
-                <td colspan='3'> Nothing to show here </td>
+                <th className="tbl-left bg-dark text-white">Beer Name</th>
+                <th className="tbl-left bg-dark text-white">Status</th>
+                <th className="tbl-left bg-dark text-white">Action</th>
               </tr>
-            )}
+            </thead>
 
-          </tbody>
-        </Table>
-        <br />
-        {/* <h2 className='listUntapTitle'>Untapped List</h2>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th className="tbl-left">Beer Name</th>
-              <th className="tbl-left">Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {untappedList.map((beer) => (
-              <tr key={beer.product_id}>
-                <td className="tbl-left">{beer.name}</td>
-                <td
-                  className="tbl-left"
-                  style={{
-                    fontWeight: 'bolder',
-                    fontSize: '20px',
-                    color:
-                      beer.status === 'upcoming'
-                        ? 'grey'
-                        : beer.status === 'delivered'
-                        ? 'green'
-                        : beer.status === 'ordered'
-                        ? 'orange'
-                        : 'red',
-                  }}
-                >
-                  {beer.status}
-                </td>
-                <td>
-                  <Button
-                    variant="primary"
-                    onClick={() => updateBeerStatus(beer.product_id, 'on-tap')}
-                  >
-                    Put On Tap
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table> */}
+            <tbody>
+              {tapList?.length > 0 ? tapList.map((beer) => (
+                <tr key={beer.product_id}>
+                  <td className="tbl-left">{beer.name}</td>
+                  <td className="tbl-left">
+                    <Badge 
+                      bg={bgColor[beer.status]}
+                      style={{
+                        fontWeight: 'bolder',
+                        fontSize: '15px',
+                      }}> {beer.status} </Badge>
+                  </td>
+                  <td>
+                    <Button
+                      variant="danger"
+                      onClick={() => updateBeerStatus(beer.product_id, 'empty')}
+                      className='tap'
+                    >
+                      Mark as Empty
+                    </Button>
+                  </td>
+                </tr>
+              )) : (
+                <tr>
+                  <td colspan='3'> Nothing to show here </td>
+                </tr>
+              )}
+
+            </tbody>
+          </Table>
+        </div>
+        
       </Container>
     </div>
   );

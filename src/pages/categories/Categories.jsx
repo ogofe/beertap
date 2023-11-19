@@ -89,7 +89,7 @@ function Categories() {
     <div className="page">
       <Container className='contMargin'>
         
-        <div className="d-flex justify-content-between align-items-center flex-wrap w-100">
+        <div className="d-flex justify-content-between mb-3 align-items-center flex-wrap w-100">
           <h2 className='listUntapTitle my-4 w-fit'> Categories List </h2>
 
           <Button variant='primary' size='md'>
@@ -102,36 +102,38 @@ function Categories() {
         
         {deleteConfirmation && <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>}
         
-        <table className="brewery-table">
-          <thead>
-            <tr>
-              <th className='tbl-left'>Name</th>
-              <th className='tbl-left'>Type</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.slice(start, end).map((category) => (
-              <tr key={category.category_id}>
-                <td className='tbl-left'>{category.name}</td>
-                <td className='tbl-left'>{category.type}</td>
-                <td>
-                  <div className="d-flex">
-                    <Button className="mr-1" variant="warning">
-                      <Link to={`/categories/update/${category.category_id}`} className="update-link">
-                        <FontAwesomeIcon icon={faEdit} /> 
-                      </Link>
-                    </Button>
-
-                    <Button onClick={() => handleDelete(category.category_id)} variant="danger">
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </div>
-                </td>
+        <div className="table-wrapper">
+          <table className="brewery-table">
+            <thead>
+              <tr>
+                <th className='tbl-left'>Name</th>
+                <th className='tbl-left'>Type</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {categories.slice(start, end).map((category) => (
+                <tr key={category.category_id}>
+                  <td className='tbl-left'>{category.name}</td>
+                  <td className='tbl-left'>{category.type}</td>
+                  <td>
+                    <div className="d-flex">
+                      <Button className="mr-1" variant="warning">
+                        <Link to={`/categories/update/${category.category_id}`} className="update-link">
+                          <FontAwesomeIcon icon={faEdit} /> 
+                        </Link>
+                      </Button>
+
+                      <Button onClick={() => handleDelete(category.category_id)} variant="danger">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="p-2 rounded bg-light my-3">
           <Button 
