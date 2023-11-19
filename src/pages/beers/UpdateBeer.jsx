@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, InputGroup, Form } from 'react-bootstrap';
+import { Button, InputGroup, Form, Container, Badge } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import {GlobalStore} from '../../App';
 import {BackButton} from '../../components';
-import { faSave, faAdd } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faAdd, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
@@ -31,6 +31,7 @@ function UpdateBeer() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDisabled, setIsDisabled] = useState(true);
+  const [popupVisible, setPopupVisibility] = useState(false);
   const beerId = location.pathname.split('/')[3];
   const {apiUrl} = useContext(GlobalStore);
   //const { beerId } = useParams();
@@ -53,11 +54,10 @@ function UpdateBeer() {
     setBeer((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleClick = async (e) => {
-    e.preventDefault();
+  const handleClick = async (data) => {
     const beerUrl = `${apiUrl}/beers/${beerId}`;
     try {
-      await axios.put(beerUrl, beer);
+      await axios.put(beerUrl, data);
       setUpdateConfirmation('Record updated successfully.');
       navigate('/beers');
     } catch (err) {
@@ -68,16 +68,18 @@ function UpdateBeer() {
   function showPopup(){
     const overlay = popup.current;
     overlay.classList.add('show');
+    setPopupVisibility(true)
   }
 
   function onPopupClose(){
     const overlay = popup.current;
     overlay.classList.remove('show');
+    setPopupVisibility(false)
   }
 
   return (
     <div className="page">
-      <div className='contMargin'>
+      <Container className='contMargin'>
         <BackButton path={'/beers'} />
 
         <div className="d-flex justify-content-between mt-3">
@@ -89,14 +91,31 @@ function UpdateBeer() {
         )}
 
         <div className="form p-2 rounded my-3 bg-light">
-          {!beer?.tap_number && 
+          {!beer.tap_number ?
             <Button
               variant="info"
               size='md'
               className="w-fit"
               style={{ marginLeft: 'auto'}}
               onClick={showPopup}
-            ><FontAwesomeIcon icon={faAdd} /> Add to Tap </Button>
+            >
+              <FontAwesomeIcon icon={faAdd} /> Add to Tap
+            </Button>
+            :
+
+            <div className="d-flex justify-content-between align-items-center">
+              <Badge bg="primary" style={{fontSize: '18px'}}> Tap N<u>o</u> : {beer.tap_number} </Badge>
+
+              {/* <Button
+                              variant="warning"
+                              size='md'
+                              className="w-fit"
+                              style={{ marginLeft: 'auto'}}
+                              onClick={showPopup}
+                            >
+                              <FontAwesomeIcon icon={faEdit} /> Change Tap Number
+                            </Button> */}
+            </div>
           }
           
           <div className="row">
@@ -110,7 +129,7 @@ function UpdateBeer() {
                   value={beer.name}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
-                  disabled = {isDisabled}
+                  disabled = {true}
                 />
               </div>
             </div>
@@ -123,6 +142,7 @@ function UpdateBeer() {
                   onChange={handleChange}
                   name='name'
                   value={beer.type}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -137,6 +157,7 @@ function UpdateBeer() {
                   onChange={handleChange}
                   name='name'
                   value={beer.brewery}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -151,6 +172,7 @@ function UpdateBeer() {
                   onChange={handleChange}
                   name='name'
                   value={beer.supplier_id}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -165,6 +187,7 @@ function UpdateBeer() {
                   name='description'
                   as='textarea'
                   value={beer.description}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -178,6 +201,7 @@ function UpdateBeer() {
                   onChange={handleChange}
                   name='name'
                   value={beer.flavor_details}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -191,6 +215,7 @@ function UpdateBeer() {
                   onChange={handleChange}
                   name='name'
                   value={beer.flavor_details}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -204,6 +229,7 @@ function UpdateBeer() {
                   onChange={handleChange}
                   name='name'
                   value={beer.flavor_details}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -217,6 +243,7 @@ function UpdateBeer() {
                   onChange={handleChange}
                   name='name'
                   value={beer.flavor_details}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -230,6 +257,7 @@ function UpdateBeer() {
                   onChange={handleChange}
                   name='name'
                   value={beer.flavor_details}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -243,6 +271,7 @@ function UpdateBeer() {
                   onChange={handleChange}
                   name='name'
                   value={beer.flavor_details}
+                  disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
                 />
@@ -252,17 +281,11 @@ function UpdateBeer() {
             {/* Add more fields similarly */}
           </div>
         </div>
-
-        <div className='bg-light p-2 rounded'>
-          <Button className='btn-extra bold' variant='primary' size='md' onClick={handleClick}>
-            <FontAwesomeIcon icon={faSave} /> Save Changes
-          </Button>
-        </div>
-      </div>
+      </Container>
 
       <div className="overlay" ref={popup}>
         <div className="overlay-inner">
-          <TapPopup onClose={onPopupClose} />
+          {popupVisible && <TapPopup editMode={Boolean(beer.tap_number)} onSave={handleClick} beerData={beer} onClose={onPopupClose} />}
         </div>
       </div>
     </div>
@@ -271,12 +294,23 @@ function UpdateBeer() {
 
 
 
-const TapPopup = ({ show, onClose }) => {
-  const [tapNumber, setTapNumber] = useState("")
+const TapPopup = ({ show, onClose, beerData, onSave, editMode }) => {
+  const [tapNumber, setTapNumber] = useState(beerData.tap_number)
+  const [beer, setBeer] = useState(beerData)
   const popup = useRef()
+
+  useEffect(() => {
+    setBeer(beerData)
+  }, [])
 
   function addToTap(){
     // send a post request to add beer to tap
+    onSave(beer)
+    setTimeout(() => onClose(), 500)
+  }
+
+  function onChange(e){
+    setBeer((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   function closePopup(){
@@ -288,16 +322,16 @@ const TapPopup = ({ show, onClose }) => {
       <label className="form-label"> Tap Number </label>
       
       <Form.Control
-        onChange={e => setTapNumber(e.target.value)}
+        onChange={onChange}
         type='number'
         name='tap_number'
-        value={tapNumber}
+        value={beer.tap_number}
         aria-label='Large'
         aria-describedby='inputGroup-sizing-sm'
       />
 
       <div className="mt-3">
-        <Button className="bold" variant="primary"> Add to Tap </Button>
+        <Button onClick={addToTap} className="bold" variant="primary"> {editMode ? `Change Tap` : "Add to Tap"} </Button>
         <Button onClick={closePopup} className="mx-2 bold" variant="warning"> Cancel </Button>
       </div>
     </div>

@@ -8,6 +8,20 @@ body {
     background-color: #fff; /* Replace with your desired background color */
 }
 
+@media screen and (max-width: 768px){
+    .mx-sm-0{
+        margin-right: 0px !important;
+        margin-left: 0px !important;
+    }    
+}
+
+.ml-1{
+    margin-left: 10px;
+}
+.mr-1{
+    margin-right: 10px;
+}
+
 /*** Reduce the opacity of the body background image 
 body::after {
     content: ''; /* Create a pseudo-element 
@@ -21,6 +35,48 @@ body::after {
     z-index: -1; /* Place it below the content 
   }
 */
+
+/* notification toast */
+.toast {
+    position: fixed;
+    bottom: 50px;
+    z-index: 2000000;
+    right: 50px;
+    animation: swoopIn .5s forwards;
+}
+
+.beer-box{
+    display: flex;
+}
+
+.beer-box .search-box{
+    width: 75%;
+}
+
+.beer-box div:nth-child(2){
+    margin-right: 0px !important;
+}
+@media screen and (max-width: 500px){
+    .beer-box{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+    }
+    .beer-box .search-box{
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .beer-box div:nth-child(2){
+        margin-bottom: 25px;
+    }
+    
+    .beer-box div:nth-child(2) button{
+        float: right;
+        margin: 0px !important;
+    }
+}
+
 .page{
     padding: 1.5rem;
 }
@@ -285,6 +341,15 @@ input{
     width: max-content;
 }
 
+/*  Custom animations */
 
+@keyframes  swoopIn {
+    from {
+        transform:  translateY(200px);
+    }
+    to{
+        transform:  translateY(0px);
+    }
+}
 
 

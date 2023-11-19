@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Button, Container, Table } from 'react-bootstrap';
+import { Button, Container, Table, ButtonGroup, Badge } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function Deliveries() {
   const [beerList, setBeerList] = useState([]); // Original list of beers
@@ -64,54 +66,45 @@ function Deliveries() {
   };
 
   return (
-    <>
-      <Container className='contMargin'>
-        <br />
-        <h2 className='listUntapTitle'>Deliveries</h2>
+    <div className="page">
+      <Container className='pt-5'>
+        
+        <h2 className='listUntapTitle my-3'>Deliveries</h2>
+        
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th className='tbl-left'>Beer Name</th>
-              <th className='tbl-left'>Status</th>
-              <th>Actions</th>
+              <th className='bg-dark text-white tbl-left'>Beer Name</th>
+              <th className='bg-dark text-white tbl-left'>Status</th>
+              <th className="bg-dark text-white ">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredBeerList.map((beer) => (
               <tr key={beer.product_id}>
                 <td className='tbl-left'>{beer.name}</td>
-                <td
-                  className='tbl-left'
-                  style={{
-                    fontWeight: 'bolder',
-                    fontSize: '20px',
-                    color: 'orange', // Assuming 'Ordered' status is displayed in orange
-                  }}
-                >
-                  {beer.status}
+                <td className='text-center'>
+                  <Badge bg="warning" className="text-black bolder bold" style={{fontSize: '15px'}}> {beer.status} </Badge>
                 </td>
                 <td>
-                  <Button
-                    className='tap'
-                    variant='success'
-                    onClick={() => updateBeerStatus(beer.product_id, 'delivered')}
-                  >
-                    Received
-                  </Button>
-                  <Button
-                    className='tap'
-                    variant='primary'
-                    onClick={() => updateBeerStatus(beer.product_id, 'upcoming')}
-                  >
-                    Not Received
-                  </Button>
+                  <DropdownButton as={ButtonGroup} title="Set Delivery status" id="bg-nested-dropdown">
+                    <Dropdown.Item
+                      onClick={() => updateBeerStatus(beer.product_id, 'delivered')}
+                      className="bg-success text-white p-2" as={Button}
+                    > Delivery was Received </Dropdown.Item>
+
+                    <Dropdown.Item
+                      onClick={() => updateBeerStatus(beer.product_id, 'upcoming')}
+                      className="bg-primary text-white p-2" as={Button}
+                    > Delivery was not Received </Dropdown.Item>
+                  </DropdownButton>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
       </Container>
-    </>
+    </div>
   );
 }
 

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
 //import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faAdd } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faAdd, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
 
@@ -90,10 +90,10 @@ function Users() {
     <div className="page">
       <Container className='contMargin'>
 
-        <div className="d-flex my-5 pt-3 justify-content-between align-content-center">
-          <h2 className="listUntapTitle"> All Staff Accounts </h2>
+        <div className="d-flex my-5 pt-3 justify-content-between align-items-center">
+          <h2 className="listUntapTitle"> Staff Accounts </h2>
 
-          <Button variant='primary' size='md' className='btn-extra'>
+          <Button variant='primary' size='md' className=''>
             <Link to="/users/add" className="update-link">
               <FontAwesomeIcon icon={faAdd} className="mx-2" /> Add Staff
             </Link>
@@ -120,42 +120,37 @@ function Users() {
                 <td className='tbl-left'>{user.email}</td>
                 <td className='tbl-left'>{user.role}</td>
                 <td>
-                  <Button>
-                    <Link to={`/users/update/${user.user_id}`} className="update-link">
-                    <FontAwesomeIcon icon={faEdit} /> 
-                    </Link>
-                  </Button>
-                </td>
-                <td>
-                  <Button onClick={() => handleDelete(user.user_id)} variant="dark">
-                  <FontAwesomeIcon icon={faTrash} />
-                  </Button>
+                  <div className="d-flex">
+                    <Button className="mr-1">
+                      <Link to={`/users/update/${user.user_id}`} className="update-link">
+                        <FontAwesomeIcon icon={faEdit} /> 
+                      </Link>
+                    </Button>
+
+                    <Button onClick={() => handleDelete(user.user_id)} variant="dark">
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div>
+
+        <div className="bg-light rounded p-2 my-3">
           <Button 
-          onClick={handlePrevious} 
-          disabled={activePage === 0} 
-          style={{
-            background:'none',
-            color:"black",
-            border: "none"
-            }}>
-            Previous
+            onClick={handlePrevious} 
+            disabled={activePage === 0}
+            className="mr-1"
+          >
+           <FontAwesomeIcon icon={faChevronLeft} /> Previous
           </Button>
+
           <Button
             onClick={handleNext}
             disabled={activePage === Math.ceil(users.length / maxRecords) - 1}
-            style={{
-                background:'none',
-                color:"black",
-                border: "none"
-                }}
           >
-            Next
+            Next <FontAwesomeIcon icon={faChevronRight} />
           </Button>
         </div>
         

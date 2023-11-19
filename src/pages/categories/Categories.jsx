@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
 //import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faAdd, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -86,17 +86,27 @@ function Categories() {
   const end = start + maxRecords;
 
   return (
-    <div>
+    <div className="page">
       <Container className='contMargin'>
-        <br />
-        <h1 className='listUntapTitle'>Categories</h1>
+        
+        <div className="d-flex justify-content-between align-items-center flex-wrap w-100">
+          <h2 className='listUntapTitle my-4 w-fit'> Categories List </h2>
+
+          <Button variant='primary' size='md'>
+            <Link to="/categories/add" className="update-link btn-extra">
+              <FontAwesomeIcon icon={faAdd} /> Add a Category
+            </Link>
+          </Button>
+        </div>
+
+        
         {deleteConfirmation && <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>}
+        
         <table className="brewery-table">
           <thead>
             <tr>
               <th className='tbl-left'>Name</th>
               <th className='tbl-left'>Type</th>
-              <th></th>
               <th></th>
             </tr>
           </thead>
@@ -106,50 +116,40 @@ function Categories() {
                 <td className='tbl-left'>{category.name}</td>
                 <td className='tbl-left'>{category.type}</td>
                 <td>
-                  <Button>
-                    <Link to={`/categories/update/${category.category_id}`} className="update-link">
-                    <FontAwesomeIcon icon={faEdit} /> 
-                    </Link>
-                  </Button>
-                </td>
-                <td>
-                  <Button onClick={() => handleDelete(category.category_id)} variant="dark">
-                  <FontAwesomeIcon icon={faTrash} />
-                  </Button>
+                  <div className="d-flex">
+                    <Button className="mr-1" variant="warning">
+                      <Link to={`/categories/update/${category.category_id}`} className="update-link">
+                        <FontAwesomeIcon icon={faEdit} /> 
+                      </Link>
+                    </Button>
+
+                    <Button onClick={() => handleDelete(category.category_id)} variant="danger">
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div>
+
+        <div className="p-2 rounded bg-light my-3">
           <Button 
-          onClick={handlePrevious} 
-          disabled={activePage === 0} 
-          style={{
-            background:'none',
-            color:"black",
-            border: "none"
-            }}>
-            Previous
+            onClick={handlePrevious} 
+            disabled={activePage === 0}
+            className="mr-1"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} /> Previous
           </Button>
+
           <Button
             onClick={handleNext}
             disabled={activePage === Math.ceil(categories.length / maxRecords) - 1}
-            style={{
-                background:'none',
-                color:"black",
-                border: "none"
-                }}
           >
-            Next
+            Next <FontAwesomeIcon icon={faChevronRight} />
           </Button>
         </div>
-        <br />
-        <Button variant='primary' size='lg'>
-          <Link to="/categories/add" className="update-link btn-extra">
-            Add Category
-          </Link>
-        </Button>
+
       </Container>
     </div>
   );

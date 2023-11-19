@@ -1,9 +1,11 @@
 import React, { useContext, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-//import { Link } from 'react-router-dom';
-import {Button, InputGroup, Form} from 'react-bootstrap'
+import { BackButton } from '../../components';
+import {Button, InputGroup, Form, Container} from 'react-bootstrap'
 import {GlobalStore} from '../../App';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -33,27 +35,29 @@ function AddKegSize() {
     }
 
   return (
-    <>
-    <div className='form contMargin'>
-        <br />
-        <h1 className='listUntapTitle'>Add New Keg Size</h1>
-        <InputGroup size="lg">
-        <InputGroup.Text id="inputGroup-sizing-lg">Keg Size</InputGroup.Text>
-        <Form.Control
-          onChange={handleChange} 
-          name='size'
-          aria-label="Large"
-          aria-describedby="inputGroup-sizing-sm"
-        />
-        </InputGroup>
-        <div className="btn-div">
-        <Button className='btn-extra' variant='primary' size='lg' onClick={handleClick}>Add</Button>
-        <Button variant='primary' size='lg' href={"/kegsizes"} className="update-link btn-extra">
-            Back
-        </Button>
-        </div>
+    <div className="page">
+        <Container className='form contMargin'>
+
+            <BackButton path="/kegsizes" />
+
+            <h2 className='listUntapTitle my-4'> Add New Keg Size </h2>
+
+            <div size="lg" className="bg-light rounded p-2" >
+                <label id="inputGroup-sizing-lg" className="form-label">Keg Size</label>
+                <Form.Control
+                  onChange={handleChange} 
+                  name='size'
+                  aria-label="Large"
+                  aria-describedby="inputGroup-sizing-sm"
+                  style={{maxWidth: 500}}
+                />
+            </div>
+
+            <div className="bg-light rounded p-2 my-3">
+                <Button className='btn-extra bold w-fit' variant='primary' size='md' onClick={handleClick}><FontAwesomeIcon icon={faSave} /> Save Keg Size </Button>
+            </div>
+        </Container>
     </div>
-    </>
   )
 }
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button, div, Form, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faTrash, faTruckFast, faChevronLeft, faPenFancy } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faTrash, faTruckFast, faChevronLeft, faPenFancy, faCancel } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Skeleton, BackButton} from '../../components'
 import {GlobalStore} from '../../App';
@@ -41,12 +41,12 @@ function AddBeer() {
   const [kegsize, setKegsize] = useState({}); 
   const [category, setCategory] = useState(""); 
   const [pageLoading, setPageLoading] = useState(true); 
-  const [queueItemId, setQueueItemId] = useState(null); // item for editing
+  const [editItemId, setEditItemId] = useState(null); // item for editing
   const [editing, setEditingState] = useState(false); // Set it to true to initially disable editing
   const navigate = useNavigate();
   
   // get api Url from GlobalStore
-  const {apiUrl} = useContext(GlobalStore)
+  const {apiUrl, notify, translateError} = useContext(GlobalStore)
 
   const orderedItemsTableRef = useRef(null);
 
@@ -176,26 +176,47 @@ function AddBeer() {
 
 
   // Function to add the current beer to the list of ordered items
-  const addBeerToOrder = () => {
-    const newOrderedItems = [...orderedItems, beer];
-    setOrderedItems(newOrderedItems);
+  const addBeerToOrder = (e) => {
+    e.preventDefault()
+    try{
+      const newOrderedItems = [...orderedItems, beer];
+      setOrderedItems(newOrderedItems);
 
-    // Save the updated ordered items to local storage
-    localStorage.setItem('orderedItems', JSON.stringify(newOrderedItems));
-    // Reload the page
-    window.location.reload();
+      // Save the updated ordered items to local storage
+      localStorage.setItem('orderedItems', JSON.stringify(newOrderedItems));
 
-    setBeer({
+      notify({
+        level: 'success',
+        title: "Beer Item Added",
+        body: `You added ${beer.name} to your order queue!`
+      })
+
       // Reset the beer state after adding to the order
-    }); 
+      setBeer({}); 
+    }catch (err){
+      const processError = translateError(err)
+      notify({
+        level: 'info',
+        title: processError.title,
+        body: processError.body
+      })
+      console.log("Error adding to queue:", err)
+    }
   };
 
 
   // Function to remove a beer from the order list
   const removeBeerFromOrder = (index) => {
     const updatedItems = [...orderedItems];
+    const item = updatedItems [index]
     updatedItems.splice(index, 1);
     setOrderedItems(updatedItems);
+
+    notify({
+      level: 'success',
+      title: "Beer Item Removed",
+      body: `You remover ${item.name} to your order queue!`
+    })
 
     // Update local storage after removing an item
     localStorage.setItem('orderedItems', JSON.stringify(updatedItems));
@@ -234,6 +255,12 @@ function AddBeer() {
     e.preventDefault();
     const beerUrl =  `${apiUrl}/beers/`;
 
+    notify({
+      level: 'info',
+      title: "Processing...",
+      body: `Please wait while we record your order!`
+    })
+
     try {
       // Get all orders from local storage
       const localOrders = JSON.parse(localStorage.getItem('orderedItems')) || [];
@@ -266,6 +293,12 @@ function AddBeer() {
       // Navigate to the beers page or do other actions as needed
       navigate('/beers');
     } catch (err) {
+      const processError = translateError(err)
+      notify({
+        level: 'info',
+        title: processError.title,
+        body: processError.body
+      })
       console.error('Error adding orders:', err);
     }
   }
@@ -277,19 +310,42 @@ function AddBeer() {
 
   function editQueueItem(itemId){
     setEditingState(true)
+    setEditItemId(itemId)
     const info = document.querySelector('#title')
     
     window.scrollTo({
       behavior: 'smooth',
       top: (info.offsetTop - 150)
     })
+  }
 
-    // setQueueItemId(itemId)
-    // showOverlay()
+  function saveBeerChanges(newBeer){
+    orderedItems[editItemId] = newBeer
+    setEditingState(false)
+    setEditItemId(null)
+    localStorage.setItem('orderedItems', JSON.stringify(orderedItems))
+    notify({
+      level: 'success',
+      title: "Beer Item Changed",
+      body: `You have made changes to ${newBeer.name}`
+    })
+    window.scrollTo({
+      behavior: 'smooth',
+      top: (0)
+    })
+  }
+
+  function cancelEditing(){
+    setEditItemId(null)
+    setEditingState(false)
+    window.scrollTo({
+      behavior: 'smooth',
+      top: (0)
+    })
   }
 
   // Function to handle the Order button click
-  const handleClick = async (e) => {
+  const placeBeerOrder = async (e) => {
     e.preventDefault();
     const beerUrl = `${apiUrl}/beers/`;
 
@@ -297,6 +353,7 @@ function AddBeer() {
       // Order the beer (update its status to "Ordered")
       const orderedBeer = { ...beer, status: 'ordered' };
       const response = await axios.post(beerUrl, orderedBeer);
+      
 
       // Check if the response contains the newly created beer data
       if (response.data) {
@@ -308,7 +365,8 @@ function AddBeer() {
 
       navigate('/beers');
     } catch (err) {
-      console.error('Error adding beer:', err);
+
+      console.error('Error adding beer:', err);  
     }
   };
 
@@ -327,214 +385,221 @@ function AddBeer() {
           <BackButton path={"/beers"} />
 
           {editing &&
-            <div className="p-3 bg-warning rounded fadeIn">
-              <FontAwesomeIcon size='lg' className="d-block" icon={faPenFancy} />
-              <p className="my-2"> You are now editing an item in the queue, be careful your changes are permanent until altered. </p>
+            <div className="p-3 my-4 bg-warning rounded fadeIn">
+              <FontAwesomeIcon size='xl' className="d-block" icon={faPenFancy} />
+              <p className="my-2"> You are now editing an item in the order queue, be careful your changes are permanent until altered. </p>
             </div>
           }
 
-          <h1 className='listUntapTitle' id="title">Order Beer</h1>       
+          <h1 className='listUntapTitle' id="title">{editing ? "Edit Beer" : "Order Beer" }</h1>       
 
-          <div className="form my-3 bg-light p-2 rounded">
-            {/* <div size="lg">
-              <label className="form-label"id="tap_number">Tap Number</label>
-              <Form.Control
-                onChange={handleChange}
-                name="tap_number"
-                type="number"
-                aria-describedby="tap_number"
-                disabled={isDisabled}
+          {/* Add Beer Form */}
+          {editing ? (
+              <EditQueueItem
+                itemId={editItemId}
+                breweries={breweries}
+                suppliers={suppliers}
+                kegSizes={kegSizes}
+                categories={categories}
+                orderedItems={orderedItems}
+                supplierNames={supplierNames}
+                breweryNames={breweryNames}
+                onSave={saveBeerChanges}
+                onCancel={cancelEditing}
               />
-            </div> */}
+            ):(
+              <div>
+                <Form onSubmit={addBeerToOrder} id="add-form" className="form my-3 bg-light p-2 rounded">
+                  <div className="row">
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div size="lg">
+                        <label className="form-label"id="name">Beer Name</label>
+                        <Form.Control
+                          onChange={handleChange}
+                          name="name"
+                          required
+                          type="text"
+                          aria-describedby="name"
+                        />
+                      </div>
+                    </div>
 
-            <div className="row">
-              <div className="my-2 col-sm-12 col-md-4">
-                <div size="lg">
-                  <label className="form-label"id="name">Beer Name</label>
-                  <Form.Control
-                    onChange={handleChange}
-                    name="name"
-                    type="text"
-                    aria-describedby="name"
-                  />
-                </div>
-              </div>
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div size="lg">
+                        <label className="form-label"id="type">Type of Beer</label>
+                        <Form.Control
+                          onChange={handleChange}
+                          name="type"
+                          aria-describedby="type"
+                        />
+                      </div>
+                    </div>
 
-              <div className="my-2 col-sm-12 col-md-4">
-                <div size="lg">
-                  <label className="form-label"id="type">Type of Beer</label>
-                  <Form.Control
-                    onChange={handleChange}
-                    name="type"
-                    aria-describedby="type"
-                  />
-                </div>
-              </div>
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div>
+                        <label className="form-label"htmlFor="brewery_id">Brewery</label>
+                        <Form.Control
+                          onChange={handleChange}
+                          name="brewery_id"
+                          aria-describedby="brewery_id"
+                          as="select"
+                        >
+                          <option selected value="" disabled>
+                            Select Brewery
+                          </option>
+                          {breweries.map((brewery) => (
+                            <option key={brewery.brewery_id} value={brewery.brewery_id}>
+                              {brewery.name}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </div>
+                    </div>
 
-              <div className="my-2 col-sm-12 col-md-4">
-                <div>
-                  <label className="form-label"htmlFor="brewery_id">Brewery</label>
-                  <Form.Control
-                    onChange={handleChange}
-                    name="brewery_id"
-                    aria-describedby="brewery_id"
-                    as="select"
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div>
+                        <label className="form-label"htmlFor="supplier_id">Supplier</label>
+                        <Form.Control
+                          as="select"
+                          name="supplier_id"
+                          onChange={handleChange}
+                          defaultValue={''}
+                        >
+                          <option value="" selected disabled>
+                            Select Supplier
+                          </option>
+                          {suppliers.map((supplier) => (
+                            <option key={supplier.supplier_id} value={supplier.supplier_id}>
+                              {supplier.name}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </div>
+                    </div>
+
+                    <div className="my-2 col-sm-12 col-md-8">
+                      <div size="lg">
+                        <label className="form-label"id="description">Brief Description</label>
+                        <Form.Control
+                          as="textarea" // Use textarea for brief description
+                          onChange={handleChange}
+                          name="description"
+                          aria-describedby="description"
+                        />
+                      </div>
+                    </div>
+
+                    <hr className="mx-0 px-0 my-3" />
+
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div size="lg">
+                        <label className="form-label"id="flavor_details">Flavor Details</label>
+                        <Form.Control
+                          onChange={handleChange}
+                          name="flavor_details"
+                          type="text"
+                          aria-describedby="flavor_details"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div size="lg">
+                        <label className="form-label"id="price_per_keg">Price Per Keg ($)</label>
+                        <Form.Control
+                          onChange={handleChange}
+                          name="price_per_keg"
+                          type="number"
+                          aria-describedby="price_per_keg"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div size="lg">
+                        <label className="form-label"id="arrival_date">Arrival Date</label>
+                        <Form.Control
+                          onChange={handleChange}
+                          name="arrival_date"
+                          type="date"
+                          aria-describedby="arrival_date"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div>
+                        <label className="form-label"htmlFor="keg_size">Keg Size</label>
+                        <Form.Control
+                          as="select"
+                          name="keg_size_id"
+                          onChange={handleChange}
+                          defaultValue={''}
+                        >
+                          <option value="" selected disabled>
+                            Select Keg Size
+                          </option>
+                          {kegSizes.map((kegSize) => (
+                            <option key={kegSize.keg_size_id} value={kegSize.keg_size_id}>
+                              {kegSize.size}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </div>
+                    </div>
+
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div>
+                        <label className="form-label"htmlFor="serving_sizes">Serving Size</label>
+                        <Form.Control
+                          as="select"
+                          name="serving_sizes"
+                          onChange={handleChange}
+                          defaultValue={''}
+                        >
+                          <option value="" selected disabled>
+                            Select Serving Size
+                          </option>
+                          <option value="16oz">16oz</option>
+                          <option value="10oz">10oz</option>
+                          <option value="6oz">6oz</option>
+                        </Form.Control>
+                      </div>
+                    </div>
+
+                    <div className="my-2 col-sm-12 col-md-4">
+                      <div size="lg">
+                        <label className="form-label"id="price_per_serving_size">
+                          Price Per Serving ($)
+                        </label>
+                        <Form.Control
+                          onChange={handleChange}
+                          name="price_per_serving_size"
+                          type="number"
+                          aria-describedby="price_per_serving_size"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Form>
+
+                <div className="p-2 bg-light rounded mt-2 my-4">
+                  
+                  <Button
+                    variant="success"
+                    size="md"
+                    form="add-form"
+                    type="submit"
+                    className="bold w-fit btn-extra"
                   >
-                    <option selected value="" disabled>
-                      Select Brewery
-                    </option>
-                    {breweries.map((brewery) => (
-                      <option key={brewery.brewery_id} value={brewery.brewery_id}>
-                        {brewery.name}
-                      </option>
-                    ))}
-                  </Form.Control>
+                   <FontAwesomeIcon icon={faSave} /> Save to Queue
+                  </Button>
                 </div>
               </div>
-
-              <div className="my-2 col-sm-12 col-md-4">
-                <div>
-                  <label className="form-label"htmlFor="supplier_id">Supplier</label>
-                  <Form.Control
-                    as="select"
-                    name="supplier_id"
-                    onChange={handleChange}
-                    defaultValue={''}
-                  >
-                    <option value="" selected disabled>
-                      Select Supplier
-                    </option>
-                    {suppliers.map((supplier) => (
-                      <option key={supplier.supplier_id} value={supplier.supplier_id}>
-                        {supplier.name}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </div>
-              </div>
-
-              <div className="my-2 col-sm-12 col-md-8">
-                <div size="lg">
-                  <label className="form-label"id="description">Brief Description</label>
-                  <Form.Control
-                    as="textarea" // Use textarea for brief description
-                    onChange={handleChange}
-                    name="description"
-                    aria-describedby="description"
-                  />
-                </div>
-              </div>
-
-              <hr className="mx-0 px-0 my-3" />
-
-              <div className="my-2 col-sm-12 col-md-4">
-                <div size="lg">
-                  <label className="form-label"id="flavor_details">Flavor Details</label>
-                  <Form.Control
-                    onChange={handleChange}
-                    name="flavor_details"
-                    type="text"
-                    aria-describedby="flavor_details"
-                  />
-                </div>
-              </div>
-
-              <div className="my-2 col-sm-12 col-md-4">
-                <div size="lg">
-                  <label className="form-label"id="price_per_keg">Price Per Keg ($)</label>
-                  <Form.Control
-                    onChange={handleChange}
-                    name="price_per_keg"
-                    type="number"
-                    aria-describedby="price_per_keg"
-                  />
-                </div>
-              </div>
-
-              <div className="my-2 col-sm-12 col-md-4">
-                <div size="lg">
-                  <label className="form-label"id="arrival_date">Arrival Date</label>
-                  <Form.Control
-                    onChange={handleChange}
-                    name="arrival_date"
-                    type="date"
-                    aria-describedby="arrival_date"
-                  />
-                </div>
-              </div>
-
-              <div className="my-2 col-sm-12 col-md-4">
-                <div>
-                  <label className="form-label"htmlFor="keg_size">Keg Size</label>
-                  <Form.Control
-                    as="select"
-                    name="keg_size_id"
-                    onChange={handleChange}
-                    defaultValue={''}
-                  >
-                    <option value="" selected disabled>
-                      Select Keg Size
-                    </option>
-                    {kegSizes.map((kegSize) => (
-                      <option key={kegSize.keg_size_id} value={kegSize.keg_size_id}>
-                        {kegSize.size}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </div>
-              </div>
-
-              <div className="my-2 col-sm-12 col-md-4">
-                <div>
-                  <label className="form-label"htmlFor="serving_sizes">Serving Size</label>
-                  <Form.Control
-                    as="select"
-                    name="serving_sizes"
-                    onChange={handleChange}
-                    defaultValue={''}
-                  >
-                    <option value="" selected disabled>
-                      Select Serving Size
-                    </option>
-                    <option value="16oz">16oz</option>
-                    <option value="10oz">10oz</option>
-                    <option value="6oz">6oz</option>
-                  </Form.Control>
-                </div>
-              </div>
-
-              <div className="my-2 col-sm-12 col-md-4">
-                <div size="lg">
-                  <label className="form-label"id="price_per_serving_size">
-                    Price Per Serving ($)
-                  </label>
-                  <Form.Control
-                    onChange={handleChange}
-                    name="price_per_serving_size"
-                    type="number"
-                    aria-describedby="price_per_serving_size"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+            )
+          }
+          {/* End Add Beer Form */}
           
-          <div className="p-2 bg-light rounded mt-2 my-4">
-            {/* <Button
-            variant='primary'
-            size='lg'
-             className='btn-extra' onClick={handleClick}>
-              Order
-            </Button> */}
-            <Button
-              variant="info"
-              size="md"
-              className="bold w-fit btn-extra"
-              onClick={addBeerToOrder}
-            >
-             <FontAwesomeIcon icon={faSave} /> Save to Queue
-            </Button>
-          </div>
         </div>
         
         <hr />
@@ -547,19 +612,19 @@ function AddBeer() {
             <table className='table table-responsive table-striped brewery-table' ref={orderedItemsTableRef}>
               <thead>
                 <tr className='tbl-left'>
-                  <th className="tbl-left bg-dark text-white"> Beer Name</th>
-                  <th className="tbl-left bg-dark text-white"> Beer Type</th>
-                  <th className="tbl-left bg-dark text-white"> Brewery</th>
-                  <th className="tbl-left bg-dark text-white"> Supplier</th>
-                  <th className="tbl-left bg-dark text-white"> Description</th>
-                  <th className="tbl-left bg-dark text-white"> Flavor</th>
-                  <th className="tbl-left bg-dark text-white"> Price Per Keg $</th>
-                  <th className="tbl-left bg-dark text-white"> Arrival Date</th>
-                  <th className="tbl-left bg-dark text-white"> Keg Size</th>
-                  <th className="tbl-left bg-dark text-white"> Serving Size</th>
-                  <th className="tbl-left bg-dark text-white"> Price Per Serving $</th>
-                  <th className="tbl-left bg-dark text-white"> Status</th>
-                  <th className="tbl-left bg-dark text-white">Action</th>
+                  <th className="tbl-left bg-dark text-white"> Beer Name </th>
+                  <th className="tbl-left bg-dark text-white"> Beer Type </th>
+                  <th className="tbl-left bg-dark text-white"> Brewery </th>
+                  <th className="tbl-left bg-dark text-white"> Supplier </th>
+                  <th className="tbl-left bg-dark text-white"> Description </th>
+                  <th className="tbl-left bg-dark text-white"> Flavor </th>
+                  <th className="tbl-left bg-dark text-white"> Price Per Keg $ </th>
+                  <th className="tbl-left bg-dark text-white"> Arrival Date </th>
+                  <th className="tbl-left bg-dark text-white"> Keg Size </th>
+                  <th className="tbl-left bg-dark text-white"> Serving Size </th>
+                  <th className="tbl-left bg-dark text-white"> Price Per Serving $ </th>
+                  <th className="tbl-left bg-dark text-white"> Status </th>
+                  <th className="tbl-left bg-dark text-white">Action </th>
                 </tr>
               </thead>
               <tbody>
@@ -616,7 +681,6 @@ function AddBeer() {
             </div>
           )}
         </div>
-
       </Container>  
     </div>
   );
@@ -624,7 +688,12 @@ function AddBeer() {
 
 
 
-const EditQueueItem = ({ itemId }) => {
+const EditQueueItem = ({
+  itemId, breweries, suppliers,
+  kegSizes, categories, orderedItems,
+  supplierNames, breweryNames, onSave, onCancel,
+}) => {
+
   const [orderQueue, setQueue] = useState([]);
   const [beer, setBeer] = useState({
     tap_number: null,
@@ -643,16 +712,6 @@ const EditQueueItem = ({ itemId }) => {
     tap_id: null,
     status: 'ordered', // Default status is "ordered"
   });
-
-  const [breweries, setBreweries] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
-  const [kegSizes, setKegSizes] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [orderedItems, setOrderedItems] = useState([])
-  const [supplierNames, setSupplierNames] = useState({}); 
-  const [breweryNames, setBreweryNames] = useState({});
-  const [kegsize, setKegsize] = useState({}); 
-  const [category, setCategory] = useState(""); 
   const [pageLoading, setPageLoading] = useState(true); 
 
   function getAllQueuedItems(){
@@ -665,17 +724,24 @@ const EditQueueItem = ({ itemId }) => {
   }
 
   function getItemFromQueue(){
-    orderQueue.find(item => item.id === itemId)
+    const item = orderedItems[itemId];
+    setBeer(item)
   }
 
-  function handleChange(){
-
+  function handleChange(e){
+    setBeer((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  const isDisabled = true
+  function saveBeerChanges(){
+    onSave(beer)
+  }
+
+  function cancelEditing(){
+    onCancel()
+  }
 
   useEffect(() => {
-    getAllQueuedItems();
+    // getAllQueuedItems();
     getItemFromQueue();
   }, [])
 
@@ -692,7 +758,6 @@ const EditQueueItem = ({ itemId }) => {
               value={beer.name}
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
-              disabled = {isDisabled}
             />
           </div>
         </div>
@@ -703,7 +768,7 @@ const EditQueueItem = ({ itemId }) => {
             <label className="form-label"> Type </label>
             <Form.Control
               onChange={handleChange}
-              name='name'
+              name='type'
               value={beer.type}
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
@@ -717,11 +782,19 @@ const EditQueueItem = ({ itemId }) => {
             <label className="form-label"> Brewery Name </label>
             <Form.Control
               onChange={handleChange}
-              name='name'
-              value={beer.brewery}
+              name='brewery_id'
+              as="select"
+              value={beer.brewery_id}
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
-            />
+            >
+            <option disabled value=""> Select brewery </option>
+            {
+              breweries.map((brewery, idx) => 
+                <option key={brewery.brewery_id} value={brewery.brewery_id}> {brewery.name} </option>
+              )
+            }
+            </Form.Control>
           </div>
         </div>
 
@@ -731,11 +804,19 @@ const EditQueueItem = ({ itemId }) => {
             <label className="form-label"> Supplier Name </label>
             <Form.Control
               onChange={handleChange}
-              name='name'
+              name='supplier_id'
+              as="select"
               value={beer.supplier_id}
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
-            />
+            >
+            <option disabled value=""> Select supplier </option>
+            {
+              suppliers.map((supplier, idx) => 
+                <option key={idx} value={supplier.supplier_id}> {supplier.name} </option>
+              )
+            }
+            </Form.Control>
           </div>
         </div>
 
@@ -758,7 +839,7 @@ const EditQueueItem = ({ itemId }) => {
             <label className="form-label"> Flavor Details </label>
             <Form.Control
               onChange={handleChange}
-              name='name'
+              name='flavor_details'
               value={beer.flavor_details}
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
@@ -771,9 +852,11 @@ const EditQueueItem = ({ itemId }) => {
             <label className="form-label"> Price Per Keg ($) </label>
             <Form.Control
               onChange={handleChange}
-              name='name'
-              value={beer.flavor_details}
+              name='price_per_keg'
+              value={beer.price_per_keg}
               aria-label='Large'
+              type="number"
+              min="1"
               aria-describedby='inputGroup-sizing-sm'
             />
           </div>
@@ -784,8 +867,9 @@ const EditQueueItem = ({ itemId }) => {
             <label className="form-label"> Arrival Date </label>
             <Form.Control
               onChange={handleChange}
-              name='name'
-              value={beer.flavor_details}
+              name='arrival_date'
+              type="date"
+              value={beer.arrival_date}
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
             />
@@ -797,11 +881,19 @@ const EditQueueItem = ({ itemId }) => {
             <label className="form-label"> Keg Size </label>
             <Form.Control
               onChange={handleChange}
-              name='name'
-              value={beer.flavor_details}
+              name='keg_size_id'
+              as="select"
+              value={beer.keg_size_id}
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
-            />
+            >
+            <option disabled value=""> Select Keg Size </option>
+            {
+              kegSizes.map((size, idx) => 
+                <option value={size.keg_size_id} key={idx}> {size.size} </option>
+              )
+            }
+            </Form.Control>
           </div>
         </div>
 
@@ -810,11 +902,17 @@ const EditQueueItem = ({ itemId }) => {
             <label className="form-label"> Serving Size </label>
             <Form.Control
               onChange={handleChange}
-              name='name'
-              value={beer.flavor_details}
+              name='serving_sizes'
+              value={beer.serving_sizes}
               aria-label='Large'
+              as="select"
               aria-describedby='inputGroup-sizing-sm'
-            />
+            >
+              <option disabled value=""> Select Serving Size </option>
+              <option value="16oz">16oz</option>
+              <option value="10oz">10oz</option>
+              <option value="6oz">6oz</option>
+            </Form.Control>
           </div>
         </div>
 
@@ -823,8 +921,10 @@ const EditQueueItem = ({ itemId }) => {
             <label className="form-label"> Price Per Serving ($) </label>
             <Form.Control
               onChange={handleChange}
-              name='name'
-              value={beer.flavor_details}
+              name='price_per_serving_size'
+              type="number"
+              min="1"
+              value={beer.price_per_serving_size}
               aria-label='Large'
               aria-describedby='inputGroup-sizing-sm'
             />
@@ -832,6 +932,26 @@ const EditQueueItem = ({ itemId }) => {
         </div>
 
         {/* Add more fields similarly */}
+      </div>
+
+      <div className="p-2 bg-light rounded mt-2 my-4">         
+        <Button
+          variant="success"
+          size="md"
+          className="bold w-fit btn-extra mr-1 my-1"
+          onClick={saveBeerChanges}
+        >
+         <FontAwesomeIcon icon={faSave} /> Save changes
+        </Button>
+
+        <Button
+          variant="warning"
+          size="md"
+          className="bold w-fit btn-extra my-1"
+          onClick={cancelEditing}
+        >
+         <FontAwesomeIcon icon={faCancel} /> Cancel Editing
+        </Button>
       </div>
     </div>
 

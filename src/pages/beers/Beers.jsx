@@ -2,28 +2,13 @@ import React, { useEffect, useContext, useState, Fragment } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 // import { ResponsiveTable } from '../../components';
-import { Button, Container, InputGroup, FormControl, Table } from 'react-bootstrap';
+import { Button, Container, InputGroup, FormControl, Table, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faBeerMugEmpty, faChevronRight, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
 import {GlobalStore} from '../../App'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-
-const Headers = [
-  { id: 0, Header: 'Tap Number', accessor: 'tap_number'},
-  { id: 1, Header: 'Beer Name', accessor: 'name'},
-  { id: 2, Header: 'Beer Type', accessor: 'type'},
-  { id: 3, Header: 'Brewery Name', accessor: 'name'},
-  { id: 4, Header: 'Supplier Name', accessor: 'name'},
-  { id: 5, Header: 'Description', accessor: 'description'},
-  { id: 6, Header: 'Flavor', accessor: 'flavor_details'},
-  { id: 7, Header: 'Price per Keg ($)', accessor: 'price_per_keg'},
-  { id: 8, Header: 'Serving Sizes', accessor: 'serving_sizes'},
-  { id: 9, Header: 'Price per Service Size ($)', accessor: 'price_per_serving_size'},
-  { id: 10, Header: 'Arrival Date', accessor: 'arrival_date'},
-  { id: 11, Header: 'Status', accessor: 'status'},
-]
 
 function Beers() {
   const [isDeleted, setIsDeleted] = useState(false);
@@ -34,7 +19,12 @@ function Beers() {
   const [activePage, setActivePage] = useState(0);
   const {apiUrl} = useContext(GlobalStore)
   const beerUrl = `${apiUrl}/beers/`
-
+  const bgColor = {
+    'upcoming'    : 'secondary',
+    'delivered'   : 'success',
+    'ordered'     : 'warning',
+    'empty'    : 'danger',
+  }
   const [breweryNames, setBreweryNames] = useState({});
   const [supplierNames, setSupplierNames] = useState({});
   const [isDisabled, setIsDisabled] = useState(true);
@@ -195,8 +185,8 @@ function Beers() {
       <Container className='contMargin'>
         <h1 className='listUntapTitle text-left mb-3 pt-5'>Beer Stock</h1>
         
-        <div className='d-flex justify-content-between mb-3'>
-          <InputGroup className='w-50'>
+        <div className='beer-box justify-content-between mb-3'>
+          <InputGroup className='search-box'>
             <FontAwesomeIcon style={{
              padding: '11px', backgroundColor: 'grey', color: '#fff',
              borderRadius: '4px 0px 0px 4px'
@@ -267,7 +257,7 @@ function Beers() {
                 {beers.length > 1 && beers.slice(start, end).map((beer) => (
                   <tr key={beer.product_id}>
                     <td className='tbl-left'>{beer.tap_number}</td>
-                    <td className='tbl-left'>{beer.name}</td>
+                    <td className='w-50 tbl-left'>{beer.name}</td>
                     <td className='tbl-left'>{beer.type}</td>
                     <td className='tbl-left'>{breweryNames[beer.product_id]}</td>
                     <td className='tbl-left'>{supplierNames[beer.supplier_id]}</td>
@@ -277,39 +267,25 @@ function Beers() {
                     <td className='tbl-left'>{beer.serving_sizes}</td>
                     <td className='tbl-left'>{beer.price_per_serving_size}</td>
                     <td className='tbl-left'>{formatDate(beer.arrival_date)}</td>
-                    <td
-                      className="tbl-left"
-                      style={{
-                        fontWeight: 'bolder',
-                        fontSize: '15px',
-                        color:
-                          beer.status === 'upcoming'
-                            ? 'grey'
-                            : beer.status === 'on-tap'
-                            ? 'tomato'
-                            :beer.status === 'ordered'
-                            ? 'orange'
-                            :beer.status === 'delivered'
-                            ? 'green'
-                            : 'red',
-                      }}
-                    >
-                      {beer.status}
+                    <td className="tbl-left">
+                      <Badge bg={bgColor[beer.status]} className="bold"> {beer.status} </Badge>
                     </td>
-                    <td className="d-flex tbl-left">
-                      <Button className="mx-2">
-                        <Link to={`/beers/update/${beer.product_id}`} className="update-link">
-                          <FontAwesomeIcon icon={faEdit} />
-                        </Link>
-                      </Button>
+                    <td className="w-10 tbl-left">
+                      <div className="d-flex">
+                        <Button className="mx-2">
+                          <Link to={`/beers/update/${beer.product_id}`} className="update-link">
+                            <FontAwesomeIcon icon={faEdit} />
+                          </Link>
+                        </Button>
 
-                      <Button 
-                      onClick={() => handleDelete(beer.product_id)} 
-                      variant="dark"
-                      disabled={true}
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </Button>
+                        <Button 
+                          onClick={() => handleDelete(beer.product_id)} 
+                          variant="dark"
+                          disabled={true}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}

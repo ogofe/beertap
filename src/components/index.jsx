@@ -1,10 +1,10 @@
 
-import { Button, div, Form, Container } from 'react-bootstrap';
+import React, {useState} from 'react';
+import { Button, div, Form, Col, Toast, Row, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import logo from '../images/uob.png'
 import {Link} from 'react-router-dom'
 import { faSave, faTrash, faTruck, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
-// import React from 'react';
 // import {
 //   Table,
 //   Thead,
@@ -79,13 +79,43 @@ export const Skeleton = ({ props }) => {
 
 export const PageLoader = () => {
 	return(
-		<div className="w-100 h-100 d-flex justify-content-center align-content-center">
-			<img src={logo} className="loading-skeleton" 
-				style={{
-					width:"100%",
-					height: "100vh",
-					animation: 'grayOut 1s infinite'
-				}} />
+		<div className="w-100 h-100 d-flex justify-content-center loading-skeleton position-absolute align-content-center"
+			style={{
+				width:"100%",
+				height: "100vh",
+				animation: 'grayOut 1s infinite'
+				// backgroundImage={url('../images/uob.png')}
+			}}
+		>
+			<img src={logo} className="" style={{
+			    background: 'none',
+			    top: '15vh',
+			    height: '400px',
+			    position: 'absolute',
+			    width: '100%',
+			    maxWidth: '440px'
+			}} />
+				
 		</div>
 	)
 }
+
+export const Notification = ({ title, body, onClose, show, level }) => {
+
+  // setTimeout(() => setShow(false), 3500)
+
+  return (
+    <Toast bg={level|| 'dark'} onClose={onClose} show={show} > {/* delay={3500} autohide */}
+      <Toast.Header>
+        <strong className="me-auto">{title}</strong>
+        <small>Just now</small>
+      </Toast.Header>
+      <Toast.Body className="text-white">{body}</Toast.Body>
+    </Toast>
+    )
+}
+
+
+
+
+

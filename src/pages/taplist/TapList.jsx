@@ -1,7 +1,7 @@
 import {GlobalStore} from '../../App';
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Button, Container, Table } from 'react-bootstrap';
+import { Button, Container, Table, Badge } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function TapList() {
@@ -11,7 +11,12 @@ function TapList() {
   const tapListUrl = `${apiUrl}/tap/`;
   const untappedListUrl = `${apiUrl}/tap/untappedList`;
   const updateUrl = `${apiUrl}/tap/updateStatus`;
-
+  const bgColor = {
+    'upcoming'    : 'secondary',
+    'delivered'   : 'success',
+    'ordered'     : 'warning',
+    'empty'    : 'danger',
+  }
   useEffect(() => {
     // Fetch data from the tapList URL
     axios.get(tapListUrl).then((response) => {
@@ -65,13 +70,13 @@ function TapList() {
     <div className="page">
       <Container className='contMargin'>
         <br />
-        <h2 className='listUntapTitle mb-5'>Tapped List</h2>
+        <h2 className='listUntapTitle my-3'>Tapped List</h2>
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th className="rounded tbl-left bg-dark text-white">Beer Name</th>
-              <th className="rounded tbl-left bg-dark text-white">Status</th>
-              <th className="rounded tbl-left bg-dark text-white">Action</th>
+              <th className="tbl-left bg-dark text-white">Beer Name</th>
+              <th className="tbl-left bg-dark text-white">Status</th>
+              <th className="tbl-left bg-dark text-white">Action</th>
             </tr>
           </thead>
 
@@ -79,22 +84,13 @@ function TapList() {
             {tapList?.length > 0 ? tapList.map((beer) => (
               <tr key={beer.product_id}>
                 <td className="tbl-left">{beer.name}</td>
-                <td
-                  className="tbl-left"
-                  style={{
-                    fontWeight: 'bolder',
-                    fontSize: '20px',
-                    color:
-                      beer.status === 'upcoming'
-                        ? 'grey'
-                        : beer.status === 'on-tap'
-                        ? 'tomato'
-                        : beer.status === 'ordered'
-                        ? 'orange'
-                        : 'red',
-                  }}
-                >
-                  {beer.status}
+                <td className="tbl-left">
+                  <Badge 
+                    bg={bgColor[beer.status]}
+                    style={{
+                      fontWeight: 'bolder',
+                      fontSize: '15px',
+                    }}> {beer.status} </Badge>
                 </td>
                 <td>
                   <Button

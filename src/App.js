@@ -6,7 +6,7 @@ import Navigation from './components/Navbar';
 import { UserProvider, useUser } from './contexts/userContext';
 import { loginWithToken } from './pages/services/authService';
 import './styles.css';
-import {PageLoader} from './components'
+import {PageLoader, Notification} from './components'
 import Beers from './pages/beers/Beers';
 import AddBeer from './pages/beers/AddBeer';
 import UpdateBeer from './pages/beers/UpdateBeer';
@@ -29,6 +29,7 @@ import TapList from './pages/taplist/TapList'
 import UntappedList from './pages/taplist/UntappedList';
 import Deliveries from './pages/taplist/Deliveries';
 import Login from './pages/users/Login';
+import PasswordReset from './pages/users/PasswordReset';
 
 //import Router from './components/Routers'
 export const API_URL = 'https://beer.binsoft.online/api'
@@ -83,12 +84,7 @@ const BaseRouter = createBrowserRouter([
   // Public Route for login page
   {
     path: "/",
-    element: <>
-      {/* <ConditionalRoute /> */}
-      {/* <Login /> */}
-      <Layout /> 
-      <Beers /> 
-    </>,
+    element: <Navigate to="/beers" replace />,
   },
 
   // For beer display, add and update
@@ -317,6 +313,15 @@ const AuthRouter = createBrowserRouter([
     path: "/",
     element: <>
       {/* <ConditionalRoute /> */}
+      <Navigate to='/login' replace />
+    </>,
+  },
+
+  // Public Route for login page
+  {
+    path: "/login",
+    element: <>
+      {/* <ConditionalRoute /> */}
       <Login />
     </>,
   },
@@ -326,7 +331,7 @@ const AuthRouter = createBrowserRouter([
     path: "/password-reset",
     element: <>
       {/* <ConditionalRoute /> */}
-      <Login /> 
+      <PasswordReset /> 
     </>,
   },
 
@@ -338,13 +343,53 @@ function App() {
   const [isAuthenticated, setAuthState] = useState(false)
   // always loading before mounting route based on authetication
   const [isLoading, setLoadingState] = useState(true) 
+  const [notificationVisible, setNotificationVisibility] = useState(false) 
+  const [notification, setNotification] = useState(null) 
   // const navigate = useNavigate()
+
+  function notify({ level, title, body, timeout }){
+    setNotification({ title, body, level })
+    const _timeout = timeout || 5000 // 5 seconds default
+    setNotificationVisibility(true)
+    setTimeout(() => {setNotificationVisibility(false); setNotification(null)}, _timeout)
+  }
+
+  function dismissNotification(){
+    setNotification(null)
+    setNotificationVisibility(false)
+  }
+
+  function translateError(err) {
+    // if ( err.message ) {
+    //   return err.message
+    // }
+
+    if ( err.code ) {
+      switch(err.code){
+        case 'ERR_NETWORK': {
+          return {title: 'Network Error', body: 'Please check your internet connection!'}
+        }
+        case 'ERR_TYPE': {
+          return {title: 'Data Error', body: 'Please fill in the correct details!'}
+        }
+        default : {
+          return {title: 'Network Error', body: 'Please check your internet connection!'}
+        }
+      }
+    } else {
+      return {title: 'Network Error', body: 'Something went terribly wrong, please contact the developer!'}
+    }
+  }
+
 
   const generalContext = {
     'apiUrl': API_URL,
     onLogin: authenticate,
     onLogout: logout,
+    notify,
+    dismissNotification,
     isAuthenticated,
+    translateError,
   }
 
   function renderApp(){
@@ -440,13 +485,13 @@ function App() {
       <GlobalStore.Provider value={generalContext}>
       <UserProvider>
         <div className='App'>
+          <Notification onClose={dismissNotification} show={notificationVisible} title={notification?.title} body={notification?.body} />
           <RouterProvider router={BaseRouter}>
           </RouterProvider>
         </div>
       </UserProvider>
       </GlobalStore.Provider>
     );
-
   }
 }
 

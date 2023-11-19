@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
 //import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faAdd, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
 
@@ -86,10 +86,19 @@ function Breweries() {
   const end = start + maxRecords;
 
   return (
-    <div>
+    <div className="page">
       <Container className='contMargin'>
-        <br />
-        <h1 className='listUntapTitle'>Breweries</h1>
+        
+        <div className="d-flex justify-content-between align-items-center mb-3 mt-5">
+          <h2 className='listUntapTitle w-fit'>Breweries</h2>
+
+          <Button variant='primary' size='md'>
+            <Link to="/breweries/add" className="update-link btn-extra">
+              <FontAwesomeIcon icon={faAdd} /> Add Brewery
+            </Link>
+          </Button>
+        </div>
+
         {deleteConfirmation && <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>}
         <table className="brewery-table">
           <thead>
@@ -106,50 +115,40 @@ function Breweries() {
                 <td className='tbl-left'>{brewery.name}</td>
                 <td className='tbl-left'>{brewery.location}</td>
                 <td>
-                  <Button>
-                    <Link to={`/breweries/update/${brewery.brewery_id}`} className="update-link">
-                    <FontAwesomeIcon icon={faEdit} /> 
-                    </Link>
-                  </Button>
-                </td>
-                <td>
-                  <Button onClick={() => handleDelete(brewery.brewery_id)} variant="dark">
-                  <FontAwesomeIcon icon={faTrash} />
-                  </Button>
+                  <div className="d-flex">
+                    <Button className="mr-1">
+                      <Link to={`/breweries/update/${brewery.brewery_id}`} className="update-link">
+                        <FontAwesomeIcon icon={faEdit} /> 
+                      </Link>
+                    </Button>
+
+                    <Button onClick={() => handleDelete(brewery.brewery_id)} variant="dark">
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div>
+
+        <div className="rounded p-2 bg-light my-3">
           <Button 
-          onClick={handlePrevious} 
-          disabled={activePage === 0} 
-          style={{
-            background:'none',
-            color:"black",
-            border: "none"
-            }}>
-            Previous
+            onClick={handlePrevious} 
+            disabled={activePage === 0}
+            className="mr-1"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} /> Previous
           </Button>
+
           <Button
             onClick={handleNext}
             disabled={activePage === Math.ceil(breweries.length / maxRecords) - 1}
-            style={{
-                background:'none',
-                color:"black",
-                border: "none"
-                }}
           >
-            Next
+            Next <FontAwesomeIcon icon={faChevronRight} />
           </Button>
         </div>
-        <br />
-        <Button variant='primary' size='lg'>
-          <Link to="/breweries/add" className="update-link btn-extra">
-            Add Brewery
-          </Link>
-        </Button>
+
       </Container>
     </div>
   );

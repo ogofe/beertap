@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Button, InputGroup, Form, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../../contexts/userContext'; 
 import { login } from '../services/authService';
 import logo from '../../images/uob.png'
@@ -59,7 +59,7 @@ function Login() {
       <div className=''>
         <img src={logo} style={{height: 200, width: 200}} className='bg-logo d-block mx-auto ' alt="Logo"  />
 
-        <div className="bg-white mx-auto p-3 shadow-lg border-0 d-block" style={{maxWidth: '500px'}}>
+        <div className="bg-white mx-auto p-3 rounded shadow-lg border-0 d-block" style={{maxWidth: '500px'}}>
           <Form onSubmit={handleSubmit}>
             <h5 className='listUntapTitle p-3 text-white rounded border-bottom text-center bg-beer' >LOGIN</h5>
           
@@ -78,7 +78,7 @@ function Login() {
                 />
               </div>
               
-              <div size='lg' className="mt-4">
+              <div size='lg' className="mt-2">
                 <label className="form-label"id='inputGroup-sizing-lg'>Password</label>
                 <Form.Control
                   onChange={handleChange}
@@ -95,7 +95,7 @@ function Login() {
               Login
             </Button>
 
-            <p className="m-0 px-3"> <a href="/password-reset">Forgot your Password? </a> </p>
+            <p className="m-0 px-3"> <Link to="/password-reset">Forgot your Password? </Link> </p>
           </Form>
         </div>
       </div>

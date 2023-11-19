@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
 //import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faAdd, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -86,11 +86,20 @@ function Suppliers() {
   const end = start + maxRecords;
 
   return (
-    <div>
+    <div className="page">
       <Container className='contMargin'>
-        <br />
-        <h1 className='listUntapTitle'>Suppliers</h1>
+        <div className="d-flex justify-content-between align-items-center flex-wrap w-100">
+          <h2 className='listUntapTitle my-4 w-fit'> Suppliers List </h2>
+
+          <Button variant='primary' size='md'>
+            <Link to="/kegsizes/add" className="update-link btn-extra">
+              <FontAwesomeIcon icon={faAdd} /> Add a Supplier
+            </Link>
+          </Button>
+        </div>
+
         {deleteConfirmation && <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>}
+
         <table className="brewery-table">
           <thead>
             <tr>
@@ -119,35 +128,24 @@ function Suppliers() {
             ))}
           </tbody>
         </table>
-        <div>
+
+        <div className="my-3 bg-light rounded p-2">
           <Button 
-          onClick={handlePrevious} 
-          disabled={activePage === 0} 
-          style={{
-            background:'none',
-            color:"black",
-            border: "none"
-            }}>
-            Previous
+            onClick={handlePrevious} 
+            disabled={activePage === 0}
+            className="mr-1"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} /> Previous
           </Button>
+
           <Button
             onClick={handleNext}
             disabled={activePage === Math.ceil(supplier.length / maxRecords) - 1}
-            style={{
-                background:'none',
-                color:"black",
-                border: "none"
-                }}
           >
-            Next
+            Next <FontAwesomeIcon icon={faChevronRight} />
           </Button>
         </div>
-        <br />
-        <Button variant='primary' size='lg'>
-          <Link to="/suppliers/add" className="update-link btn-extra">
-            Add Supplier
-          </Link>
-        </Button>
+        
       </Container>
     </div>
   );
