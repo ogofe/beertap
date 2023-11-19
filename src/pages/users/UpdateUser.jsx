@@ -67,8 +67,8 @@ function UpdateUser() {
 
         <h2> Update Staff </h2>
         
-        <div className="row">
-          <div className="col-sm-12 col-md-6">
+        <div className="row p-2 rounded bg-light">
+          <div className="col-sm-12 my-2 col-md-6">
             <div size="lg">
               <label className="form-label" id="div-sizing-lg">Username</label>
               <Form.Control
@@ -81,7 +81,7 @@ function UpdateUser() {
             </div>
           </div>
 
-          <div className="col-sm-12 col-md-6">
+          <div className="col-sm-12 my-2 col-md-6">
             <div size="lg">
               <label className="form-label" id="div-sizing-lg">Password</label>
               <Form.Control
@@ -95,7 +95,7 @@ function UpdateUser() {
             </div>
           </div>
 
-          <div className="col-sm-12 col-md-6">
+          <div className="col-sm-12 my-2 col-md-6">
             <div size="lg">
               <label className="form-label" id="div-sizing-lg">Full Name</label>
               <Form.Control
@@ -108,7 +108,7 @@ function UpdateUser() {
             </div>
           </div>
 
-          <div className="col-sm-12 col-md-6">
+          <div className="col-sm-12 my-2 col-md-6">
             <div size="lg">
               <label className="form-label" id="div-sizing-lg">Email</label>
               <Form.Control
@@ -121,11 +121,11 @@ function UpdateUser() {
             </div>
           </div>
 
-          <div className="col-sm-12 col-md-6">
+          <div className="col-sm-12 my-2 col-md-6">
             <div size='lg'>
               <label className="form-label" id='div-sizing-lg'>Role</label>
               <Dropdown className="w-100">
-                <Dropdown.Toggle variant='secondary' id='dropdown-basic'>
+                <Dropdown.Toggle variant='secondary' className="w-100" id='dropdown-basic'>
                   {user.role || 'Select Role'}
                 </Dropdown.Toggle>
 
