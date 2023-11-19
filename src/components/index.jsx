@@ -5,42 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import logo from '../images/uob.png'
 import {Link} from 'react-router-dom'
 import { faSave, faTrash, faTruck, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
-// import {
-//   Table,
-//   Thead,
-//   Tbody,
-//   Tr,
-//   Th,
-//   Td,
-//   TableCaption,
-//   useBreakpointValue,
-// } from '@chakra-ui/react';
-
-// export const ResponsiveTable = ({ data, columns }) => {
-//   const isMobile = useBreakpointValue({ base: true, md: false });
-
-//   return (
-//     <Table variant="simple" size={isMobile ? 'sm' : 'md'}>
-//       <TableCaption placement="top">Your Table Caption</TableCaption>
-//       <Thead>
-//         <Tr>
-//           {columns.map((column) => (
-//             <Th key={column.id}>{column.Header}</Th>
-//           ))}
-//         </Tr>
-//       </Thead>
-//       <Tbody>
-//         {data.map((row, rowIndex) => (
-//           <Tr key={rowIndex}>
-//             {columns.map((column) => (
-//               <Td key={column.id}>{row[column.accessor]}</Td>
-//             ))}
-//           </Tr>
-//         ))}
-//       </Tbody>
-//     </Table>
-//   );
-// };
 
 export const BackButton =({ path }) =>{
 
@@ -105,7 +69,7 @@ export const Notification = ({ title, body, onClose, show, level }) => {
   // setTimeout(() => setShow(false), 3500)
 
   return (
-    <Toast bg={level|| 'dark'} onClose={onClose} show={show} > {/* delay={3500} autohide */}
+    <Toast bg={level || 'dark'} onClose={onClose} show={show} > {/* delay={3500} autohide */}
       <Toast.Header>
         <strong className="me-auto">{title}</strong>
         <small>Just now</small>

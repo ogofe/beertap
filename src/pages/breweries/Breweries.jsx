@@ -100,37 +100,40 @@ function Breweries() {
         </div>
 
         {deleteConfirmation && <p style={{ color: 'green', fontWeight: 'bold' }}>{deleteConfirmation}</p>}
-        <table className="brewery-table">
-          <thead>
-            <tr>
-              <th className='tbl-left'>Name</th>
-              <th className='tbl-left'>Location</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {breweries.slice(start, end).map((brewery) => (
-              <tr key={brewery.brewery_id}>
-                <td className='tbl-left'>{brewery.name}</td>
-                <td className='tbl-left'>{brewery.location}</td>
-                <td>
-                  <div className="d-flex">
-                    <Button className="mr-1">
-                      <Link to={`/breweries/update/${brewery.brewery_id}`} className="update-link">
-                        <FontAwesomeIcon icon={faEdit} /> 
-                      </Link>
-                    </Button>
 
-                    <Button onClick={() => handleDelete(brewery.brewery_id)} variant="dark">
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </div>
-                </td>
+        <div className="table-wrapper">
+          <table className="brewery-table">
+            <thead>
+              <tr>
+                <th className='tbl-left'>Name</th>
+                <th className='tbl-left'>Location</th>
+                <th></th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {breweries.slice(start, end).map((brewery) => (
+                <tr key={brewery.brewery_id}>
+                  <td className='tbl-left'>{brewery.name}</td>
+                  <td className='tbl-left'>{brewery.location}</td>
+                  <td>
+                    <div className="d-flex">
+                      <Button className="mr-1">
+                        <Link to={`/breweries/update/${brewery.brewery_id}`} className="update-link">
+                          <FontAwesomeIcon icon={faEdit} /> 
+                        </Link>
+                      </Button>
+
+                      <Button onClick={() => handleDelete(brewery.brewery_id)} variant="dark">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="rounded p-2 bg-light my-3">
           <Button 

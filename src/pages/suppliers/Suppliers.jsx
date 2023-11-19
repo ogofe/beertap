@@ -91,7 +91,7 @@ function Suppliers() {
         <div className="d-flex justify-content-between align-items-center flex-wrap w-100">
           <h2 className='listUntapTitle my-4 w-fit'> Suppliers List </h2>
 
-          <Button variant='primary' size='md'>
+          <Button variant='primary' className="mb-3" size='md'>
             <Link to="/kegsizes/add" className="update-link btn-extra">
               <FontAwesomeIcon icon={faAdd} /> Add a Supplier
             </Link>
@@ -113,8 +113,8 @@ function Suppliers() {
                 <td className='tbl-left'>{supply.name}</td>
                 <td>
                   <div className="d-flex">
-                    <Button>
-                      <Link to={`/suppliers/update/${supply.supplier_id}`} className="update-link mr-1">
+                    <Button className=" mr-1">
+                      <Link to={`/suppliers/update/${supply.supplier_id}`} className="update-link">
                         <FontAwesomeIcon icon={faEdit} />
                       </Link>
                     </Button>

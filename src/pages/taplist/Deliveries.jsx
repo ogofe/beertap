@@ -71,38 +71,40 @@ function Deliveries() {
         
         <h2 className='listUntapTitle my-3'>Deliveries</h2>
         
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th className='bg-dark text-white tbl-left'>Beer Name</th>
-              <th className='bg-dark text-white tbl-left'>Status</th>
-              <th className="bg-dark text-white ">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredBeerList.map((beer) => (
-              <tr key={beer.product_id}>
-                <td className='tbl-left'>{beer.name}</td>
-                <td className='text-center'>
-                  <Badge bg="warning" className="text-black bolder bold" style={{fontSize: '15px'}}> {beer.status} </Badge>
-                </td>
-                <td>
-                  <DropdownButton as={ButtonGroup} title="Set Delivery status" id="bg-nested-dropdown">
-                    <Dropdown.Item
-                      onClick={() => updateBeerStatus(beer.product_id, 'delivered')}
-                      className="bg-success text-white p-2" as={Button}
-                    > Delivery was Received </Dropdown.Item>
-
-                    <Dropdown.Item
-                      onClick={() => updateBeerStatus(beer.product_id, 'upcoming')}
-                      className="bg-primary text-white p-2" as={Button}
-                    > Delivery was not Received </Dropdown.Item>
-                  </DropdownButton>
-                </td>
+        <div className="table-wrapper">
+          <Table responsive striped bordered hover>
+            <thead>
+              <tr>
+                <th className='bg-dark text-white tbl-left'>Beer Name</th>
+                <th className='bg-dark text-white tbl-left'>Status</th>
+                <th className="bg-dark text-white ">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {filteredBeerList.map((beer) => (
+                <tr key={beer.product_id}>
+                  <td className='tbl-left'>{beer.name}</td>
+                  <td className='text-center'>
+                    <Badge bg="warning" className="text-black bolder bold" style={{fontSize: '15px'}}> {beer.status} </Badge>
+                  </td>
+                  <td>
+                    <DropdownButton as={ButtonGroup} title="Set Delivery status" id="bg-nested-dropdown">
+                      <Dropdown.Item
+                        onClick={() => updateBeerStatus(beer.product_id, 'delivered')}
+                        className="bg-success text-white p-2" as={Button}
+                      > Delivery was Received </Dropdown.Item>
+
+                      <Dropdown.Item
+                        onClick={() => updateBeerStatus(beer.product_id, 'upcoming')}
+                        className="bg-primary text-white p-2" as={Button}
+                      > Delivery was not Received </Dropdown.Item>
+                    </DropdownButton>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
       </Container>
     </div>
   );

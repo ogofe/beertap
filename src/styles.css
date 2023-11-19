@@ -41,7 +41,7 @@ body::after {
     position: fixed;
     bottom: 50px;
     z-index: 2000000;
-    right: 50px;
+    right: 15px;
     animation: swoopIn .5s forwards;
 }
 
