@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, InputGroup, Form, Dropdown } from 'react-bootstrap';
+import { Button, div, Form, Dropdown } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave, faTrash, faTruckFast, faChevronLeft, faPenFancy, faCancel } from '@fortawesome/free-solid-svg-icons';
+import {BackButton} from '../../components'
 import {GlobalStore} from '../../App'
 
 function UpdateUser() {
@@ -60,83 +63,85 @@ function UpdateUser() {
   return (
     <div className="page">
       <div className='form contMargin'>
-        <h1>Update Staff</h1>
+        <BackButton path="/users" />
+
+        <h2> Update Staff </h2>
         
-        <div>
-          <InputGroup size="lg">
-          <InputGroup.Text id="inputGroup-sizing-lg">Username</InputGroup.Text>
-          <Form.Control
-            onChange={handleChange}
-            name='username'
-            value={user.username} 
-            aria-label="Large"
-            aria-describedby="inputGroup-sizing-sm"
-          />
-          </InputGroup>
-        </div>
+        <div className="row">
+          <div className="col-sm-12 col-md-6">
+            <div size="lg">
+              <label className="form-label" id="div-sizing-lg">Username</label>
+              <Form.Control
+                onChange={handleChange}
+                name='username'
+                value={user.username} 
+                aria-label="Large"
+                aria-describedby="div-sizing-sm"
+              />
+            </div>
+          </div>
 
-        <div>
-          <InputGroup size="lg">
-          <InputGroup.Text id="inputGroup-sizing-lg">Password</InputGroup.Text>
-          <Form.Control
-            onChange={handleChange}
-            type='password' 
-            name='password'
-            value={user.password}
-            aria-label="Large"
-            aria-describedby="inputGroup-sizing-sm"
-          />
-          </InputGroup>
-        </div>
+          <div className="col-sm-12 col-md-6">
+            <div size="lg">
+              <label className="form-label" id="div-sizing-lg">Password</label>
+              <Form.Control
+                onChange={handleChange}
+                type='password' 
+                name='password'
+                value={user.password}
+                aria-label="Large"
+                aria-describedby="div-sizing-sm"
+              />
+            </div>
+          </div>
 
-        <div>
-          <InputGroup size="lg">
-          <InputGroup.Text id="inputGroup-sizing-lg">Full Name</InputGroup.Text>
-          <Form.Control
-            onChange={handleChange} 
-            name='full_name'
-            value={user.full_name}
-            aria-label="Large"
-            aria-describedby="inputGroup-sizing-sm"
-          />
-          </InputGroup>
-        </div>
+          <div className="col-sm-12 col-md-6">
+            <div size="lg">
+              <label className="form-label" id="div-sizing-lg">Full Name</label>
+              <Form.Control
+                onChange={handleChange} 
+                name='full_name'
+                value={user.full_name}
+                aria-label="Large"
+                aria-describedby="div-sizing-sm"
+              />
+            </div>
+          </div>
 
-        <div>
-          <InputGroup size="lg">
-          <InputGroup.Text id="inputGroup-sizing-lg">Email</InputGroup.Text>
-          <Form.Control
-            onChange={handleChange} 
-            name='email'
-            value={user.email}
-            aria-label="Large"
-            aria-describedby="inputGroup-sizing-sm"
-          />
-          </InputGroup>
-        </div>
+          <div className="col-sm-12 col-md-6">
+            <div size="lg">
+              <label className="form-label" id="div-sizing-lg">Email</label>
+              <Form.Control
+                onChange={handleChange} 
+                name='email'
+                value={user.email}
+                aria-label="Large"
+                aria-describedby="div-sizing-sm"
+              />
+            </div>
+          </div>
 
-        <div>
-          <InputGroup size='lg'>
-            <InputGroup.Text id='inputGroup-sizing-lg'>Role</InputGroup.Text>
-            <Dropdown>
-              <Dropdown.Toggle variant='secondary' id='dropdown-basic'>
-                {user.role || 'Select Role'}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => handleRoleSelect('Super Admin')}>Super Admin</Dropdown.Item>
-                <Dropdown.Item onClick={() => handleRoleSelect('Admin')}>Admin</Dropdown.Item>
-                <Dropdown.Item onClick={() => handleRoleSelect('Basic User')}>Basic User</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </InputGroup>
+          <div className="col-sm-12 col-md-6">
+            <div size='lg'>
+              <label className="form-label" id='div-sizing-lg'>Role</label>
+              <Dropdown className="w-100">
+                <Dropdown.Toggle variant='secondary' id='dropdown-basic'>
+                  {user.role || 'Select Role'}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu className="w-100">
+                  <Dropdown.Item onClick={() => handleRoleSelect('Super Admin')}>Super Admin</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleRoleSelect('Admin')}>Admin</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleRoleSelect('Basic User')}>Basic User</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </div>
         </div>
         
-        <div className='btn-div'>
-          <Button className='btn-extra' variant='primary' size='lg' onClick={handleClick}>
-              Update
-          </Button>
-          <Button variant='primary' size='lg' href={"/users"} className="update-link btn-extra">
-              Back
+        <div className='bg-light p-2 rounded my-3'>
+          <Button className='btn-extra w-fit' variant='success' size='md' onClick={handleClick}>
+            <FontAwesomeIcon icon={faSave} />  Save Changes
           </Button>
         </div>
 

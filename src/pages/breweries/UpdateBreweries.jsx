@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, InputGroup, Form } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
+import {BackButton} from '../../components';
+import { Button, Container, Form } from 'react-bootstrap';
 import {GlobalStore} from '../../App';
 
 
@@ -49,47 +52,49 @@ function UpdateBrewery() {
   };
 
   return (
-    <>
-      <div className='form contMargin'>
-        <br />
-        <h1 className='listUntapTitle'>Update Brewery</h1>
+    <div className="page">
+      <Container className='form contMargin'>
+        <BackButton path="/breweries" />
+
+        <h2 className='listUntapTitle'>Update Brewery</h2>
+        
         {updateConfirmation && (
           <p style={{ color: 'green', fontWeight: 'bold' }}>{updateConfirmation}</p>
         )}
-          <div>
-    <InputGroup size='lg'>
-      <InputGroup.Text id='inputGroup-sizing-lg'>Brewery Name</InputGroup.Text>
-      <Form.Control
-        onChange={handleChange}
-        name='name'
-        value={brewery.name}
-        aria-label='Large'
-        aria-describedby='inputGroup-sizing-sm'
-      />
-    </InputGroup>
-  </div>
-  <div>
-    <InputGroup size='lg'>
-      <InputGroup.Text id='inputGroup-sizing-lg'>Location</InputGroup.Text>
-      <Form.Control
-        onChange={handleChange}
-        name='location'
-        value={brewery.location}
-        aria-label='Large'
-        aria-describedby='inputGroup-sizing-sm'
-      />
-    </InputGroup>
-  </div>
-        <div className="btn-div">
-        <Button className='btn-extra' variant='primary' size='lg' onClick={handleClick}>
-          Update
-        </Button>
-        <Button variant='primary' size='lg' href={"/breweries"} className="update-link btn-extra">
-            Back
-        </Button>
+        
+        <div>
+          <InputGroup size='lg'>
+            <label className="form-label" id='inputGroup-sizing-lg'>Brewery Name</label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={brewery.name}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </InputGroup>
         </div>
-      </div>
-    </>
+  
+        <div>
+          <InputGroup size='lg'>
+            <label className="form-label" id='inputGroup-sizing-lg'>Location</label>
+            <Form.Control
+              onChange={handleChange}
+              name='location'
+              value={brewery.location}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </InputGroup>
+        </div>
+
+        <div className="bg-light rounded p-2 my-3">
+          <Button className='btn-extra w-fit' variant='success' size='md' onClick={handleClick}>
+            <FontAwesomeIcon icon={faSave} /> Save Changes
+          </Button>
+        </div>
+      </Container>
+    </div>
   );
 }
 

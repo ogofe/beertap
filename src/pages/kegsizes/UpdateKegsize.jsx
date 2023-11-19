@@ -2,7 +2,10 @@ import {GlobalStore} from '../../App';
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, InputGroup, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
+import { BackButton } from '../../components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 
 function UpdateKegsize() {
   const [kegsize, setKegsize] = useState({
@@ -48,33 +51,37 @@ function UpdateKegsize() {
   };
 
   return (
-    <>
+    <div className="page">
       <div className='form contMargin'>
-        <br />
-        <h1 className='listUntapTitle'>Update Keg Size</h1>
+        
+        <BackButton path={"/kegsizes"} />
+
+        <h2 className='listUntapTitle'> Update Keg Size </h2>
+
         {updateConfirmation && (
           <p style={{ color: 'green', fontWeight: 'bold' }}>{updateConfirmation}</p>
         )}
-        <InputGroup size='lg'>
-          <InputGroup.Text id='inputGroup-sizing-lg'>Keg Size</InputGroup.Text>
-          <Form.Control
-            onChange={handleChange}
-            name='size'
-            value={kegsize.size}
-            aria-label='Large'
-            aria-describedby='inputGroup-sizing-sm'
-          />
-        </InputGroup>
-          <div className="btn-div">
-          <Button className='btn-extra' variant='primary' size='lg' onClick={handleClick}>
-          Update
-        </Button>
-        <Button variant='primary' size='lg' href={"/kegsizes"} className="update-link btn-extra">
-            Back
-        </Button>
+
+        <div className="bg-light p-2 rounded" size='lg'>
+          <div className="" style={{maxWidth: 500}} size='lg'>
+            <label className="form-label" id='inputGroup-sizing-lg'>Keg Size</label>
+            <Form.Control
+              onChange={handleChange}
+              name='size'
+              value={kegsize.size}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+            />
+          </div>
+        </div>
+
+          <div className="bg-light p-2 rounded my-3">
+            <Button className='btn-extra w-fit' variant='success' size='md' onClick={handleClick}>
+              <FontAwesomeIcon icon={faSave} /> Save Changes
+            </Button>
           </div>
       </div>
-    </>
+    </div>
   );
 }
 

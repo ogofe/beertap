@@ -301,32 +301,32 @@ function Beers() {
           </div>
           
           {beers.length > 1 &&
-            <div>
-            <Button
-              onClick={handlePrevious}
-              disabled={activePage === 0}
-              style={{
-                // background: 'none',
-                color: 'black',
-                border: 'none',
-              }}
-              className=""
-            >
-              <FontAwesomeIcon icon={faChevronLeft} /> Previous 
-            </Button>
+            <div className="bg-light p-2 rounded mt-2">
+              <Button
+                onClick={handlePrevious}
+                disabled={activePage === 0}
+                style={{
+                  // background: 'none',
+                  color: 'black',
+                  border: 'none',
+                }}
+                className=""
+              >
+                <FontAwesomeIcon icon={faChevronLeft} /> Previous 
+              </Button>
 
-            <Button
-              onClick={handleNext}
-              className="mx-2"
-              disabled={activePage === Math.ceil(beers.length / maxRecords) - 1}
-              style={{
-                // background: 'none',
-                color: 'black',
-                border: 'none',
-              }}
-            >
-              Next <FontAwesomeIcon icon={faChevronRight} />
-            </Button>
+              <Button
+                onClick={handleNext}
+                className="mx-2"
+                disabled={activePage === Math.ceil(beers.length / maxRecords) - 1}
+                style={{
+                  // background: 'none',
+                  color: 'black',
+                  border: 'none',
+                }}
+              >
+                Next <FontAwesomeIcon icon={faChevronRight} />
+              </Button>
             </div>
           }
         </Fragment>
