@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, div, Form, Dropdown } from 'react-bootstrap';
+import { Button, div, Form, Dropdown, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTrash, faTruckFast, faChevronLeft, faPenFancy, faCancel } from '@fortawesome/free-solid-svg-icons';
 import {BackButton} from '../../components'
@@ -62,7 +62,7 @@ function UpdateUser() {
 
   return (
     <div className="page">
-      <div className='form contMargin'>
+      <Container className='form contMargin'>
         <BackButton path="/users" />
 
         <h2> Update Staff </h2>
@@ -145,7 +145,7 @@ function UpdateUser() {
           </Button>
         </div>
 
-      </div>
+      </Container>
     </div>
   );
 }

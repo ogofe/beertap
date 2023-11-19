@@ -2,7 +2,11 @@ import {GlobalStore} from '../../App';
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, InputGroup, Form } from 'react-bootstrap';
+import { Button, InputGroup, Container, Form } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
+import { BackButton } from '../../components';
+
 
 function UpdateSupplier() {
   const [supplier, setSupplier] = useState({
@@ -47,13 +51,16 @@ function UpdateSupplier() {
   };
 
   return (
-    <>
-      <div className='form contMargin'>
-        <br />
-        <h1 className='listUntapTitle'>Update Supplier</h1>
+    <div className="page">
+      <Container className='form contMargin'>
+        <BackButton path="/suppliers" />
+
+        <h2 className='listUntapTitle'>Update Supplier</h2>
+
         {updateConfirmation && (
           <p style={{ color: 'green', fontWeight: 'bold' }}>{updateConfirmation}</p>
         )}
+
         <InputGroup size='lg'>
           <InputGroup.Text id='inputGroup-sizing-lg'>Supplier Name</InputGroup.Text>
           <Form.Control
@@ -65,16 +72,14 @@ function UpdateSupplier() {
         
           />
         </InputGroup>
-          <div className="btn-div">
-          <Button className='btn-extra' variant='primary' size='lg' onClick={handleClick}>
-          Update
-        </Button>
-        <Button variant='primary' size='lg' href={"/suppliers"} className="update-link btn-extra">
-            Back
-        </Button>
-          </div>
-      </div>
-    </>
+
+        <div className="bg-light rounded p-2 my-3">
+          <Button className='btn-extra bold w-fit' variant='success' size='md' onClick={handleClick}>
+            <FontAwesomeIcon icon={faSave} /> Update
+          </Button>
+        </div>
+      </Container>
+    </div>
   );
 }
 

@@ -2,7 +2,7 @@ import {GlobalStore} from '../../App';
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Container } from 'react-bootstrap';
 import { BackButton } from '../../components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
@@ -52,7 +52,7 @@ function UpdateKegsize() {
 
   return (
     <div className="page">
-      <div className='form contMargin'>
+      <Container className='form contMargin'>
         
         <BackButton path={"/kegsizes"} />
 
@@ -80,7 +80,7 @@ function UpdateKegsize() {
               <FontAwesomeIcon icon={faSave} /> Save Changes
             </Button>
           </div>
-      </div>
+      </Container>
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import {GlobalStore} from '../../App';
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import {BackButton} from '../../components';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faSave} from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, InputGroup, Form } from 'react-bootstrap';
+import { Button, div, Form, Container } from 'react-bootstrap';
 
 function UpdateCategory() {
   const [category, setCategory] = useState({
@@ -48,47 +51,52 @@ function UpdateCategory() {
   };
 
   return (
-    <>
-      <div className='form contMargin'>
-        <br />
-        <h1 className='listUntapTitle'>Update Category</h1>
+    <div className="page">
+      <Container className='form contMargin'>
+        <BackButton path="/categories" />
+
+        <h2 className='listUntapTitle'>Update Category</h2>
+        
         {updateConfirmation && (
           <p style={{ color: 'green', fontWeight: 'bold' }}>{updateConfirmation}</p>
         )}
-          <div>
-    <InputGroup size='lg'>
-      <InputGroup.Text id='inputGroup-sizing-lg'>Category Name</InputGroup.Text>
-      <Form.Control
-        onChange={handleChange}
-        name='name'
-        value={category.name}
-        aria-label='Large'
-        aria-describedby='inputGroup-sizing-sm'
-      />
-    </InputGroup>
-  </div>
-  <div>
-    <InputGroup size='lg'>
-      <InputGroup.Text id='inputGroup-sizing-lg'>Type</InputGroup.Text>
-      <Form.Control
-        onChange={handleChange}
-        name='type'
-        value={category.type}
-        aria-label='Large'
-        aria-describedby='inputGroup-sizing-sm'
-      />
-    </InputGroup>
-  </div>
-      <div className="btn-div">
-      <Button className='btn-extra' variant='primary' size='lg' onClick={handleClick}>
-          Update
-        </Button>
-        <Button variant='primary' size='lg' href={"/categories"} className="update-link btn-extra">
-            Back
-        </Button>
-      </div>
-      </div>
-    </>
+
+        <div className="p-2 rounded bg-light">
+
+          <div style={{maxWidth: 500}}>
+            <div size='lg'>
+              <label className="form-label" id='inputGroup-sizing-lg'>Category Name</label>
+              <Form.Control
+                onChange={handleChange}
+                name='name'
+                value={category.name}
+                aria-label='Large'
+                aria-describedby='inputGroup-sizing-sm'
+              />
+            </div>
+          </div>
+
+          <div style={{maxWidth: 500}}>
+            <div size='lg'>
+              <label className="form-label" id='inputGroup-sizing-lg'>Type</label>
+              <Form.Control
+                onChange={handleChange}
+                name='type'
+                value={category.type}
+                aria-label='Large'
+                aria-describedby='inputGroup-sizing-sm'
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-light rounded p-2 my-3">
+          <Button className='btn-extra bold w-fit' variant='success' size='md' onClick={handleClick}>
+            <FontAwesomeIcon icon={faSave} /> Save Changes
+          </Button>
+        </div>
+      </Container>
+    </div>
   );
 }
 

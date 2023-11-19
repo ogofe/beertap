@@ -3,44 +3,44 @@ import React, { useContext, useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { BackButton } from '../../components';
-import {Button, div, Form, Dropdown} from 'react-bootstrap';
+import {Button, div, Form, Dropdown, Container} from 'react-bootstrap';
 import { faSave, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 
 function AddUsers() {
-    const [user, setUser] = useState({
-        username: "",
-        password : '',
-        full_name:"",
-        email: "",
-        role: ""
-    })
+  const [user, setUser] = useState({
+    username: "",
+    password : '',
+    full_name:"",
+    email: "",
+    role: ""
+  })
 
   const {apiUrl} = useContext(GlobalStore)
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
-    const handleChange = (e) => {
-        setUser((prev) => ({...prev, [e.target.name]: e.target.value}))
-    }
-    console.log(user)
+  const handleChange = (e) => {
+      setUser((prev) => ({...prev, [e.target.name]: e.target.value}))
+  }
+  console.log(user)
 
-    const handleClick = async e => {
-        e.preventDefault()
-        const userUrl = `${apiUrl}/users/register`
-        try {
-            await axios.post(userUrl, user)
-            navigate("/users")
-        } catch (err) {
-            console.log(err)
-            
-        }
+  const handleClick = async e => {
+    e.preventDefault()
+    const userUrl = `${apiUrl}/users/register`
+    try {
+        await axios.post(userUrl, user)
+        navigate("/users")
+    } catch (err) {
+        console.log(err)
+        
     }
+  }
 
   return (
     <div className="page">
-      <div className='form contMargin'>
+      <Container className='form contMargin'>
           <BackButton path="/users" />
 
           <h2 className="listUntapTitle">Add New Staff</h2>
@@ -119,7 +119,7 @@ function AddUsers() {
               Save User
             </Button>
           </div>
-      </div>
+      </Container>
     </div>
   )
 }

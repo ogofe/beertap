@@ -105,7 +105,6 @@ function Suppliers() {
             <tr>
               <th className='tbl-left'>Supplier Name</th>
               <th></th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -113,16 +112,17 @@ function Suppliers() {
               <tr key={supply.supplier_id}>
                 <td className='tbl-left'>{supply.name}</td>
                 <td>
-                  <Button>
-                    <Link to={`/suppliers/update/${supply.supplier_id}`} className="update-link">
-                    <FontAwesomeIcon icon={faEdit} />
-                    </Link>
-                  </Button>
-                </td>
-                <td>
-                  <Button onClick={() => handleDelete(supply.supplier_id)} variant="dark">
-                  <FontAwesomeIcon icon={faTrash} />
-                  </Button>
+                  <div className="d-flex">
+                    <Button>
+                      <Link to={`/suppliers/update/${supply.supplier_id}`} className="update-link mr-1">
+                        <FontAwesomeIcon icon={faEdit} />
+                      </Link>
+                    </Button>
+
+                    <Button onClick={() => handleDelete(supply.supplier_id)} variant="dark">
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </div>
                 </td>
               </tr>
             ))}
