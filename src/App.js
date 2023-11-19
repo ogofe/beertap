@@ -310,15 +310,6 @@ const AuthRouter = createBrowserRouter([
 
   // Public Route for login page
   {
-    path: "/",
-    element: <>
-      {/* <ConditionalRoute /> */}
-      <Navigate to='/login' replace />
-    </>,
-  },
-
-  // Public Route for login page
-  {
     path: "/login",
     element: <>
       {/* <ConditionalRoute /> */}
@@ -332,6 +323,15 @@ const AuthRouter = createBrowserRouter([
     element: <>
       {/* <ConditionalRoute /> */}
       <PasswordReset /> 
+    </>,
+  },
+
+  // Public Route for login page
+  {
+    path: "/*",
+    element: <>
+      {/* <ConditionalRoute /> */}
+      <Navigate to='/login' replace />
     </>,
   },
 
