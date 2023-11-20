@@ -9,15 +9,15 @@ import {GlobalStore} from '../../App';
 function Login() {
   const { dispatch } = useUser();
   const navigate = useNavigate();
+  const {onLogin, translateError} = useContext(GlobalStore)
 
-  const {onLogin} = useContext(GlobalStore)
 
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
 
-  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,31 +25,35 @@ function Login() {
 
   const handleLoginSuccess = (token) => {
     localStorage.setItem('token', JSON.stringify(token));
-    // console.log(token)
     navigate('/beers');
   };
+
+  function showMessage(level, message){
+    setMessage({ level, message })
+    setTimeout(() => setMessage(null), 4000)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!formData.username || !formData.password) {
-      setError('All fields are required');
+      showMessage('info', 'All fields are required');
       return;
     }
-
-    return onLogin()
 
     try {
       const response = await login(formData.username, formData.password);
 
       if (response.status === 200 && response.data.token) {
+        showMessage('success', `Welcome Back ${formData.username}!`)
         dispatch({ type: 'LOGIN', payload: { username: formData.username, token: response.data.token } });
         handleLoginSuccess(response.data.token);
+        return onLogin({ user: formData.username, ...response.data })
       } else {
-        setError('Incorrect username or password');
+        showMessage('danger', 'Incorrect username or password');
       }
     } catch (error) {
-      setError('Incorrect username or password');
+      showMessage('danger', translateError(error).body);
       console.error('Login failed:', error.message);
     }
   };
@@ -63,7 +67,7 @@ function Login() {
           <Form onSubmit={handleSubmit}>
             <h5 className='listUntapTitle p-3 text-white rounded border-bottom text-center bg-beer' >LOGIN</h5>
           
-            {error && <Alert variant="danger">{error}</Alert>}
+            {message && <Alert variant={message.level || "danger"}>{message.message}</Alert>}
 
             <div className="mb-2 p-3">
               <div size='lg'>

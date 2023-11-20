@@ -62,8 +62,8 @@ function UpdateBrewery() {
           <p style={{ color: 'green', fontWeight: 'bold' }}>{updateConfirmation}</p>
         )}
         
-        <div>
-          <div size='lg'>
+        <div className="bg-light p-2 rounded">
+          <div size='lg' className="mb-2">
             <label className="form-label" id='inputGroup-sizing-lg'>Brewery Name</label>
             <Form.Control
               onChange={handleChange}
@@ -73,9 +73,7 @@ function UpdateBrewery() {
               aria-describedby='inputGroup-sizing-sm'
             />
           </div>
-        </div>
-  
-        <div>
+       
           <div size='lg'>
             <label className="form-label" id='inputGroup-sizing-lg'>Location</label>
             <Form.Control
@@ -89,7 +87,7 @@ function UpdateBrewery() {
         </div>
 
         <div className="bg-light rounded p-2 my-3">
-          <Button className='btn-extra w-fit' variant='success' size='md' onClick={handleClick}>
+          <Button className='btn-extra w-fit bold' variant='success' size='md' onClick={handleClick}>
             <FontAwesomeIcon icon={faSave} /> Save Changes
           </Button>
         </div>

@@ -344,7 +344,8 @@ function App() {
   // always loading before mounting route based on authetication
   const [isLoading, setLoadingState] = useState(true) 
   const [notificationVisible, setNotificationVisibility] = useState(false) 
-  const [notification, setNotification] = useState(null) 
+  const [notification, setNotification] = useState(null)
+  const [authUser, setAuthUser] = useState(null)
   // const navigate = useNavigate()
 
   function notify({ level, title, body, timeout }){
@@ -383,12 +384,16 @@ function App() {
 
 
   const generalContext = {
+    // app state
     'apiUrl': API_URL,
+    isAuthenticated,
+    authUser,
+
+    // methods
     onLogin: authenticate,
     onLogout: logout,
     notify,
     dismissNotification,
-    isAuthenticated,
     translateError,
   }
 
@@ -401,6 +406,7 @@ function App() {
     // then store token to session storage (session restarts when browser is closed)
     // set the auth state to true
     localStorage.setItem('isAuthenticated', true)
+    localStorage.setItem('authUser', JSON.stringify(authData)) // user, token
     setLoadingState(true)
     window.location.href = '/'
     setAuthState(true)
@@ -410,11 +416,10 @@ function App() {
     setLoadingState(true)
     setAuthState(false)
     localStorage.setItem('isAuthenticated', false)
+    localStorage.setItem('authUser', null)
     localStorage.removeItem('token');
-    window.location.href = '/'
-    // setIsLoggedIn(false);
     // dispatch({ type: 'LOGOUT' });
-    // navigate('/')
+    window.location.href = '/'
   }
 
   function init(){
@@ -423,8 +428,11 @@ function App() {
     // after auth logic and confirmation
     // set auth state
     const loggedIn = JSON.parse(localStorage.getItem('isAuthenticated'))
-    if(loggedIn && loggedIn === true){
+    const user = JSON.parse(localStorage.getItem('authUser'))
+
+    if(loggedIn && loggedIn === true && user !== null) {
       setAuthState(true)
+      setAuthUser(user)
     }
 
     // timer to set loading state false after 1.5 seconds of confirmation

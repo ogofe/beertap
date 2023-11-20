@@ -61,17 +61,19 @@ function UpdateSupplier() {
           <p style={{ color: 'green', fontWeight: 'bold' }}>{updateConfirmation}</p>
         )}
 
-        <InputGroup size='lg'>
-          <InputGroup.Text id='inputGroup-sizing-lg'>Supplier Name</InputGroup.Text>
-          <Form.Control
-            onChange={handleChange}
-            name='name'
-            value={supplier.name}
-            aria-label='Large'
-            aria-describedby='inputGroup-sizing-sm'
-        
-          />
-        </InputGroup>
+        <div className='bg-light p-2 rounded'>
+          <div size='lg' style={{maxWidth: '500px'}}>
+            <label className="form-label" id='inputGroup-sizing-lg'> Supplier Name </label>
+            <Form.Control
+              onChange={handleChange}
+              name='name'
+              value={supplier.name}
+              aria-label='Large'
+              aria-describedby='inputGroup-sizing-sm'
+          
+            />
+          </div>
+        </div>
 
         <div className="bg-light rounded p-2 my-3">
           <Button className='btn-extra bold w-fit' variant='success' size='md' onClick={handleClick}>

@@ -7,11 +7,11 @@ import {GlobalStore} from '../App'
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate()
-  const {onLogout} = useContext(GlobalStore)
+  const {onLogout, authUser} = useContext(GlobalStore)
+  const {user, token} = authUser;
 
   useEffect(() => {
     // Check if the user is logged in by inspecting local storage
-    const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
   }, []);
 
@@ -26,7 +26,7 @@ function Navigation() {
         <Navbar.Brand as={NavLink} to="/beers">
           University Of Beer
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={NavLink} to="/beers">
@@ -64,17 +64,17 @@ function Navigation() {
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>          
-
-          <NavDropdown title="User" className="text-white" id="basic-nav-dropdown">
-            <NavDropdown.Item as={NavLink} to="/breweries">
-              Profile
-            </NavDropdown.Item>
-            
-            <NavDropdown.Item as={Button} onClick={handleLogout}>
-              Log out
-            </NavDropdown.Item>
-          </NavDropdown>
         </Navbar.Collapse>
+
+        <NavDropdown title={user} className="text-white chip" id="basic-nav-dropdown">    
+          <NavDropdown.Item as={Button} onClick={handleLogout}>
+            Log out
+          </NavDropdown.Item>
+        </NavDropdown>
+
+
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
       </Container>
     </Navbar>
   );

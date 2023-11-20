@@ -45,6 +45,15 @@ body::after {
     animation: swoopIn .5s forwards;
 }
 
+.chip{
+    border: 1px solid white;
+    padding: 5px 15px;
+    border-radius: 30px;
+    text-transform: capitalize;
+}
+
+
+
 .beer-box{
     display: flex;
 }

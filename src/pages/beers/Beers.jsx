@@ -17,7 +17,7 @@ function Beers() {
   const [searchQuery, setSearchQuery] = useState(''); // Manage search functionality
   const maxRecords = 10; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
-  const {apiUrl} = useContext(GlobalStore)
+  const {apiUrl, notify} = useContext(GlobalStore)
   const beerUrl = `${apiUrl}/beers/`
   const bgColor = {
     'upcoming'    : 'secondary',
@@ -47,26 +47,42 @@ function Beers() {
     fetchAllBeers();
   }, [isDeleted]);
 
-  useEffect(() => {
-    // Fetch all brewery names and store them in the state
-    const fetchBreweryNames = async () => {
+  // Fetch all brewery names and store them in the state
+  const fetchBreweryNames = async () => {
+    try{
       const names = {};
       for (const beer of beers.slice(start, end)) {
         const breweryName = await fetchBreweryName(beer.brewery_id);
         names[beer.product_id] = breweryName;
       }
       setBreweryNames(names);
-    };
+    }catch(error){
+      notify({
+        level: 'error',
+        title: 'Server Error',
+        body: "An error occurred when trying to get Brewery Names"
+      })
+    }
+  };
 
-    const fetchSupplierNames = async () => {
+  const fetchSupplierNames = async () => {
+    try{
       const names = {};
       for (const beer of beers.slice(start, end)) {
         const supplierName = await fetchSupplierName(beer.supplier_id);
         names[beer.supplier_id] = supplierName;
       }
       setSupplierNames(names);
-    };
+    }catch(error){
+      notify({
+        level: 'error',
+        title: 'Server Error',
+        body: "An error occurred when trying to get Supplier Names"
+      })
+    }
+  };
 
+  useEffect(() => {
     fetchBreweryNames();
     fetchSupplierNames();
   }, [beers, start, end]);
