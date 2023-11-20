@@ -36,16 +36,36 @@ function UpdateBeer() {
   const {apiUrl} = useContext(GlobalStore);
   //const { beerId } = useParams();
   const popup = useRef()
+  const [breweries, setBreweries] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+
+  function getBreweries(){
+   // Fetch breweries and suppliers to populate dropdowns
+    axios.get(`${apiUrl}/breweries`)
+    .then((response) => setBreweries(response.data))
+    .catch((error) => {
+      console.error('Error fetching breweries:', error);
+    }); 
+  }
+
+  function getSuppliers(){
+    axios.get(`${apiUrl}/suppliers`)
+    .then((response) => setSuppliers(response.data));
+    .catch((error) => {
+      console.error('Error fetching suppliers:', error);
+    });
+  }
+
+  const fetchBeer = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/beers/${beerId}`);
+      setBeer(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    const fetchBeer = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/beers/${beerId}`);
-        setBeer(response.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
 
     fetchBeer();
   }, [beerId]);
@@ -105,16 +125,6 @@ function UpdateBeer() {
 
             <div className="d-flex justify-content-between align-items-center">
               <Badge bg="primary" style={{fontSize: '18px'}}> Tap N<u>o</u> : {beer.tap_number} </Badge>
-
-              {/* <Button
-                              variant="warning"
-                              size='md'
-                              className="w-fit"
-                              style={{ marginLeft: 'auto'}}
-                              onClick={showPopup}
-                            >
-                              <FontAwesomeIcon icon={faEdit} /> Change Tap Number
-                            </Button> */}
             </div>
           }
           
@@ -156,7 +166,7 @@ function UpdateBeer() {
                 <Form.Control
                   onChange={handleChange}
                   name='name'
-                  value={beer.brewery}
+                  value={breweryNames[beer.brewery_id]}
                   disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
@@ -214,7 +224,7 @@ function UpdateBeer() {
                 <Form.Control
                   onChange={handleChange}
                   name='name'
-                  value={beer.flavor_details}
+                  value={beer.price_per_keg}
                   disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
@@ -228,7 +238,7 @@ function UpdateBeer() {
                 <Form.Control
                   onChange={handleChange}
                   name='name'
-                  value={beer.flavor_details}
+                  value={beer.arrival_date}
                   disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
@@ -242,7 +252,7 @@ function UpdateBeer() {
                 <Form.Control
                   onChange={handleChange}
                   name='name'
-                  value={beer.flavor_details}
+                  value={beer.keg_size_id}
                   disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
@@ -256,7 +266,7 @@ function UpdateBeer() {
                 <Form.Control
                   onChange={handleChange}
                   name='name'
-                  value={beer.flavor_details}
+                  value={beer.serving_sizes}
                   disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'
@@ -270,7 +280,7 @@ function UpdateBeer() {
                 <Form.Control
                   onChange={handleChange}
                   name='name'
-                  value={beer.flavor_details}
+                  value={beer.price_per_serving_size}
                   disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'

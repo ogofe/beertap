@@ -510,6 +510,8 @@ function AddBeer() {
                           onChange={handleChange}
                           name="price_per_keg"
                           type="number"
+                          min="1.00"
+                          step="0.01"
                           aria-describedby="price_per_keg"
                         />
                       </div>
@@ -575,6 +577,8 @@ function AddBeer() {
                         <Form.Control
                           onChange={handleChange}
                           name="price_per_serving_size"
+                          step="0.01"
+                          min="1.00"
                           type="number"
                           aria-describedby="price_per_serving_size"
                         />
