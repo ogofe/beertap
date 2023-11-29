@@ -7,6 +7,7 @@ import { Button, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faAdd, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function Categories() {
@@ -20,6 +21,7 @@ function Categories() {
   const [activePage, setActivePage] = useState(0);
   const {apiUrl} = useContext(GlobalStore)
   const categoryUrl = `${apiUrl}/categories/`;
+  useRoleBasedAccess(['super-admin', 'admin'])
 
   // Fetch all breweries using the useEffect
   useEffect(() => {

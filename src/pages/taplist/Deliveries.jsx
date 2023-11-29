@@ -5,12 +5,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 function Deliveries() {
   const [beerList, setBeerList] = useState([]); // Original list of beers
   const [filteredBeerList, setFilteredBeerList] = useState([]); // Filtered list based on status
   const {apiUrl} = useContext(GlobalStore)
   const updateUrl = `${apiUrl}/tap/updateStatus`;
+  useRoleBasedAccess(['super-admin', 'admin', 'basic-user'])
 
   useEffect(() => {
     // Fetch data from the API to populate the list of beers

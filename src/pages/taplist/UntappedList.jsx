@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button, Container, Table, Badge } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function UntappedList() {
@@ -18,6 +19,7 @@ function UntappedList() {
     'ordered'     : 'warning',
     'empty'    : 'danger',
   }
+  useRoleBasedAccess(['super-admin', 'admin', 'basic-user'])
 
   useEffect(() => {
     // Fetch data from the tapList URL

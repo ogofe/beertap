@@ -7,6 +7,7 @@ import { Button, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faAdd, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function Suppliers() {
@@ -19,6 +20,7 @@ function Suppliers() {
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
   const {apiUrl} = useContext(GlobalStore)
+  useRoleBasedAccess(['super-admin', 'admin'])
   const supplierUrl = `${apiUrl}/suppliers/`;
 
   // Fetch all Suppliers using the useEffect
@@ -92,7 +94,7 @@ function Suppliers() {
           <h2 className='listUntapTitle my-4 w-fit'> Suppliers List </h2>
 
           <Button variant='primary' className="mb-3" size='md'>
-            <Link to="/kegsizes/add" className="update-link btn-extra">
+            <Link to="/suppliers/add" className="update-link btn-extra">
               <FontAwesomeIcon icon={faAdd} /> Add a Supplier
             </Link>
           </Button>

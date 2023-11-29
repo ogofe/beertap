@@ -6,6 +6,7 @@ import { Button, Form, Container } from 'react-bootstrap';
 import { BackButton } from '../../components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 function UpdateKegsize() {
   const [kegsize, setKegsize] = useState({
@@ -17,6 +18,7 @@ function UpdateKegsize() {
   const location = useLocation();
   const {apiUrl} = useContext(GlobalStore)
   const kegsizeId = location.pathname.split('/')[3];
+  useRoleBasedAccess(['super-admin', 'admin'])
   //console.log(supplierId)
 
   useEffect(() => {

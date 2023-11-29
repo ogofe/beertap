@@ -373,12 +373,15 @@ function App() {
         case 'ERR_TYPE': {
           return {title: 'Data Error', body: 'Please fill in the correct details!'}
         }
+        case 'ERR_BAD_RESPONSE': {
+          return {title: 'Server Error', body: 'A server error occured! Please contact the developer.'}
+        }
         default : {
           return {title: 'Network Error', body: 'Please check your internet connection!'}
         }
       }
     } else {
-      return {title: 'Network Error', body: 'Something went terribly wrong, please contact the developer!'}
+      return {title: 'Server Error', body: 'Something went terribly wrong, please contact the developer!'}
     }
   }
 
@@ -503,18 +506,6 @@ function App() {
   }
 }
 
-
-// function MainApp() {
-
-//   return (
-//     <div className="App">
-//     <UserProvider>
-//     <RouterProvider router={router}>
-//     </RouterProvider>
-//     </UserProvider>
-//     </div>
-//   );
-// }
 
 
 export default App;

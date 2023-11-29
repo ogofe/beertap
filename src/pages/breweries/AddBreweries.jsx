@@ -6,6 +6,7 @@ import {Button, div, Form, Container} from 'react-bootstrap'
 import {GlobalStore} from '../../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function AddBreweries() {
@@ -14,6 +15,7 @@ function AddBreweries() {
         location:""
     })
     const {apiUrl} = useContext(GlobalStore)
+    useRoleBasedAccess(['super-admin', 'admin'])
     const navigate = useNavigate()
 
     const handleChange = (e) => {

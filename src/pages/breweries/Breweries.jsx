@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faAdd, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function Breweries() {
@@ -20,6 +21,7 @@ function Breweries() {
   const [activePage, setActivePage] = useState(0);
   const {apiUrl}  = useContext(GlobalStore)
   const breweryUrl = `${apiUrl}/breweries/`;
+  useRoleBasedAccess(['super-admin', 'admin'])
 
   // Fetch all breweries using the useEffect
   useEffect(() => {

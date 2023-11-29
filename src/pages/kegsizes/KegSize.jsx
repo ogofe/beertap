@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faAdd } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function KegSizes() {
@@ -19,6 +20,7 @@ function KegSizes() {
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
   const {apiUrl} = useContext(GlobalStore)
+  useRoleBasedAccess(['super-admin', 'admin'])
   const sizeUrl = `${apiUrl}/kegsizes/`;
 
   // Fetch all Suppliers using the useEffect

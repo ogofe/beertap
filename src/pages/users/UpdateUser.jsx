@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTrash, faTruckFast, faChevronLeft, faPenFancy, faCancel } from '@fortawesome/free-solid-svg-icons';
 import {BackButton} from '../../components'
 import {GlobalStore} from '../../App'
+import useRoleBasedAccess from '../../hooks/useRole';
 
 function UpdateUser() {
   const [user, setUser] = useState({
@@ -20,7 +21,8 @@ function UpdateUser() {
   const navigate = useNavigate();
   const location = useLocation();
   const userId = location.pathname.split('/')[3];
- //console.log(user.username)
+  useRoleBasedAccess(['super-admin', 'admin'])
+  //console.log(user.username)
   const {apiUrl} = useContext(GlobalStore)
 
   useEffect(() => {

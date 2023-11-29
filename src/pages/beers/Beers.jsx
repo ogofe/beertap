@@ -97,7 +97,7 @@ function Beers() {
   const fetchBreweryName = async (breweryId) => {
     try {
       const response = await axios.get(`${apiUrl}/breweries/${breweryId}`);
-      return response.data.name; // Assuming the brewery name is available in the response
+      return response.data[0].name; // Assuming the brewery name is available in the response
     } catch (err) {
       console.log(err);
       return "Unknown Brewery"; // Handle errors gracefully

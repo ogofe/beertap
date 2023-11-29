@@ -6,6 +6,7 @@ import { BackButton } from '../../components';
 import {Button, div, Form, Dropdown, Container} from 'react-bootstrap';
 import { faSave, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 
@@ -20,6 +21,7 @@ function AddUsers() {
 
   const {apiUrl} = useContext(GlobalStore)
   const navigate = useNavigate()
+  useRoleBasedAccess(['super-admin', 'admin'])
 
   const handleChange = (e) => {
       setUser((prev) => ({...prev, [e.target.name]: e.target.value}))
@@ -104,9 +106,9 @@ function AddUsers() {
                     {user.role || 'Select Role'}
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="w-100">
-                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'Super Admin' })}>Super Admin</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'Admin' })}>Admin</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'Basic User' })}>Basic User</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'super-admin' })}>Super Admin</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'admin' })}>Admin</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'basic-user' })}>Basic User</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>

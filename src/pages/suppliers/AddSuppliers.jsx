@@ -3,7 +3,11 @@ import React, { useContext, useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 //import { Link } from 'react-router-dom';
-import {Button, InputGroup, Form} from 'react-bootstrap'
+import {Button, InputGroup, Form, Container} from 'react-bootstrap'
+import { BackButton } from '../../components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 function AddSuppliers() {
     const [required, setRequired] = [true]
@@ -11,6 +15,7 @@ function AddSuppliers() {
         name: ""
     })
     const {apiUrl} = useContext(GlobalStore);
+    useRoleBasedAccess(['super-admin', 'admin'])
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -32,29 +37,33 @@ function AddSuppliers() {
     }
 
   return (
-    <>
-    <div className='form contMargin'>
-        <br />
-        <h1 className='listUntapTitle'>Add New Supplier</h1>
-        <InputGroup size="lg">
-        <InputGroup.Text id="inputGroup-sizing-lg">Supplier Name</InputGroup.Text>
-        <Form.Control
-          onChange={handleChange} 
-          name='name'
-          aria-label="Large"
-          aria-describedby="inputGroup-sizing-sm"
-          setRequired
-          
-        />
-        </InputGroup>
-        <div className="btn-div">
-        <Button className='btn-extra' variant='primary' size='lg' onClick={handleClick}>Add</Button>
-        <Button variant='primary' size='lg' href={"/suppliers"} className="update-link btn-extra">
-            Back
-        </Button>
+    <div className='page'>
+    <Container className='form contMargin'>
+        
+        <BackButton path={'/suppliers'} />
+
+        <h2 className='listUntapTitle'>Add New Supplier</h2>
+
+        <div size="lg" className='bg-light rounded p-2'>
+            <label className='form-label' id="inputGroup-sizing-lg">Supplier Name</label>
+            <Form.Control
+                style={{ maxWidth: 500 }}
+                onChange={handleChange} 
+                name='name'
+                aria-label="Large"
+                aria-describedby="inputGroup-sizing-sm"
+                setRequired
+            />
         </div>
+
+        <div className="bg-light p-2 rounded my-3">
+            <Button className='btn-extra bold' variant='primary' size='md' onClick={handleClick}>
+                <FontAwesomeIcon icon={faSave} className='mr-1' />
+                Add Supplier
+            </Button>
+        </div>
+    </Container>
     </div>
-    </>
   )
 }
 

@@ -6,6 +6,7 @@ import {Button, InputGroup, Form, Container} from 'react-bootstrap'
 import {GlobalStore} from '../../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function AddCategories() {
@@ -13,6 +14,7 @@ function AddCategories() {
         name: "",
         type:""
     })
+    useRoleBasedAccess(['super-admin', 'admin'])
 
     const navigate = useNavigate()
     const {apiUrl} = useContext(GlobalStore)

@@ -6,6 +6,7 @@ import { faSave } from '@fortawesome/free-solid-svg-icons';
 import {BackButton} from '../../components';
 import { Button, Container, Form } from 'react-bootstrap';
 import {GlobalStore} from '../../App';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function UpdateBrewery() {
@@ -16,23 +17,47 @@ function UpdateBrewery() {
 
   const [updateConfirmation, setUpdateConfirmation] = useState(null); // Added state for update confirmation
   const navigate = useNavigate();
+  useRoleBasedAccess(['super-admin', 'admin'])
   const location = useLocation();
   const breweryId = location.pathname.split('/')[3];
-  const {apiUrl} = useContext(GlobalStore)
+  const {apiUrl, notify, translateError} = useContext(GlobalStore)
+  // Fetch existing data from the API
+
+  const fetchBrewery = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/breweries/${breweryId}`);
+      if (response.status === 200){
+        notify({
+          title: 'Success',
+          level: 'success',
+          body: "Successfully got data from server"
+        })
+      }else{
+        notify({
+          title: 'Success',
+          level: 'danger',
+          body: "Successfully got data from server"
+        })
+      }
+      // Set the existing data as the initial state for the input field
+      console.log("DATA:", response.data)
+      setBrewery(response.data);
+    } catch (err) {
+      console.log(err);
+      const error = translateError(err)
+      notify({
+        title: error.title,
+        timeout: 5000,
+        level: 'danger',
+        body: error.body
+      })
+    }
+  };
 
   useEffect(() => {
-    // Fetch existing data from the API
-    const fetchBrewery = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/breweries/${breweryId}`);
-        // Set the existing data as the initial state for the input field
-        setBrewery(response.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     fetchBrewery();
+
+    // eslint-disable-next-line
   }, [breweryId]);
 
   const handleChange = (e) => {

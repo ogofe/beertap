@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faAdd, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function Users() {
@@ -19,6 +20,7 @@ function Users() {
   const maxRecords = 5; // Define the maximum number of records per table
   const {apiUrl} = useContext(GlobalStore)
   const [activePage, setActivePage] = useState(0);
+  useRoleBasedAccess(['super-admin', 'admin'])
 
   const userUrl = `${apiUrl}/users/`;
 

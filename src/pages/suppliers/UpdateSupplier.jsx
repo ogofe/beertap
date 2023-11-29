@@ -6,6 +6,7 @@ import { Button, InputGroup, Container, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { BackButton } from '../../components';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function UpdateSupplier() {
@@ -15,6 +16,7 @@ function UpdateSupplier() {
   const {apiUrl} = useContext(GlobalStore)
   const [updateConfirmation, setUpdateConfirmation] = useState(null); // Added state for update confirmation
   const navigate = useNavigate();
+  useRoleBasedAccess(['super-admin', 'admin'])
   const location = useLocation();
   const supplierId = location.pathname.split('/')[3];
   //console.log(supplierId)

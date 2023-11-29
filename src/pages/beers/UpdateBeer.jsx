@@ -7,6 +7,7 @@ import {GlobalStore} from '../../App';
 import {BackButton} from '../../components';
 import { faSave, faAdd, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function UpdateBeer() {
@@ -26,6 +27,7 @@ function UpdateBeer() {
     // category_id: null,
     // tap_id: null,
   });
+  useRoleBasedAccess(['superadmin', 'admin'])
 
   const [updateConfirmation, setUpdateConfirmation] = useState(null);
   const navigate = useNavigate();
@@ -38,11 +40,20 @@ function UpdateBeer() {
   const popup = useRef()
   const [breweries, setBreweries] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const [breweryNames, setBreweryNames] = useState({});
+  const [supplierNames, setSupplierNames] = useState({});
 
   function getBreweries(){
    // Fetch breweries and suppliers to populate dropdowns
     axios.get(`${apiUrl}/breweries`)
-    .then((response) => setBreweries(response.data))
+    .then((response) => {
+      setBreweries(response.data)
+      const breweryNamesMap = {};
+      response.data.forEach((brewery) => {
+         breweryNamesMap[brewery.brewery_id] = brewery.name;
+      });
+      setBreweryNames(breweryNamesMap);
+    })
     .catch((error) => {
       console.error('Error fetching breweries:', error);
     }); 
@@ -50,7 +61,14 @@ function UpdateBeer() {
 
   function getSuppliers(){
     axios.get(`${apiUrl}/suppliers`)
-    .then((response) => setSuppliers(response.data));
+    .then((response) => {
+      setSuppliers(response.data)
+      const supplierNamesMap = {};
+      response.data.forEach((supplier) => {
+        supplierNamesMap[supplier.supplier_id] = supplier.name;
+      });
+      setSupplierNames(supplierNamesMap);
+    })
     .catch((error) => {
       console.error('Error fetching suppliers:', error);
     });
@@ -66,7 +84,8 @@ function UpdateBeer() {
   };
 
   useEffect(() => {
-
+    getBreweries();
+    getSuppliers();
     fetchBeer();
   }, [beerId]);
 
@@ -122,7 +141,6 @@ function UpdateBeer() {
               <FontAwesomeIcon icon={faAdd} /> Add to Tap
             </Button>
             :
-
             <div className="d-flex justify-content-between align-items-center">
               <Badge bg="primary" style={{fontSize: '18px'}}> Tap N<u>o</u> : {beer.tap_number} </Badge>
             </div>
@@ -181,7 +199,7 @@ function UpdateBeer() {
                 <Form.Control
                   onChange={handleChange}
                   name='name'
-                  value={beer.supplier_id}
+                  value={supplierNames[beer.supplier_id]}
                   disabled = {true}
                   aria-label='Large'
                   aria-describedby='inputGroup-sizing-sm'

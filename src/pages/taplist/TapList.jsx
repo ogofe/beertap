@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Button, Container, Table, Badge } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 function TapList() {
   const [tapList, setTapList] = useState([]);
@@ -17,6 +18,8 @@ function TapList() {
     'ordered'     : 'warning',
     'empty'    : 'danger',
   }
+  useRoleBasedAccess(['super-admin', 'admin', 'basic-user'])
+  
   useEffect(() => {
     // Fetch data from the tapList URL
     axios.get(tapListUrl).then((response) => {

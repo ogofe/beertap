@@ -7,6 +7,7 @@ import { faSave, faTrash, faTruckFast, faChevronLeft, faPenFancy, faCancel } fro
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Skeleton, BackButton} from '../../components'
 import {GlobalStore} from '../../App';
+import useRoleBasedAccess from '../../hooks/useRole';
 // import PDFDocument from '../../contexts/PDFDocument';
 
 // import jsPDF from 'jspdf';
@@ -44,29 +45,12 @@ function AddBeer() {
   const [editItemId, setEditItemId] = useState(null); // item for editing
   const [editing, setEditingState] = useState(false); // Set it to true to initially disable editing
   const navigate = useNavigate();
-  
-  // get api Url from GlobalStore
   const {apiUrl, notify, translateError} = useContext(GlobalStore)
-
   const orderedItemsTableRef = useRef(null);
-
-
-  // function to save table as pdf
-  // const exportTableAsPDF = () => {
-  //   const input = orderedItemsTableRef.current;
   
-  //   if (input) {
-  //     html2canvas(input).then((canvas) => {
-  //       const imgData = canvas.toDataURL('image/png');
-  //       const pdf = new jsPDF('p', 'mm', 'a4');
-  //       pdf.addImage(imgData, 'PNG', 10, 10, 190, 0);
-  //       pdf.save('ordered-items.pdf');
-  //     });
-  //   }
-  // };
+  useRoleBasedAccess(['superadmin', 'basic-user'])
 
   // Exporting as CSV
-
   function exportTableAsCSV(table, filename) {
     const rows = table.querySelectorAll('tr');
     const csv = [];
@@ -87,9 +71,9 @@ function AddBeer() {
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
     link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
   }
 
   function getBreweries(){
@@ -158,52 +142,7 @@ function AddBeer() {
     });
   }
 
-  useEffect(() => {
-    getBreweries();
-
-    getSuppliers();
-
-    getKegSizes();
-
-    getCategories();
-    
-    // Load ordered items from local storage when the component mounts
-    const storedItems = JSON.parse(localStorage.getItem('orderedItems')) || [];
-    setOrderedItems(storedItems);
-
-    setTimeout(() => setPageLoading(false), 1000)
-  }, []);
-
-
-  // Function to add the current beer to the list of ordered items
-  const addBeerToOrder = (e) => {
-    e.preventDefault()
-    try{
-      const newOrderedItems = [...orderedItems, beer];
-      setOrderedItems(newOrderedItems);
-
-      // Save the updated ordered items to local storage
-      localStorage.setItem('orderedItems', JSON.stringify(newOrderedItems));
-
-      notify({
-        level: 'success',
-        title: "Beer Item Added",
-        body: `You added ${beer.name} to your order queue!`
-      })
-
-      // Reset the beer state after adding to the order
-      setBeer({}); 
-    }catch (err){
-      const processError = translateError(err)
-      notify({
-        level: 'info',
-        title: processError.title,
-        body: processError.body
-      })
-      console.log("Error adding to queue:", err)
-    }
-  };
-
+  
 
   // Function to remove a beer from the order list
   const removeBeerFromOrder = (index) => {
@@ -264,34 +203,34 @@ function AddBeer() {
     try {
       // Get all orders from local storage
       const localOrders = JSON.parse(localStorage.getItem('orderedItems')) || [];
-      //console.log(localOrders)
-
-      // Iterate through each order and send it to the database
-      for (const localOrder of localOrders) {
-        const orderedBeer = { ...localOrder, status: 'ordered' };
-        console.log(orderedBeer)
-        const response = await axios.post(beerUrl, orderedBeer);
-
-        if (response.data) {
-          // Send an email to the staff with beer details for each order if needed
-          sendEmailToStaff(orderedBeer);
-        } else {
-          console.error('No data received from the API for order:', orderedBeer);
-        }
+      const payload = {
+        'orderedItems': localOrders
       }
+      const response = await axios.post(beerUrl, payload)
+      console.log("Ordering:", localOrders)
 
-      // Export table as pdf
-      // exportTableAsPDF();
-
-      // Export table as CSV
-      exportTableAsCSV(document.querySelector('.brewery-table'), 'ordered-items.csv');
+      console.log("Got Data:", response.data)
 
 
+      // // Iterate through each order and send it to the database
+      // for (const localOrder of localOrders) {
+      //   const orderedBeer = { ...localOrder, status: 'ordered' };
+      //   console.log(orderedBeer)
+      //   const response = await axios.post(beerUrl, orderedBeer);
+
+      //   if (response.data) {
+      //     // Send an email to the staff with beer details for each order if needed
+      //     sendEmailToStaff(orderedBeer);
+      //   } else {
+      //     console.error('No data received from the API for order:', orderedBeer);
+      //   }
+      // }
+      
       // Clear the orders from local storage after they are successfully sent to the database
-      localStorage.removeItem('orderedItems');
+      // localStorage.removeItem('orderedItems');
 
       // Navigate to the beers page or do other actions as needed
-      navigate('/beers');
+      // navigate('/beers');
     } catch (err) {
       const processError = translateError(err)
       notify({
@@ -303,11 +242,7 @@ function AddBeer() {
     }
   }
 
-  function showOverlay(){
-    // show editing form
-    // .... code body
-  }
-
+  // enable editing mode for beer order queue item
   function editQueueItem(itemId){
     setEditingState(true)
     setEditItemId(itemId)
@@ -319,16 +254,21 @@ function AddBeer() {
     })
   }
 
+  // Function to save changes when editing a beer in the order queue    
   function saveBeerChanges(newBeer){
     orderedItems[editItemId] = newBeer
     setEditingState(false)
     setEditItemId(null)
     localStorage.setItem('orderedItems', JSON.stringify(orderedItems))
+    
+    // notify the user of the changes
     notify({
       level: 'success',
       title: "Beer Item Changed",
       body: `You have made changes to ${newBeer.name}`
     })
+
+    // back to top
     window.scrollTo({
       behavior: 'smooth',
       top: (0)
@@ -344,6 +284,36 @@ function AddBeer() {
     })
   }
 
+  // Function to add the current beer to the list of ordered items
+  const addBeerToOrder = (e) => {
+    e.preventDefault()
+    try{
+      const newOrderedItems = [...orderedItems, beer];
+      setOrderedItems(newOrderedItems);
+
+      // Save the updated ordered items to local storage
+      localStorage.setItem('orderedItems', JSON.stringify(newOrderedItems));
+
+      notify({
+        level: 'success',
+        title: "Beer Item Added",
+        body: `You added ${beer.name} to your order queue!`
+      })
+
+      // Reset the beer state after adding to the order
+      setBeer({}); 
+    }catch (err){
+      const processError = translateError(err)
+      notify({
+        level: 'info',
+        title: processError.title,
+        body: processError.body
+      })
+      console.log("Error adding to queue:", err)
+    }
+  };
+
+
   // Function to handle the Order button click
   const placeBeerOrder = async (e) => {
     e.preventDefault();
@@ -354,7 +324,6 @@ function AddBeer() {
       const orderedBeer = { ...beer, status: 'ordered' };
       const response = await axios.post(beerUrl, orderedBeer);
       
-
       // Check if the response contains the newly created beer data
       if (response.data) {
         // Send an email to the staff with beer details
@@ -369,6 +338,23 @@ function AddBeer() {
       console.error('Error adding beer:', err);  
     }
   };
+
+  useEffect(() => {
+    getBreweries();
+
+    getSuppliers();
+
+    getKegSizes();
+
+    getCategories();
+    
+    // Load ordered items from local storage when the component mounts
+    const storedItems = JSON.parse(localStorage.getItem('orderedItems')) || [];
+    setOrderedItems(storedItems);
+
+    setTimeout(() => setPageLoading(false), 1000)
+  }, []);
+
 
   if (pageLoading){
     return(
@@ -418,6 +404,8 @@ function AddBeer() {
                           onChange={handleChange}
                           name="name"
                           required
+                          aria-errormessage='error-msg'
+                          aria-haspopup
                           type="text"
                           aria-describedby="name"
                         />
@@ -698,7 +686,6 @@ const EditQueueItem = ({
   supplierNames, breweryNames, onSave, onCancel,
 }) => {
 
-  const [orderQueue, setQueue] = useState([]);
   const [beer, setBeer] = useState({
     tap_number: null,
     name: '',
@@ -718,18 +705,9 @@ const EditQueueItem = ({
   });
   const [pageLoading, setPageLoading] = useState(true); 
 
-  function getAllQueuedItems(){
-    // get all queued items from local storage
-    const queue = JSON.parse(
-                    localStorage.getItem('orderedItems')
-                  )
-
-    setQueue(queue)
-  }
-
   function getItemFromQueue(){
     const item = orderedItems[itemId];
-    setBeer(item)
+    setBeer({ ...beer, ...item})
   }
 
   function handleChange(e){
@@ -750,7 +728,7 @@ const EditQueueItem = ({
   }, [])
 
   return(
-    <div> 
+    <div className='bg-light rounded p-2'> 
       <div className="row">
         {/* Beer Name */}
         <div className="col-sm-12 my-2 col-md-4">

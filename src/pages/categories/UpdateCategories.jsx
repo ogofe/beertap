@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSave} from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, div, Form, Container } from 'react-bootstrap';
+import useRoleBasedAccess from '../../hooks/useRole';
 
 function UpdateCategory() {
   const [category, setCategory] = useState({
@@ -18,6 +19,7 @@ function UpdateCategory() {
   const navigate = useNavigate();
   const location = useLocation();
   const categoryId = location.pathname.split('/')[3];
+  useRoleBasedAccess(['super-admin', 'admin'])
 
   useEffect(() => {
     // Fetch existing data from the API
