@@ -47,41 +47,6 @@ function Beers() {
     fetchAllBeers();
   }, [isDeleted]);
 
-  // Fetch all brewery names and store them in the state
-  const fetchBreweryNames = async () => {
-    try{
-      const names = {};
-      for (const beer of beers.slice(start, end)) {
-        const breweryName = await fetchBreweryName(beer.brewery_id);
-        names[beer.product_id] = breweryName;
-      }
-      setBreweryNames(names);
-    }catch(error){
-      notify({
-        level: 'error',
-        title: 'Server Error',
-        body: "An error occurred when trying to get Brewery Names"
-      })
-    }
-  };
-
-  const fetchSupplierNames = async () => {
-    try{
-      const names = {};
-      for (const beer of beers.slice(start, end)) {
-        const supplierName = await fetchSupplierName(beer.supplier_id);
-        names[beer.supplier_id] = supplierName;
-      }
-      setSupplierNames(names);
-    }catch(error){
-      notify({
-        level: 'error',
-        title: 'Server Error',
-        body: "An error occurred when trying to get Supplier Names"
-      })
-    }
-  };
-
   useEffect(() => {
     fetchBreweryNames();
     fetchSupplierNames();
@@ -93,27 +58,48 @@ function Beers() {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  // Define an async function to fetch the brewery name based on brewery_id
-  const fetchBreweryName = async (breweryId) => {
-    try {
-      const response = await axios.get(`${apiUrl}/breweries/${breweryId}`);
-      return response.data[0].name; // Assuming the brewery name is available in the response
-    } catch (err) {
-      console.log(err);
-      return "Unknown Brewery"; // Handle errors gracefully
+
+  // Fetch all brewery names and store them in the state
+  const fetchBreweryNames = async () => {
+    try{
+      let names = {};
+      const response = await axios.get(`${apiUrl}/breweries/`);
+      console.log("Breweries:", response.data)
+      // const breweries = response.data; // Assuming the brewery name is available in the response
+
+      response.data.map((brewery, idx, arr) => {
+        names[brewery.brewery_id] = brewery.name
+      })
+
+      setBreweryNames(names);
+    }catch(error){
+      notify({
+        level: 'error',
+        title: 'Server Error',
+        body: "An error occurred when trying to get Brewery Names"
+      })
+    }
+  }
+
+
+  const fetchSupplierNames = async () => {
+    try{
+      const names = {};
+      const response = await axios.get(`${apiUrl}/suppliers/`);
+      console.log("Suppliers:", response.data)
+      response.data.map((val, idx, arr) => {
+        names[val.supplier_id] = val.name
+      })
+      setSupplierNames(names);
+    }catch(error){
+      notify({
+        level: 'error',
+        title: 'Server Error',
+        body: "An error occurred when trying to get Supplier Names"
+      })
     }
   };
 
-  // Define an async function to fetch the supplier name based on supplier_id
-  const fetchSupplierName = async (supplierId) => {
-    try {
-      const response = await axios.get(`${apiUrl}/suppliers/${supplierId}`);
-      return response.data.name; // Assuming the supplier name is available in the response
-    } catch (err) {
-      console.log(err);
-      return "Unknown Supplier"; // Handle errors gracefully
-    }
-  };
 
   useEffect(() => {
     // Check if a delete confirmation message is stored in localStorage
@@ -132,23 +118,22 @@ function Beers() {
     if (confirmDelete) {
       const deleteUrl = `${beerUrl}${id}`;
       axios
-        .delete(deleteUrl)
-        .then((response) => {
-          setIsDeleted(true);
-          const confirmationMessage = 'Record deleted successfully.';
-          setDeleteConfirmation(confirmationMessage);
-          // Store the confirmation message in localStorage
-          localStorage.setItem('deleteConfirmation', confirmationMessage);
-          // Reload the page
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsDeleted(false);
-          setDeleteConfirmation('Failed to delete the record.');
-        });
+      .delete(deleteUrl)
+      .then((response) => {
+        setIsDeleted(true);
+        const confirmationMessage = 'Record deleted successfully.';
+        setDeleteConfirmation(confirmationMessage);
+        // Store the confirmation message in localStorage
+        localStorage.setItem('deleteConfirmation', confirmationMessage);
+        // Reload the page
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsDeleted(false);
+        setDeleteConfirmation('Failed to delete the record.');
+      });
     }
-
   };
 
   const handleNext = () => {
@@ -275,7 +260,7 @@ function Beers() {
                     <td className='tbl-left'>{beer.tap_number}</td>
                     <td className='w-50 tbl-left'>{beer.name}</td>
                     <td className='tbl-left'>{beer.type}</td>
-                    <td className='tbl-left'>{breweryNames[beer.product_id]}</td>
+                    <td className='tbl-left'>{breweryNames[beer.brewery_id]}</td>
                     <td className='tbl-left'>{supplierNames[beer.supplier_id]}</td>
                     <td className='tbl-left'>{beer.description}</td>
                     <td className='tbl-left'>{beer.flavor_details}</td>
@@ -352,8 +337,3 @@ function Beers() {
 }
 
 export default Beers;
-
-/*
-
-
-*/

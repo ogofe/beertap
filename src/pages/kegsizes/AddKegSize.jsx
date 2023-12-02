@@ -15,7 +15,7 @@ function AddKegSize() {
         size: ""
     })
 
-    useRoleBasedAccess(['super-admin', 'admin'])
+    useRoleBasedAccess(['Super Admin', 'Admin'])
     const navigate = useNavigate()
     const {apiUrl} = useContext(GlobalStore)
     const handleChange = (e) => {

@@ -18,7 +18,7 @@ function UpdateKegsize() {
   const location = useLocation();
   const {apiUrl} = useContext(GlobalStore)
   const kegsizeId = location.pathname.split('/')[3];
-  useRoleBasedAccess(['super-admin', 'admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
   //console.log(supplierId)
 
   useEffect(() => {

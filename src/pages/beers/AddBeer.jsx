@@ -48,7 +48,7 @@ function AddBeer() {
   const {apiUrl, notify, translateError} = useContext(GlobalStore)
   const orderedItemsTableRef = useRef(null);
   
-  useRoleBasedAccess(['superadmin', 'basic-user'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
 
   // Exporting as CSV
   function exportTableAsCSV(table, filename) {

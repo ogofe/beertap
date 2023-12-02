@@ -408,8 +408,8 @@ function App() {
     // receive token and confirm from api
     // then store token to session storage (session restarts when browser is closed)
     // set the auth state to true
-    localStorage.setItem('isAuthenticated', true)
-    localStorage.setItem('authUser', JSON.stringify(authData)) // user, token
+    sessionStorage.setItem('isAuthenticated', true)
+    sessionStorage.setItem('authUser', JSON.stringify(authData)) // user, token
     setLoadingState(true)
     window.location.href = '/'
     setAuthState(true)
@@ -418,9 +418,9 @@ function App() {
   function logout(){
     setLoadingState(true)
     setAuthState(false)
-    localStorage.setItem('isAuthenticated', false)
-    localStorage.setItem('authUser', null)
-    localStorage.removeItem('token');
+    sessionStorage.setItem('isAuthenticated', false)
+    sessionStorage.setItem('authUser', null)
+    sessionStorage.removeItem('token');
     // dispatch({ type: 'LOGOUT' });
     window.location.href = '/'
   }
@@ -430,8 +430,8 @@ function App() {
     // some logic
     // after auth logic and confirmation
     // set auth state
-    const loggedIn = JSON.parse(localStorage.getItem('isAuthenticated'))
-    const user = JSON.parse(localStorage.getItem('authUser'))
+    const loggedIn = JSON.parse(sessionStorage.getItem('isAuthenticated'))
+    const user = JSON.parse(sessionStorage.getItem('authUser'))
 
     if(loggedIn && loggedIn === true && user !== null) {
       setAuthState(true)

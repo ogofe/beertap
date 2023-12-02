@@ -15,7 +15,7 @@ function AddSuppliers() {
         name: ""
     })
     const {apiUrl} = useContext(GlobalStore);
-    useRoleBasedAccess(['super-admin', 'admin'])
+    useRoleBasedAccess(['Super Admin', 'Admin'])
     const navigate = useNavigate()
 
     const handleChange = (e) => {

@@ -20,7 +20,7 @@ function KegSizes() {
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
   const {apiUrl} = useContext(GlobalStore)
-  useRoleBasedAccess(['super-admin', 'admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
   const sizeUrl = `${apiUrl}/kegsizes/`;
 
   // Fetch all Suppliers using the useEffect

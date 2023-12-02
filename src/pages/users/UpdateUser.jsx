@@ -21,7 +21,7 @@ function UpdateUser() {
   const navigate = useNavigate();
   const location = useLocation();
   const userId = location.pathname.split('/')[3];
-  useRoleBasedAccess(['super-admin', 'admin'])
+  // useRoleBasedAccess(['Super Admin', 'Admin'])
   //console.log(user.username)
   const {apiUrl} = useContext(GlobalStore)
 

@@ -21,7 +21,7 @@ function Breweries() {
   const [activePage, setActivePage] = useState(0);
   const {apiUrl}  = useContext(GlobalStore)
   const breweryUrl = `${apiUrl}/breweries/`;
-  useRoleBasedAccess(['super-admin', 'admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
 
   // Fetch all breweries using the useEffect
   useEffect(() => {

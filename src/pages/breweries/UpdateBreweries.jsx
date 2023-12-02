@@ -17,7 +17,7 @@ function UpdateBrewery() {
 
   const [updateConfirmation, setUpdateConfirmation] = useState(null); // Added state for update confirmation
   const navigate = useNavigate();
-  useRoleBasedAccess(['super-admin', 'admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
   const location = useLocation();
   const breweryId = location.pathname.split('/')[3];
   const {apiUrl, notify, translateError} = useContext(GlobalStore)

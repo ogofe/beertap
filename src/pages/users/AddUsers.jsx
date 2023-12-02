@@ -21,7 +21,7 @@ function AddUsers() {
 
   const {apiUrl} = useContext(GlobalStore)
   const navigate = useNavigate()
-  useRoleBasedAccess(['super-admin', 'admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
 
   const handleChange = (e) => {
       setUser((prev) => ({...prev, [e.target.name]: e.target.value}))

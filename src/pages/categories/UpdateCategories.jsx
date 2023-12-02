@@ -19,7 +19,7 @@ function UpdateCategory() {
   const navigate = useNavigate();
   const location = useLocation();
   const categoryId = location.pathname.split('/')[3];
-  useRoleBasedAccess(['super-admin', 'admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
 
   useEffect(() => {
     // Fetch existing data from the API

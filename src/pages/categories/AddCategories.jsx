@@ -14,7 +14,7 @@ function AddCategories() {
         name: "",
         type:""
     })
-    useRoleBasedAccess(['super-admin', 'admin'])
+    useRoleBasedAccess(['Super Admin', 'Admin'])
 
     const navigate = useNavigate()
     const {apiUrl} = useContext(GlobalStore)

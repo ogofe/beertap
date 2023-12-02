@@ -20,7 +20,7 @@ function Users() {
   const maxRecords = 5; // Define the maximum number of records per table
   const {apiUrl} = useContext(GlobalStore)
   const [activePage, setActivePage] = useState(0);
-  useRoleBasedAccess(['super-admin', 'admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
 
   const userUrl = `${apiUrl}/users/`;
 

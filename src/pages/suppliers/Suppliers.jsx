@@ -20,7 +20,7 @@ function Suppliers() {
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
   const {apiUrl} = useContext(GlobalStore)
-  useRoleBasedAccess(['super-admin', 'admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
   const supplierUrl = `${apiUrl}/suppliers/`;
 
   // Fetch all Suppliers using the useEffect
