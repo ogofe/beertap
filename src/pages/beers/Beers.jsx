@@ -1,10 +1,10 @@
 import React, { useEffect, useContext, useState, Fragment } from 'react';
-import axios from 'axios';
+import axe from 'axios';
 import { Link } from 'react-router-dom';
 // import { ResponsiveTable } from '../../components';
 import { Button, Container, InputGroup, FormControl, Table, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faBeerMugEmpty, faChevronRight, faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faBeerMugEmpty, faChevronRight, faChevronLeft, faSearch, faMailBulk } from '@fortawesome/free-solid-svg-icons';
 import {GlobalStore} from '../../App'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -17,7 +17,7 @@ function Beers() {
   const [searchQuery, setSearchQuery] = useState(''); // Manage search functionality
   const maxRecords = 10; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
-  const {apiUrl, notify} = useContext(GlobalStore)
+  const {apiUrl, notify, axios} = useContext(GlobalStore)
   const beerUrl = `${apiUrl}/beers/`
   const bgColor = {
     'upcoming'    : 'secondary',
@@ -34,16 +34,17 @@ function Beers() {
   const start = activePage * maxRecords;
   const end = start + maxRecords;
 
+  const fetchAllBeers = async () => {
+    try {
+      const res = await axios.get('/beers/');
+      setBeers(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     // Fetch all beers using the useEffect
-    const fetchAllBeers = async () => {
-      try {
-        const res = await axios.get(beerUrl);
-        setBeers(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
     fetchAllBeers();
   }, [isDeleted]);
 
@@ -63,9 +64,8 @@ function Beers() {
   const fetchBreweryNames = async () => {
     try{
       let names = {};
-      const response = await axios.get(`${apiUrl}/breweries/`);
+      const response = await axios.get(`/breweries/`);
       console.log("Breweries:", response.data)
-      // const breweries = response.data; // Assuming the brewery name is available in the response
 
       response.data.map((brewery, idx, arr) => {
         names[brewery.brewery_id] = brewery.name
@@ -85,10 +85,11 @@ function Beers() {
   const fetchSupplierNames = async () => {
     try{
       const names = {};
-      const response = await axios.get(`${apiUrl}/suppliers/`);
+      const response = await axios.get(`/suppliers/`);
       console.log("Suppliers:", response.data)
       response.data.map((val, idx, arr) => {
         names[val.supplier_id] = val.name
+        return arr
       })
       setSupplierNames(names);
     }catch(error){
@@ -215,12 +216,22 @@ function Beers() {
             </Button>
           </InputGroup>
 
-          <div className="mx-2">
-            <Button variant='primary' size='md' className="w-fit mr-3">
-              <Link to="/beers/add" className="update-link">
+          <div className="mx-2 d-flex align-items-center">
+            <Link to="/beers/add" className="update-link">
+              <Button variant='primary' size='md' className="w-fit mr-1">
                 Order Beer 
                 <FontAwesomeIcon className="mx-2" icon={faBeerMugEmpty} />
-              </Link>
+              </Button>
+            </Link>
+            
+            <Button variant='info' size='md' className="w-fit mr-3"
+              onClick={async (e) => {
+                const res = await axe.get('http://localhost:5001/mail/')
+                console.log("Sent Mail:", res.data)
+              }}
+            >
+                Send Email 
+                <FontAwesomeIcon className="mx-2" icon={faMailBulk} />
             </Button>
           </div>
         </div>

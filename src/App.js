@@ -5,6 +5,8 @@ import { RouterProvider, createBrowserRouter, Outlet, Routes, Navigate, useNavig
 import Navigation from './components/Navbar';
 import { UserProvider, useUser } from './contexts/userContext';
 import { loginWithToken } from './pages/services/authService';
+import axios from 'axios';
+
 import './styles.css';
 import {PageLoader, Notification} from './components'
 import Beers from './pages/beers/Beers';
@@ -31,9 +33,8 @@ import Deliveries from './pages/taplist/Deliveries';
 import Login from './pages/users/Login';
 import PasswordReset from './pages/users/PasswordReset';
 
-//import Router from './components/Routers'
-export const API_URL = 'https://beer.binsoft.online/api'
 
+export const API_URL = 'https://beer.binsoft.online/api'
 export const GlobalStore = createContext({})
 
 const Layout = () => {
@@ -44,39 +45,6 @@ const Layout = () => {
     </div>
   )
 }
-
-// Protect the application and give access on login
-// function ProtectedRoute() {
-//   const { user } = useUser();
-
-//   if (user.isAuthenticated) {
-//     return (
-//       <>
-//         {/* <Navigation />
-//         <Outlet /> */}
-//         <Layout />
-//       </>
-//     );
-//   }
-
-//   return <Navigate to="/" />;
-// }
-
-// const ConditionalRoute = () => {
-//   const { user } = useUser();
-
-//   if (user.isAuthenticated) {
-//     // User is authenticated, redirect to the authenticated page
-//     return <Navigate to="/beers" />;
-//   } else {
-//     // User is not authenticated, redirect to the login page
-//     return (
-//       <>
-//        <Navigate to='/' />;
-//        </>
-//     )
-//   }
-// }
 
 
 const BaseRouter = createBrowserRouter([
@@ -348,6 +316,14 @@ function App() {
   const [authUser, setAuthUser] = useState(null)
   // const navigate = useNavigate()
 
+  const axiosClient = axios.create({
+    baseURL: API_URL,
+    headers:{
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authUser?.token}`
+    }
+  })
+
   function notify({ level, title, body, timeout }){
     setNotification({ title, body, level })
     const _timeout = timeout || 5000 // 5 seconds default
@@ -396,6 +372,7 @@ function App() {
     onLogin: authenticate,
     onLogout: logout,
     notify,
+    axios: axiosClient,
     dismissNotification,
     translateError,
   }
@@ -445,33 +422,6 @@ function App() {
   useEffect(() => {
     init()
   }, [isAuthenticated])
-
-  // Define your router and routes...
-
-  // const navigate = useNavigate();
-  // const { dispatch } = useUser();
-
-  // useEffect(() => {
-  //   const storedToken = localStorage.getItem('token');
-  //   if (storedToken) {
-  //     console.log('Token found:', storedToken);
-  //     // Log in the user with the token
-  //     loginWithToken(storedToken)
-  //       .then((response) => {
-  //         console.log('Login with token successful:', response);
-  //         // Handle user login and additional actions here
-  //         // dispatch({ type: 'SET_USER_DATA', payload: response.data });
-  //         navigate('/beers'); // Redirect to the desired page
-  //       })
-  //       .catch((error) => {
-  //         // Handle any errors, e.g., token invalid
-  //         console.error('Login with token failed:', error.message);
-  //         // You may choose to remove the invalid token here
-  //         localStorage.removeItem('token');
-  //         navigate('/'); // Redirect to the login page
-  //       });
-  //   }
-  // }, [navigate, dispatch]);
 
   if (isLoading){
     return <PageLoader />

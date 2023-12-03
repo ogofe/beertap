@@ -2,7 +2,7 @@
 // import { API_URL } from '../../App';
 import axios from 'axios';
 
-const apiUrl = `https://beer.binsoft.online/`;
+const apiUrl = `https://beer.binsoft.online`;
 
 export const login = async (username, password) => {
   try {
