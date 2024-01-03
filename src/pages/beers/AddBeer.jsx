@@ -8,10 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Skeleton, BackButton} from '../../components'
 import {GlobalStore} from '../../App';
 import useRoleBasedAccess from '../../hooks/useRole';
-// import PDFDocument from '../../contexts/PDFDocument';
 
-// import jsPDF from 'jspdf';
-// import html2canvas from 'html2canvas';
 
 function AddBeer() {
   const [beer, setBeer] = useState({
@@ -47,34 +44,8 @@ function AddBeer() {
   const navigate = useNavigate();
   const {apiUrl, notify, translateError} = useContext(GlobalStore)
   const orderedItemsTableRef = useRef(null);
-  
   useRoleBasedAccess(['Super Admin', 'Admin'])
-
-  // Exporting as CSV
-  function exportTableAsCSV(table, filename) {
-    const rows = table.querySelectorAll('tr');
-    const csv = [];
   
-    for (let i = 0; i < rows.length; i++) {
-      const row = [];
-      const cols = rows[i].querySelectorAll('td, th');
-  
-      for (let j = 0; j < cols.length - 1; j++) {
-        row.push(cols[j].innerText);
-      }
-  
-      csv.push(row.join(','));
-    }
-  
-    const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', filename);
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
-  }
 
   function getBreweries(){
    // Fetch breweries and suppliers to populate dropdowns
@@ -93,6 +64,7 @@ function AddBeer() {
     }); 
   }
 
+
   function getSuppliers(){
     axios.get(`${apiUrl}/suppliers`)
     .then((response) => {
@@ -108,6 +80,7 @@ function AddBeer() {
       console.error('Error fetching suppliers:', error);
     });
   }
+
 
   function getKegSizes(){
     // Fetch keg sizes from the kegsizes table
@@ -125,6 +98,7 @@ function AddBeer() {
       console.error('Error fetching keg sizes:', error);
     });
   }
+
 
   function getCategories(){
     axios.get(`${apiUrl}/categories`)
@@ -189,6 +163,7 @@ function AddBeer() {
     }
   };
 
+
   // function to get all beers from local storage and push to database to handle order
   const orderBeers = async (e) => {
     e.preventDefault();
@@ -197,7 +172,8 @@ function AddBeer() {
     notify({
       level: 'info',
       title: "Processing...",
-      body: `Please wait while we record your order!`
+      body: `Please wait while we record your order!`,
+      timeout: 2000
     })
 
     try {
@@ -207,30 +183,32 @@ function AddBeer() {
         'orderedItems': localOrders
       }
       const response = await axios.post(beerUrl, payload)
-      console.log("Ordering:", localOrders)
 
-      console.log("Got Data:", response.data)
+      if (response.status === 200) {
+        setTimeout(() => {
+          // Navigate to the beers page or do other actions as needed
+          navigate('/beers');
+        }, 2500)
 
 
-      // // Iterate through each order and send it to the database
-      // for (const localOrder of localOrders) {
-      //   const orderedBeer = { ...localOrder, status: 'ordered' };
-      //   console.log(orderedBeer)
-      //   const response = await axios.post(beerUrl, orderedBeer);
+        notify({
+          title: "Beer Order Placed!",
+          level: 'success',
+          body: "You've successfully placed a beer order."
+        })
+        
+        // Clear the orders from local storage after they are successfully sent to the database
+        localStorage.removeItem('orderedItems');
 
-      //   if (response.data) {
-      //     // Send an email to the staff with beer details for each order if needed
-      //     sendEmailToStaff(orderedBeer);
-      //   } else {
-      //     console.error('No data received from the API for order:', orderedBeer);
-      //   }
-      // }
-      
-      // Clear the orders from local storage after they are successfully sent to the database
-      // localStorage.removeItem('orderedItems');
+      } else {
+        notify({
+          title: "Error Occurred!",
+          level: 'danger',
+          body: "An error occurred when trying to place your order."
+        })
+        console.error('No data received from the API for order');
+      }
 
-      // Navigate to the beers page or do other actions as needed
-      // navigate('/beers');
     } catch (err) {
       const processError = translateError(err)
       notify({
@@ -304,40 +282,10 @@ function AddBeer() {
       setBeer({}); 
     }catch (err){
       const processError = translateError(err)
-      notify({
-        level: 'info',
-        title: processError.title,
-        body: processError.body
-      })
       console.log("Error adding to queue:", err)
     }
   };
 
-
-  // Function to handle the Order button click
-  const placeBeerOrder = async (e) => {
-    e.preventDefault();
-    const beerUrl = `${apiUrl}/beers/`;
-
-    try {
-      // Order the beer (update its status to "Ordered")
-      const orderedBeer = { ...beer, status: 'ordered' };
-      const response = await axios.post(beerUrl, orderedBeer);
-      
-      // Check if the response contains the newly created beer data
-      if (response.data) {
-        // Send an email to the staff with beer details
-        sendEmailToStaff();
-      } else {
-        console.error('No data received from the API');
-      }
-
-      navigate('/beers');
-    } catch (err) {
-
-      console.error('Error adding beer:', err);  
-    }
-  };
 
   useEffect(() => {
     getBreweries();
@@ -358,7 +306,7 @@ function AddBeer() {
 
   if (pageLoading){
     return(
-      <div className="page">
+      <div className="page pt-5">
       <Skeleton className="mt-5" />
       </div>
     )

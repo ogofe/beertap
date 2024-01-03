@@ -52,7 +52,13 @@ body::after {
     text-transform: capitalize;
 }
 
+table th  {
+    min-width: 220px;
+}
 
+table td  {
+    min-width: 220px;
+}
 
 .beer-box{
     display: flex;
@@ -253,9 +259,6 @@ input{
   
 
   .brewery-table td {
-    /*border: 1px solid #ccc; /* Add a 1px solid gray border to table headers and cells 
-    padding: 8px; /* Add padding for cell content 
-    text-align: center; /* Center-align cell content */
     border: none;
     padding: 10px 20px;
   }
