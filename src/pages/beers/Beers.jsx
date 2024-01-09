@@ -224,7 +224,7 @@ function Beers() {
             
             <Button variant='info' size='md' className="w-fit mr-3"
               onClick={async (e) => {
-                const res = await axe.get('https://beer.binsoft.online/mail/')
+                const res = await axios.get('https://beer.binsoft.online/mail/')
                 console.log("Sent Mail:", res.data)
               }}
             >
