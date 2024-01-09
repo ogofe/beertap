@@ -1,5 +1,4 @@
 import React, { useContext, useState} from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { BackButton } from '../../components';
 import {Button, div, Form, Container} from 'react-bootstrap'
@@ -14,7 +13,7 @@ function AddBreweries() {
         name: "",
         location:""
     })
-    const {apiUrl} = useContext(GlobalStore)
+    const {apiUrl, axios} = useContext(GlobalStore)
     useRoleBasedAccess(['Super Admin', 'Admin'])
     const navigate = useNavigate()
 

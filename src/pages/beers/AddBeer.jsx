@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button, div, Form, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,7 +42,7 @@ function AddBeer() {
   const [editItemId, setEditItemId] = useState(null); // item for editing
   const [editing, setEditingState] = useState(false); // Set it to true to initially disable editing
   const navigate = useNavigate();
-  const {apiUrl, notify, translateError} = useContext(GlobalStore)
+  const {apiUrl, notify, translateError, axios} = useContext(GlobalStore)
   const orderedItemsTableRef = useRef(null);
   useRoleBasedAccess(['Super Admin', 'Admin'])
   

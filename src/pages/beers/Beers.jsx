@@ -1,7 +1,5 @@
 import React, { useEffect, useContext, useState, Fragment } from 'react';
-import axe from 'axios';
 import { Link } from 'react-router-dom';
-// import { ResponsiveTable } from '../../components';
 import { Button, Container, InputGroup, FormControl, Table, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faBeerMugEmpty, faChevronRight, faChevronLeft, faSearch, faMailBulk } from '@fortawesome/free-solid-svg-icons';

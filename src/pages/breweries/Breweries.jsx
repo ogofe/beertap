@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
 //import { useLocation, useNavigate } from 'react-router-dom';
@@ -19,7 +18,7 @@ function Breweries() {
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
-  const {apiUrl}  = useContext(GlobalStore)
+  const {apiUrl, axios}  = useContext(GlobalStore)
   const breweryUrl = `${apiUrl}/breweries/`;
   useRoleBasedAccess(['Super Admin', 'Admin'])
 

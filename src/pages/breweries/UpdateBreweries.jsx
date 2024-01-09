@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
@@ -20,7 +19,7 @@ function UpdateBrewery() {
   useRoleBasedAccess(['Super Admin', 'Admin'])
   const location = useLocation();
   const breweryId = location.pathname.split('/')[3];
-  const {apiUrl, notify, translateError} = useContext(GlobalStore)
+  const {apiUrl, notify, translateError, axios} = useContext(GlobalStore)
   // Fetch existing data from the API
 
   const fetchBrewery = async () => {

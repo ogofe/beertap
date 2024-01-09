@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, InputGroup, Form, Container, Badge } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
@@ -35,7 +34,7 @@ function UpdateBeer() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [popupVisible, setPopupVisibility] = useState(false);
   const beerId = location.pathname.split('/')[3];
-  const {apiUrl} = useContext(GlobalStore);
+  const {apiUrl, axios} = useContext(GlobalStore);
   //const { beerId } = useParams();
   const popup = useRef()
   const [breweries, setBreweries] = useState([]);
