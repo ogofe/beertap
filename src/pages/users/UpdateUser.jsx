@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, div, Form, Dropdown, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,9 +20,8 @@ function UpdateUser() {
   const navigate = useNavigate();
   const location = useLocation();
   const userId = location.pathname.split('/')[3];
-  // useRoleBasedAccess(['Super Admin', 'Admin'])
-  //console.log(user.username)
-  const {apiUrl} = useContext(GlobalStore)
+  useRoleBasedAccess(['Super Admin', 'Admin'])
+  const {apiUrl, axios} = useContext(GlobalStore)
 
   useEffect(() => {
     // Fetch existing data from the API

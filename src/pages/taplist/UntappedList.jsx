@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import { Button, Container, Table, Badge } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
@@ -9,7 +8,7 @@ import useRoleBasedAccess from '../../hooks/useRole';
 function UntappedList() {
   const [tapList, setTapList] = useState([]);
   const [untappedList, setUntappedList] = useState([]);
-  const {apiUrl} = useContext(GlobalStore)
+  const {apiUrl, axios} = useContext(GlobalStore)
   const tapListUrl = `${apiUrl}/tap/`;
   const untappedListUrl = `${apiUrl}/tap/untappedList`;
   const updateUrl = `${apiUrl}/tap/updateStatus`;

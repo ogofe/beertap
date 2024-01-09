@@ -1,6 +1,5 @@
 import {GlobalStore} from '../../App';
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import {BackButton} from '../../components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSave} from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +13,7 @@ function UpdateCategory() {
     type:'',
   });
 
-  const {apiUrl} = useContext(GlobalStore)
+  const {apiUrl, axios} = useContext(GlobalStore)
   const [updateConfirmation, setUpdateConfirmation] = useState(null); // Added state for update confirmation
   const navigate = useNavigate();
   const location = useLocation();

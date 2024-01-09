@@ -1,6 +1,5 @@
 import {GlobalStore} from '../../App';
 import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
 //import { useLocation, useNavigate } from 'react-router-dom';
@@ -11,15 +10,12 @@ import useRoleBasedAccess from '../../hooks/useRole';
 
 
 function Categories() {
-  //const navigate = useNavigate();
-  //const location = useLocation();
-  //const breweryId = location.pathname.split('/')[3];
   const [isDeleted, setIsDeleted] = useState(false);
   const [categories, setCategories] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const maxRecords = 5; // Define the maximum number of records per table
   const [activePage, setActivePage] = useState(0);
-  const {apiUrl} = useContext(GlobalStore)
+  const {apiUrl, axios} = useContext(GlobalStore)
   const categoryUrl = `${apiUrl}/categories/`;
   useRoleBasedAccess(['Super Admin', 'Admin'])
 

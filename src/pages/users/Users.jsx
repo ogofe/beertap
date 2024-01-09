@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
 //import { useLocation, useNavigate } from 'react-router-dom';
@@ -18,7 +17,7 @@ function Users() {
   const [users, setUsers] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const maxRecords = 5; // Define the maximum number of records per table
-  const {apiUrl} = useContext(GlobalStore)
+  const {apiUrl, axios} = useContext(GlobalStore)
   const [activePage, setActivePage] = useState(0);
   useRoleBasedAccess(['Super Admin', 'Admin'])
 

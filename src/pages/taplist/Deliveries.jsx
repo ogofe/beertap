@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import { Button, Container, Table, ButtonGroup, Badge } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStore} from '../../App';
@@ -10,7 +9,7 @@ import useRoleBasedAccess from '../../hooks/useRole';
 function Deliveries() {
   const [beerList, setBeerList] = useState([]); // Original list of beers
   const [filteredBeerList, setFilteredBeerList] = useState([]); // Filtered list based on status
-  const {apiUrl} = useContext(GlobalStore)
+  const {apiUrl, axios} = useContext(GlobalStore)
   const updateUrl = `${apiUrl}/tap/updateStatus`;
   useRoleBasedAccess(['super-admin', 'admin', 'basic-user'])
 

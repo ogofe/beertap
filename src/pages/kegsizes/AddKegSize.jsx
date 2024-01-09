@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { BackButton } from '../../components';
 import {Button, InputGroup, Form, Container} from 'react-bootstrap'
@@ -17,7 +16,7 @@ function AddKegSize() {
 
     useRoleBasedAccess(['Super Admin', 'Admin'])
     const navigate = useNavigate()
-    const {apiUrl} = useContext(GlobalStore)
+    const {apiUrl, axios} = useContext(GlobalStore)
     const handleChange = (e) => {
         setKegsize((prev) => ({...prev, [e.target.name]: e.target.value}))
     }

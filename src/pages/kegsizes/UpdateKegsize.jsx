@@ -1,6 +1,5 @@
 import {GlobalStore} from '../../App';
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Form, Container } from 'react-bootstrap';
 import { BackButton } from '../../components';
@@ -16,7 +15,7 @@ function UpdateKegsize() {
   const [updateConfirmation, setUpdateConfirmation] = useState(null); // Added state for update confirmation
   const navigate = useNavigate();
   const location = useLocation();
-  const {apiUrl} = useContext(GlobalStore)
+  const {apiUrl, axios} = useContext(GlobalStore)
   const kegsizeId = location.pathname.split('/')[3];
   useRoleBasedAccess(['Super Admin', 'Admin'])
   //console.log(supplierId)
