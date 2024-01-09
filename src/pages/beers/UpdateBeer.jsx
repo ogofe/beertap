@@ -26,7 +26,7 @@ function UpdateBeer() {
     // category_id: null,
     // tap_id: null,
   });
-  useRoleBasedAccess(['superadmin', 'admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
 
   const [updateConfirmation, setUpdateConfirmation] = useState(null);
   const navigate = useNavigate();

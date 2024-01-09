@@ -17,7 +17,8 @@ function TapList() {
     'ordered'     : 'warning',
     'empty'    : 'danger',
   }
-  useRoleBasedAccess(['super-admin', 'admin', 'basic-user'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
+  
   
   useEffect(() => {
     // Fetch data from the tapList URL

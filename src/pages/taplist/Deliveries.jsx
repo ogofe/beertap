@@ -11,7 +11,8 @@ function Deliveries() {
   const [filteredBeerList, setFilteredBeerList] = useState([]); // Filtered list based on status
   const {apiUrl, axios} = useContext(GlobalStore)
   const updateUrl = `${apiUrl}/tap/updateStatus`;
-  useRoleBasedAccess(['super-admin', 'admin', 'basic-user'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
+  
 
   useEffect(() => {
     // Fetch data from the API to populate the list of beers

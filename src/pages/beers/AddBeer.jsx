@@ -44,7 +44,7 @@ function AddBeer() {
   const navigate = useNavigate();
   const {apiUrl, notify, translateError, axios} = useContext(GlobalStore)
   const orderedItemsTableRef = useRef(null);
-  useRoleBasedAccess(['Super Admin', 'Admin'])
+  useRoleBasedAccess(['Super Admin', 'Admin', 'Basic User'])
   
 
   function getBreweries(){

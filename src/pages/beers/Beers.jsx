@@ -26,6 +26,7 @@ function Beers() {
   const [breweryNames, setBreweryNames] = useState({});
   const [supplierNames, setSupplierNames] = useState({});
   const [isDisabled, setIsDisabled] = useState(true);
+  useRoleBasedAccess(['Super Admin', 'Admin', 'Basic User'])
   //const navigate = useNavigate();
 
   // Calculate the range of records to display on the current page
