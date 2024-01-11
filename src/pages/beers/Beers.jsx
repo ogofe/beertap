@@ -223,17 +223,8 @@ function Beers() {
                 <FontAwesomeIcon className="mx-2" icon={faBeerMugEmpty} />
               </Button>
             </Link>
-            
-            <Button variant='info' size='md' className="w-fit mr-3"
-              onClick={async (e) => {
-                const res = await axios.get('https://beer.binsoft.online/mail/')
-                console.log("Sent Mail:", res.data)
-              }}
-            >
-                Send Email 
-                <FontAwesomeIcon className="mx-2" icon={faMailBulk} />
-            </Button>
           </div>
+          
         </div>
         
         {deleteConfirmation && (
