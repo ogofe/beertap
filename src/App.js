@@ -324,6 +324,25 @@ function App() {
     }
   })
 
+  // Add a response interceptor
+  axiosClient.interceptors.response.use(
+    (response) => {
+      // Check if the response status is a redirect (3xx)
+      if (response.status === 401 && Boolean(authUser?.token)) {
+        // Assuming the user is logged in but the token is expired
+        const redirectUrl = response.headers.location;
+
+        logout()
+      }
+
+      return response;
+    },
+    (error) => {
+      // Handle other errors here
+      return Promise.reject(error);
+    }
+  );
+
   function notify({ level, title, body, timeout }){
     setNotification({ title, body, level })
     const _timeout = timeout || 5000 // 5 seconds default
