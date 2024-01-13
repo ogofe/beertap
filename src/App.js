@@ -327,16 +327,19 @@ function App() {
   // Add a response interceptor
   axiosClient.interceptors.response.use(
     (response) => {
-      // Check if the response status is a redirect (3xx)
-      if (response.status === 401 && Boolean(authUser)) {
-        // Assuming the user is logged in but the token is expired
-        // logout()
-        console.log(" Token Is Expired! ")
-      }
-
+      // 2xx response codes; return response
       return response;
     },
     (error) => {
+      // Check if the response status is a redirect (3xx)
+
+      // if (response.status === 401 && Boolean(authUser)) {
+      //   // Assuming the user is logged in but the token is expired
+      //   // logout()
+      //   console.log(" Token Is Expired! ")
+      // }
+        console.log(" Token Is Expired! ", error)
+
       // Handle other errors here
       return Promise.reject(error);
     }
