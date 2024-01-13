@@ -328,11 +328,10 @@ function App() {
   axiosClient.interceptors.response.use(
     (response) => {
       // Check if the response status is a redirect (3xx)
-      if (response.status === 401 && Boolean(authUser?.token)) {
+      if (response.status === 401 && Boolean(authUser)) {
         // Assuming the user is logged in but the token is expired
-        const redirectUrl = response.headers.location;
-
-        logout()
+        // logout()
+        console.log(" Token Is Expired! ")
       }
 
       return response;
