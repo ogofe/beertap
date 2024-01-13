@@ -336,6 +336,12 @@ function App() {
       if (error.response.status === 401 && Boolean(authUser?.token)) {
         // Assuming the user is logged in but the token is expired
         logout()
+        return notify({
+          level: 'info',
+          title: 'Server Authentication Error',
+          body: 'Your security token has expired, please log in again to continue. You will be redirected soon.',
+          timeout: 7000
+        })
         console.log(" Token Is Expired! ")
       }
         // console.log(" Token Is Expired! ", error)
