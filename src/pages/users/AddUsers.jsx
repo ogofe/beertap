@@ -20,7 +20,7 @@ function AddUsers() {
 
   const {apiUrl, axios} = useContext(GlobalStore)
   const navigate = useNavigate()
-  useRoleBasedAccess(['Super Admin', 'Admin'])
+  useRoleBasedAccess(['Super Admin'])
 
   const handleChange = (e) => {
       setUser((prev) => ({...prev, [e.target.name]: e.target.value}))
@@ -105,9 +105,9 @@ function AddUsers() {
                     {user.role || 'Select Role'}
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="w-100">
-                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'super-admin' })}>Super Admin</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'admin' })}>Admin</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'basic-user' })}>Basic User</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'Super Admin' })}>Super Admin</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'Admin' })}>Admin</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setUser({ ...user, role: 'Basic User' })}>Basic User</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>

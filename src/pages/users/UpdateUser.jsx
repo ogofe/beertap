@@ -8,7 +8,7 @@ import {GlobalStore} from '../../App'
 import useRoleBasedAccess from '../../hooks/useRole';
 
 function UpdateUser() {
-  useRoleBasedAccess(['Super Admin', 'Admin'])
+  useRoleBasedAccess(['Super Admin', ])
 
   const [user, setUser] = useState({
     full_name:"",
