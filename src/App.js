@@ -378,6 +378,9 @@ function App() {
         case 'ERR_BAD_RESPONSE': {
           return {title: 'Server Error', body: 'A server error occured! Please contact the developer.'}
         }
+        case 'ERR_BAD_REQUEST': {
+          return {title: 'Server Error', body: 'Invalid authentication credentials'}
+        }
         default : {
           return {title: 'Network Error', body: 'Please check your internet connection!'}
         }

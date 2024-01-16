@@ -22,7 +22,7 @@ function Beers() {
     'upcoming'    : 'secondary',
     'delivered'   : 'success',
     'ordered'     : 'warning',
-    'empty'    : 'danger',
+    'empty'       : 'danger',
   }
   const [breweryNames, setBreweryNames] = useState({});
   const [supplierNames, setSupplierNames] = useState({});
@@ -281,13 +281,14 @@ function Beers() {
                           </Link>
                         </Button>
 
-                        <Button 
+                        {/* <Button 
                           onClick={() => handleDelete(beer.product_id)} 
                           variant="dark"
                           disabled={true}
                         >
                           <FontAwesomeIcon icon={faTrash} />
                         </Button>
+                        */}
                       </div>
                     </td>
                   </tr>

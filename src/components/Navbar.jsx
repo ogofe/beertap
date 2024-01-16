@@ -8,7 +8,10 @@ function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate()
   const {onLogout, authUser} = useContext(GlobalStore)
-  const {user, token} = authUser;
+  const {user, token, role} = authUser;
+
+  const userIsAdmin = role === 'Admin';
+  const userIsSuperAdmin = role === 'Super Admin';
 
   useEffect(() => {
     // Check if the user is logged in by inspecting local storage
@@ -32,37 +35,43 @@ function Navigation() {
             <Nav.Link as={NavLink} to="/beers">
               Beers
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/beers/add">
-              Order Beer
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/taplist">
-              Tapped List
-            </Nav.Link>
+          { userIsAdmin || userIsSuperAdmin &&
+            <Fragment>
+              <Nav.Link as={NavLink} to="/beers/add">
+                Order Beer
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/taplist">
+                Tapped List
+              </Nav.Link>
 
-            <Nav.Link as={NavLink} to="/untaplist">
-              Unapped List
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/deliveries">
-              Deliveries
-            </Nav.Link>
-            <NavDropdown title="Extra" id="basic-nav-dropdown">
-              <NavDropdown.Item as={NavLink} to="/breweries">
-                Breweries
-              </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/categories">
-                Categories
-              </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/suppliers">
-                Suppliers
-              </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/kegsizes">
-                Keg Sizes
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item as={NavLink} to="/users">
-                Staff
-              </NavDropdown.Item>
-            </NavDropdown>
+              <Nav.Link as={NavLink} to="/untaplist">
+                Unapped List
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/deliveries">
+                Deliveries
+              </Nav.Link>
+            </Fragment>
+          }
+            {userIsSuperAdmin &&
+              <NavDropdown title="Extra" id="basic-nav-dropdown">
+                <NavDropdown.Item as={NavLink} to="/breweries">
+                  Breweries
+                </NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/categories">
+                  Categories
+                </NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/suppliers">
+                  Suppliers
+                </NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/kegsizes">
+                  Keg Sizes
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item as={NavLink} to="/users">
+                  Staff
+                </NavDropdown.Item>
+              </NavDropdown>
+            }
           </Nav>          
         </Navbar.Collapse>
 
