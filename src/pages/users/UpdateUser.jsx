@@ -8,19 +8,16 @@ import {GlobalStore} from '../../App'
 import useRoleBasedAccess from '../../hooks/useRole';
 
 function UpdateUser() {
+  useRoleBasedAccess(['Super Admin', 'Admin'])
+
   const [user, setUser] = useState({
-    username: "",
-    password : '',
     full_name:"",
-    email: "",
     role: ""
   });
-
   const [updateConfirmation, setUpdateConfirmation] = useState(null); // Added state for update confirmation
   const navigate = useNavigate();
   const location = useLocation();
   const userId = location.pathname.split('/')[3];
-  useRoleBasedAccess(['Super Admin', 'Admin'])
   const {apiUrl, axios} = useContext(GlobalStore)
 
   useEffect(() => {
@@ -72,7 +69,7 @@ function UpdateUser() {
             <div size="lg">
               <label className="form-label" id="div-sizing-lg">Username</label>
               <Form.Control
-                onChange={handleChange}
+                disabled
                 name='username'
                 value={user.username} 
                 aria-label="Large"
@@ -85,7 +82,7 @@ function UpdateUser() {
             <div size="lg">
               <label className="form-label" id="div-sizing-lg">Password</label>
               <Form.Control
-                onChange={handleChange}
+                disabled
                 type='password' 
                 name='password'
                 value={user.password}
@@ -112,7 +109,7 @@ function UpdateUser() {
             <div size="lg">
               <label className="form-label" id="div-sizing-lg">Email</label>
               <Form.Control
-                onChange={handleChange} 
+                disabled
                 name='email'
                 value={user.email}
                 aria-label="Large"
