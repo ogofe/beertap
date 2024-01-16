@@ -10,24 +10,27 @@ import {GlobalStore} from '../../App';
 import useRoleBasedAccess from '../../hooks/useRole';
 
 
+const beerSample = {
+  tap_number: null,
+  name: '',
+  type: '',
+  brewery_id: '',
+  supplier_id: '',
+  description: '',
+  flavor_details: '',
+  price_per_keg: '',
+  arrival_date: '',
+  keg_size_id: '',
+  serving_sizes: '',
+  price_per_serving_size: '',
+  category_id: null,
+  tap_id: null,
+  status: 'ordered', // Default status is "ordered"
+}
+
+
 function AddBeer() {
-  const [beer, setBeer] = useState({
-    tap_number: null,
-    name: '',
-    type: '',
-    brewery_id: '',
-    supplier_id: '',
-    description: '',
-    flavor_details: '',
-    price_per_keg: '',
-    arrival_date: '',
-    keg_size_id: '',
-    serving_sizes: '',
-    price_per_serving_size: '',
-    category_id: null,
-    tap_id: null,
-    status: 'ordered', // Default status is "ordered"
-  });
+  const [beer, setBeer] = useState(beerSample);
 
   const [breweries, setBreweries] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
@@ -44,7 +47,7 @@ function AddBeer() {
   const navigate = useNavigate();
   const {apiUrl, notify, translateError, axios} = useContext(GlobalStore)
   const orderedItemsTableRef = useRef(null);
-  useRoleBasedAccess(['Super Admin', 'Admin', 'Basic User'])
+  useRoleBasedAccess(['Super Admin', 'Admin'])
   
 
   function getBreweries(){
@@ -232,6 +235,7 @@ function AddBeer() {
     })
   }
 
+
   // Function to save changes when editing a beer in the order queue    
   function saveBeerChanges(newBeer){
     orderedItems[editItemId] = newBeer
@@ -266,7 +270,10 @@ function AddBeer() {
   const addBeerToOrder = (e) => {
     e.preventDefault()
     try{
-      const newOrderedItems = [...orderedItems, beer];
+      const _beer = beer
+      const newOrderedItems = [...orderedItems, _beer];
+      // Reset the beer state after adding to the order
+      setBeer(beerSample);
       setOrderedItems(newOrderedItems);
 
       // Save the updated ordered items to local storage
@@ -275,11 +282,11 @@ function AddBeer() {
       notify({
         level: 'success',
         title: "Beer Item Added",
-        body: `You added ${beer.name} to your order queue!`
+        body: `You added ${_beer.name} to your order queue!`
       })
 
-      // Reset the beer state after adding to the order
-      setBeer({}); 
+
+
     }catch (err){
       const processError = translateError(err)
       console.log("Error adding to queue:", err)
