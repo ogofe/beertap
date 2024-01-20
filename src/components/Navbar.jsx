@@ -35,23 +35,24 @@ function Navigation() {
             <Nav.Link as={NavLink} to="/beers">
               Beers
             </Nav.Link>
-          { userIsAdmin || userIsSuperAdmin &&
-            <Fragment>
+
+            <Nav.Link as={NavLink} to="/taplist">
+              Tapped List
+            </Nav.Link>
+
+            <Nav.Link as={NavLink} to="/untaplist">
+              Unapped List
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/deliveries">
+              Deliveries
+            </Nav.Link>
+
+            { userIsAdmin || userIsSuperAdmin &&
               <Nav.Link as={NavLink} to="/beers/add">
                 Order Beer
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/taplist">
-                Tapped List
-              </Nav.Link>
-
-              <Nav.Link as={NavLink} to="/untaplist">
-                Unapped List
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/deliveries">
-                Deliveries
-              </Nav.Link>
-            </Fragment>
-          }
+            }
+            
             {userIsSuperAdmin &&
               <NavDropdown title="Extra" id="basic-nav-dropdown">
                 <NavDropdown.Item as={NavLink} to="/breweries">
