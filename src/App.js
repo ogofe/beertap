@@ -34,7 +34,7 @@ import Login from './pages/users/Login';
 import PasswordReset from './pages/users/PasswordReset';
 
 
-export const API_URL = 'https://beer.binsoft.online/api'
+export const API_URL = 'https://test.agcbarnawa.online/api'
 export const GlobalStore = createContext({})
 
 const Layout = () => {
